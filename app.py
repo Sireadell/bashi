@@ -38,8 +38,7 @@ def ask_in_words(q):
     except Exception as e:
         return {"text": "Bashi could not answer right now (%s). Use the form below." % type(e).__name__,
                 "verdict": None, "mode": None, "receipt": None}
-    text = r["reply"].rsplit("
-[answered by:", 1)[0]
+    text = r["reply"].rsplit("\n[answered by:", 1)[0]
     receipt = None
     if r["decision_id"]:
         receipt = url_for("receipt", decision_id=r["decision_id"])
