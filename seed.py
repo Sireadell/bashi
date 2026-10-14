@@ -145,10 +145,8 @@ def count(g, q):
 def main():
     db = get_db()
     g = db.select_graph(DEFAULT_GRAPH)
-    try:
+    if DEFAULT_GRAPH in db.list_graphs():
         g.delete()
-    except Exception:
-        pass  # graph did not exist yet
     g = db.select_graph(DEFAULT_GRAPH)
     s = build()
     load(g, s)
