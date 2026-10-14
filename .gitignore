@@ -17,3 +17,6 @@ INTERNAL_NOTES.md
 headwater-graph/
 *notes*.md
 *research*.md
+.tamper_state.json
+docs/
+.claude/

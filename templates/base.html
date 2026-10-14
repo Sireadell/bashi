@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Bashi{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="demo-banner">Demo data, all synthetic</div>
+<header class="top">
+  <a class="brand" href="{{ url_for('home') }}">Bashi</a>
+  <span class="tag">A shop credit answer you can check</span>
+</header>
+<main>
+{% block body %}{% endblock %}
+</main>
+<footer>Every answer comes from fixed rules and the records in the shop's graph. No guessing, no AI in the decision.</footer>
+{% block scripts %}{% endblock %}
+</body>
+</html>

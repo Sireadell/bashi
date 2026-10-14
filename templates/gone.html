@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Receipt cleared | Bashi{% endblock %}
+{% block body %}
+<section class="card">
+  <h1>This receipt was cleared</h1>
+  <p>Receipt {% if decision_id %}<span class="mono">{{ decision_id }}</span> {% endif %}was cleared when the demo data was rebuilt. Ask again and you get a fresh one.</p>
+  <a class="btn" href="{{ url_for('demo') }}">Try the Tunde demo</a>
+  <p class="hint"><a href="{{ url_for('home') }}">Or ask your own question</a></p>
+</section>
+{% endblock %}

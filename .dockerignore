@@ -1,0 +1,8 @@
+.env
+.git
+__pycache__
+tests
+docs
+*.md
+IDEA_GATE_*.json
+headwater-graph

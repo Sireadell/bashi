@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}{{ kind }} {{ rid }} | Bashi{% endblock %}
+{% block body %}
+<p class="crumbs">{% if back %}<a href="{{ url_for('receipt', decision_id=back) }}">&larr; Back to receipt {{ back }}</a>{% else %}<a href="{{ url_for('home') }}">&larr; Home</a>{% endif %}</p>
+<section class="card">
+  <p class="kicker">{{ kind }}</p>
+  <h1 class="mono">{{ rid }}</h1>
+  <dl class="props">
+    {% for k, v in props.items() %}
+      {% if k != 'id' %}
+      <dt>{{ k }}</dt>
+      <dd>{% if k in ('amount','request','credit_limit') %}{{ v|naira }}{% else %}{{ v }}{% endif %}</dd>
+      {% endif %}
+    {% endfor %}
+  </dl>
+</section>
+{% if links %}
+<section class="card">
+  <h2>{{ 'Payments behind this sale' if label == 'Trade' else 'Sales this payment settled' }}</h2>
+  <table>
+    <tr><th>Record</th><th>Date</th><th class="n">Amount</th><th class="n">Applied here</th></tr>
+    {% for l in links %}
+    <tr><td><a class="mono" href="{{ url_for('record', label=l.label, rid=l.id, d=back) }}">{{ l.id }}</a></td>
+        <td>{{ l.date }}</td><td class="n">{{ l.amount|naira }}</td><td class="n">{{ l.applied|naira }}</td></tr>
+    {% endfor %}
+  </table>
+</section>
+{% elif label != 'Promise' %}
+<section class="card"><p>No payment is linked to this record in the graph.</p></section>
+{% endif %}
+{% endblock %}

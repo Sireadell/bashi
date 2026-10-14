@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Receipt {{ dec.id }} | Bashi{% endblock %}
+{% block body %}
+<p class="crumbs"><a href="{{ url_for('home') }}">&larr; New question</a></p>
+
+<section class="verdict {{ 'no' if dec.verdict == 'NO' else 'yes' }}">
+  <p class="who">Receipt <span class="mono">{{ dec.id }}</span>: {{ dec.customer_name }} asked for {{ dec.request|naira }}</p>
+  <h1 class="big" id="orig-verdict">{{ dec.verdict }}</h1>
+  <p class="why">{{ dec.reason|cap }}.</p>
+  <p class="nums">
+    <span>Open debt <b>{{ open_debt|naira if trace_ok else 'cannot trace this amount' }}</b></span>
+    <span>Limit <b>{{ dec.limit|naira }}</b></span>
+    <span>Asked <b>{{ dec.request|naira }}</b></span>
+  </p>
+</section>
+
+<section id="whatif-panel" class="whatif" hidden aria-live="polite"></section>
+
+<section class="card">
+  <h2>Does this receipt still check out?</h2>
+  {% if verify and verify.ok %}
+  <p class="check ok"><b>Verified.</b> The records were read again just now and give the same answer and the same fingerprint.</p>
+  {% else %}
+  <p class="check bad"><b>Does not match.</b> The records in the graph have changed since this answer was given, so this receipt can no longer be trusted.</p>
+  {% if verify and verify.problems %}<ul>{% for p in verify.problems %}<li>{{ p }}</li>{% endfor %}</ul>{% endif %}
+  {% endif %}
+  <p class="small">Fingerprint <span class="mono">{{ dec.fingerprint }}</span></p>
+</section>
+
+{% if orphans %}
+<section class="card warn">
+  <h2>Possible phantom debt</h2>
+  {% for o in orphans %}
+  <p>Sale <a class="mono" href="{{ url_for('record', label='Trade', rid=o.trade, d=dec.id) }}">{{ o.trade }}</a> shows as unpaid, but payment
+     <a class="mono" href="{{ url_for('record', label='Payment', rid=o.payment, d=dec.id) }}">{{ o.payment }}</a>
+     of {{ o.amount|naira }} on {{ o.date }} was never linked to it. Flagged, not changed.</p>
+  {% endfor %}
+</section>
+{% endif %}
+
+<section class="card">
+  <h2>Credit sales and what is still owed</h2>
+  <div class="scroll"><table>
+    <tr><th>Sale</th><th>Date</th><th class="n">Amount</th><th class="n">Paid</th><th class="n">Still owed</th><th></th></tr>
+    {% for t in trades %}
+    <tr>
+      <td><a class="mono" href="{{ url_for('record', label='Trade', rid=t.id, d=dec.id) }}">{{ t.id }}</a></td>
+      <td>{{ t.date }}</td><td class="n">{{ t.amount|naira }}</td><td class="n">{{ t.settled|naira }}</td>
+      <td class="n"><b>{{ t.open|naira }}</b></td>
+      <td><button class="mini" data-remove="{{ t.id }}">What if this evidence did not exist</button></td>
+    </tr>
+    {% endfor %}
+    <tr class="total"><td colspan="4">Open debt, sales minus payments</td>
+      <td class="n"><b>{{ open_debt|naira if trace_ok else 'cannot trace this amount' }}</b></td><td></td></tr>
+  </table></div>
+</section>
+
+<section class="card">
+  <h2>Payments used</h2>
+  {% if payments %}
+  <div class="scroll"><table>
+    <tr><th>Payment</th><th>Date</th><th class="n">Amount</th><th>Settles</th><th></th></tr>
+    {% for p in payments %}
+    <tr>
+      <td><a class="mono" href="{{ url_for('record', label='Payment', rid=p.id, d=dec.id) }}">{{ p.id }}</a></td>
+      <td>{{ p.date }}</td><td class="n">{{ p.amount|naira }}</td>
+      <td>{% for t in trades %}{% for q in t.pays if q.id == p.id %}<a class="mono" href="{{ url_for('record', label='Trade', rid=t.id, d=dec.id) }}">{{ t.id }}</a> {{ q.amount|naira }} {% endfor %}{% endfor %}</td>
+      <td><button class="mini" data-remove="{{ p.id }}">What if this evidence did not exist</button></td>
+    </tr>
+    {% endfor %}
+  </table></div>
+  {% else %}<p>No payments were read for this customer.</p>{% endif %}
+</section>
+
+<section class="card">
+  <h2>Promises to pay</h2>
+  {% if promises %}
+  <table>
+    <tr><th>Promise</th><th>Due</th><th class="n">Amount</th><th>Outcome</th><th></th></tr>
+    {% for p in promises %}
+    <tr>
+      <td><a class="mono" href="{{ url_for('record', label='Promise', rid=p.id, d=dec.id) }}">{{ p.id }}</a></td>
+      <td>{{ p.due }}</td><td class="n">{{ p.amount|naira }}</td>
+      <td>{% if p.broke %}<b class="brk">Broken</b>{% elif p.kept %}Kept{% else %}Not due yet{% endif %}</td>
+      <td><button class="mini" data-remove="{{ p.id }}">What if this evidence did not exist</button></td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}<p>No promises on record.</p>{% endif %}
+</section>
+
+<section class="card">
+  <h2>Rules applied</h2>
+  <ul class="rules">{% for r in rules %}<li><span class="mono">{{ r.id }}</span> {{ r.text }}</li>{% endfor %}</ul>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>window.BASHI = {decision: {{ dec.id|tojson }}, original: {{ dec.verdict|tojson }}};</script>
+<script src="{{ url_for('static', filename='receipt.js') }}"></script>
+{% endblock %}

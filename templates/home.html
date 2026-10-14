@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block body %}
+{% if result %}
+<section class="verdict {{ 'no' if result.verdict == 'NO' else 'yes' }}" aria-live="polite">
+  <p class="who">{{ result.customer_name }} asks for {{ result.request|naira }} on credit</p>
+  <h1 class="big">{{ result.verdict }}</h1>
+  <p class="why">{{ result.reason|cap }}.</p>
+  <ol class="path">
+    <li>Open debt <b>{{ result.open_debt|naira }}</b>, built only from {{ result.evidence|length }} records in the graph.</li>
+    <li>Credit limit <b>{{ result.limit|naira }}</b>.</li>
+    <li>Broken promises: <b>{{ result.broken_promises|join(', ') if result.broken_promises else 'none' }}</b>.</li>
+  </ol>
+  {% if result.decision_id %}
+  <a class="btn" href="{{ url_for('receipt', decision_id=result.decision_id) }}">Open the receipt</a>
+  {% endif %}
+</section>
+{% endif %}
+
+{% if answer %}
+<section class="verdict {{ 'no' if answer.verdict == 'NO' else 'yes' if answer.verdict == 'YES' else '' }}" aria-live="polite">
+  <p class="who">You asked: {{ form.q }}</p>
+  <p class="why">{{ answer.text }}</p>
+  {% if answer.receipt %}<a class="btn" href="{{ answer.receipt }}">Open the receipt</a>{% endif %}
+  {% if answer.mode %}<p class="hint">Answered by: {{ answer.mode }}. The yes or no always comes from the fixed rule check.</p>{% endif %}
+</section>
+{% endif %}
+
+<section class="ask">
+  <h2>Ask in plain words</h2>
+  <form method="post" action="{{ url_for('home') }}">
+    <label>Your question
+      <input name="q" value="{{ form.q or '' }}" placeholder="Can Tunde take N45,000 on credit?" autocomplete="off" maxlength="300">
+    </label>
+    <button class="btn" type="submit">Ask</button>
+  </form>
+  <p class="hint">You can also say: Tunde promised to pay N10,000 on Friday.</p>
+</section>
+
+{% if not result and not answer %}
+<section class="demo">
+  <p class="kicker">Ninety second proof</p>
+  <a class="btn" href="{{ url_for('demo') }}">Try the Tunde demo</a>
+  <p class="hint">Asks N45,000 for Tunde Adeyemi, then opens the receipt.</p>
+</section>
+{% endif %}
+
+<section class="ask">
+  <h2>{{ 'Ask again' if result else 'Should the shop sell on credit?' }}</h2>
+  {% if error %}<p class="err">{{ error }}</p>{% endif %}
+  <form method="post" action="{{ url_for('home') }}">
+    <label>Customer
+      <select name="customer">
+        {% for c in custs %}<option value="{{ c.id }}" {{ 'selected' if c.id == form.customer }}>{{ c.name }} ({{ c.id }}), limit {{ c.limit|naira }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>Amount in naira
+      <input name="amount" inputmode="numeric" value="{{ form.amount }}" autocomplete="off">
+    </label>
+    <button class="btn" type="submit">Get the answer</button>
+  </form>
+  {% if not result %}<p class="hint">Tunde Adeyemi is filled in with N45,000. Press the button, then open the receipt.</p>{% endif %}
+</section>
+{% endblock %}
