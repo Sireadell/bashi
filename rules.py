@@ -7,12 +7,15 @@ fingerprint so verify.py can replay it later.
 import hashlib
 import json
 import sys
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 
 RULES = {
     "R_LIMIT": "Say NO if open debt plus the new request is above the credit limit.",
     "R_BROKEN_PROMISE": "Say NO if the customer has any broken promise to pay.",
 }
+
+COUNTERS = {"decision": ("Decision", "D", 4), "promise": ("Promise", "PR", 3)}
+MAX_DECISIONS = 300
 
 CANNOT_TRACE = "CANNOT_TRACE"
 CANNOT_TRACE_TEXT = "cannot trace this amount"
@@ -28,8 +31,12 @@ def _is_money(v):
 
 # ---------------------------------------------------------------- reading
 
-def read_state(graph, customer_id):
+def read_state(graph, customer_id, as_of=None):
     """Read everything the rule needs. Returns None if the customer is missing.
+
+    as_of (an ISO date) hides broken-promise links that were only added after
+    that date, so a replay or a what-if sees what the decision saw even after
+    time has passed. Links with no date (the seeded ones) always count.
 
     state = {customer: {id, limit},
              trades: {id: {amount, date}},
@@ -64,10 +71,12 @@ def read_state(graph, customer_id):
     for prid, amt, due, kept in rows:
         state["promises"][prid] = {"amount": amt, "due": due, "kept": kept, "broke": False}
     rows = graph.query(
-        "MATCH (c:Customer {id:$cid})-[:BROKE]->(pr:Promise) "
-        "RETURN pr.id, pr.amount, pr.due, pr.kept", p
+        "MATCH (c:Customer {id:$cid})-[b:BROKE]->(pr:Promise) "
+        "RETURN pr.id, pr.amount, pr.due, pr.kept, b.since", p
     ).result_set
-    for prid, amt, due, kept in rows:
+    for prid, amt, due, kept, since in rows:
+        if as_of and since and since > as_of:
+            continue
         rec = state["promises"].setdefault(
             prid, {"amount": amt, "due": due, "kept": kept, "broke": True})
         rec["broke"] = True
@@ -196,13 +205,63 @@ def fingerprint(snapshot, verdict, request_amount):
 
 # ---------------------------------------------------------------- saving
 
+def _existing_max(graph, label, prefix):
+    rows = graph.query("MATCH (n:%s) RETURN n.id" % label).result_set
+    n = len(prefix)
+    nums = [int(r[0][n:]) for r in rows if r[0] and r[0].startswith(prefix) and r[0][n:].isdigit()]
+    return max(nums, default=0)
+
+
+def allocate_id(graph, kind):
+    """Hand out the next id ("D0008", "PR008") without two requests ever getting
+    the same one. The counter lives in the graph and is bumped by a single
+    query. A graph with no counter yet starts it from the highest id in use."""
+    label, prefix, width = COUNTERS[kind]
+    bump = "MATCH (k:Counter {id:$k}) SET k.n = k.n + 1 RETURN k.n"
+    rows = graph.query(bump, {"k": kind}).result_set
+    if not rows:
+        graph.query("MERGE (k:Counter {id:$k}) ON CREATE SET k.n = $base",
+                    {"k": kind, "base": _existing_max(graph, label, prefix)})
+        rows = graph.query(bump, {"k": kind}).result_set
+    return "%s%0*d" % (prefix, width, rows[0][0])
+
+
 def _next_decision_id(graph):
-    rows = graph.query("MATCH (d:Decision) RETURN d.id").result_set
-    nums = [int(r[0][1:]) for r in rows if r[0] and r[0][1:].isdigit()]
-    return "D%04d" % (max(nums, default=0) + 1)
+    return allocate_id(graph, "decision")
 
 
-def _save(graph, customer_id, request_amount, state, result, fp, snap):
+# ---------------------------------------------------------------- overdue promises
+
+def _iso(d):
+    return d.isoformat() if hasattr(d, "isoformat") else d
+
+
+def mark_overdue_promises(graph, today=None):
+    """Link a customer to every promise that is still unkept and due before
+    today. Safe to run any number of times; kept promises are never touched.
+
+    The link carries the date it was added, so read_state(as_of=...) can show
+    an older decision exactly what it saw."""
+    today = _iso(today or date.today())
+    graph.query(
+        "MATCH (c:Customer)-[:PROMISED]->(p:Promise) "
+        "WHERE p.kept = false AND p.due < $today "
+        "MERGE (c)-[b:BROKE]->(p) ON CREATE SET b.since = $today",
+        {"today": today})
+
+
+def prune_decisions(graph, keep=MAX_DECISIONS):
+    """Keep at most `keep` stored decisions: the oldest go first, together with
+    their links. Sales, payments and promises are never deleted."""
+    n = graph.query("MATCH (d:Decision) RETURN count(d)").result_set[0][0]
+    if n <= keep:
+        return 0
+    graph.query("MATCH (d:Decision) WITH d ORDER BY d.created ASC, d.id ASC LIMIT $n "
+                "DETACH DELETE d", {"n": n - keep})
+    return n - keep
+
+
+def _save(graph, customer_id, request_amount, state, result, fp, snap, as_of):
     did = _next_decision_id(graph)
     for rid, text in RULES.items():
         graph.query("MERGE (r:Rule {id:$id}) ON CREATE SET r.text=$text",
@@ -211,13 +270,14 @@ def _save(graph, customer_id, request_amount, state, result, fp, snap):
         "MATCH (c:Customer {id:$cid}) "
         "CREATE (d:Decision {id:$did, customer_id:$cid, request:$req, verdict:$v, "
         "reason:$reason, created:$created, fingerprint:$fp, rule_ids:$rids, "
-        "snapshot:$snap, open_debt:$debt}) "
+        "snapshot:$snap, open_debt:$debt, as_of:$as_of}) "
         "CREATE (d)-[:ABOUT]->(c)",
         {"cid": customer_id, "did": did, "req": request_amount, "v": result["verdict"],
          "reason": result["reason"],
          "created": datetime.now(timezone.utc).isoformat(timespec="seconds"),
          "fp": fp, "rids": json.dumps(sorted(RULES)),
-         "snap": json.dumps(snap, sort_keys=True), "debt": result["open_debt"]})
+         "snap": json.dumps(snap, sort_keys=True), "debt": result["open_debt"],
+         "as_of": as_of})
     for ev in evidence_list(state):
         graph.query(
             "MATCH (d:Decision {id:$did}), (e:%s {id:$eid}) "
@@ -229,11 +289,19 @@ def _save(graph, customer_id, request_amount, state, result, fp, snap):
     return did
 
 
-def decide(customer_id, request_amount, graph=None, save=True):
+def decide(customer_id, request_amount, graph=None, save=True, today=None, as_of=None):
+    """today: override for the date (tests). as_of: replay mode, used by the
+    what-if on a graph copy. It reads the records as they stood on that date
+    and does not add any broken-promise links."""
     if graph is None:
         from db import get_graph
         graph = get_graph()
-    state = read_state(graph, customer_id)
+    if as_of is None:
+        today = _iso(today or date.today())
+        mark_overdue_promises(graph, today)
+    else:
+        today = as_of
+    state = read_state(graph, customer_id, as_of=as_of)
     if state is None:
         return {"verdict": CANNOT_TRACE, "reason": "%s (no customer %s)" % (CANNOT_TRACE_TEXT, customer_id),
                 "open_debt": None, "limit": None, "broken_promises": [], "evidence": [],
@@ -253,7 +321,7 @@ def decide(customer_id, request_amount, graph=None, save=True):
     out["fingerprint"] = fingerprint(snap, result["verdict"], request_amount)
     if save:
         out["decision_id"] = _save(graph, customer_id, request_amount, state,
-                                   result, out["fingerprint"], snap)
+                                   result, out["fingerprint"], snap, today)
     return out
 
 

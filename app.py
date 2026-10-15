@@ -1,17 +1,76 @@
 """Bashi: shop credit decisions with a receipt that links the exact records used."""
 import os
+import threading
+import time
+from collections import deque
 
 from flask import Flask, abort, jsonify, redirect, render_template, request, url_for
 
 import agent
 from rules import (CANNOT_TRACE, CANNOT_TRACE_TEXT, RULES, decide, evaluate,
-                   fingerprint, naira, read_state, snapshot_of)
+                   fingerprint, naira, prune_decisions, read_state, snapshot_of)
 from verify import verify_decision
 from whatif import get_graph, load_decision, whatif
 
 app = Flask(__name__)
 app.jinja_env.filters["cap"] = lambda s: (s[:1].upper() + s[1:]) if s else s
 app.jinja_env.filters["naira"] = lambda n: naira(n) if isinstance(n, int) else CANNOT_TRACE_TEXT
+
+# ---------------------------------------------------------------- write limits
+# Every route that writes or spends the model key goes through this. In memory,
+# so it resets when the site restarts. Behind Render the visitor's address
+# comes from X-Forwarded-For, which a determined caller can fake, so there is
+# also one limit for the whole site.
+WINDOW = 600            # seconds
+PER_IP_LIMIT = 20       # writes per window per visitor
+SITE_LIMIT = 200        # writes per window across everyone
+_hits = {}
+_site_hits = deque()
+_hits_lock = threading.Lock()
+
+
+def reset_limits():
+    with _hits_lock:
+        _hits.clear()
+        _site_hits.clear()
+
+
+def client_ip():
+    fwd = request.headers.get("X-Forwarded-For", "")
+    return (fwd.split(",")[0].strip() or request.remote_addr or "unknown")
+
+
+def too_many_writes():
+    """Count one write for this visitor. True if they are over the limit."""
+    now = time.time()
+    with _hits_lock:
+        q = _hits.setdefault(client_ip(), deque())
+        while q and now - q[0] > WINDOW:
+            q.popleft()
+        while _site_hits and now - _site_hits[0] > WINDOW:
+            _site_hits.popleft()
+        if len(q) >= PER_IP_LIMIT or len(_site_hits) >= SITE_LIMIT:
+            return True
+        q.append(now)
+        _site_hits.append(now)
+        if len(_hits) > 5000:   # drop visitors with nothing recent
+            for k in [k for k, v in _hits.items() if not v or now - v[-1] > WINDOW]:
+                del _hits[k]
+        return False
+
+
+def slow_down():
+    if request.path.startswith("/whatif/"):
+        return jsonify(error="Too many requests from you just now. Wait a few minutes and try again."), 429
+    return render_template("slow.html"), 429
+
+
+def store_decision_cap():
+    try:
+        prune_decisions(get_graph())
+    except Exception:
+        pass
+
 
 LABELS = {"Trade": "Credit sale", "Payment": "Payment", "Promise": "Promise to pay"}
 
@@ -51,6 +110,8 @@ def ask_in_words(q):
 def home():
     custs = customers()
     form = {"customer": "C001", "amount": "45000"}
+    if request.method == "POST" and too_many_writes():
+        return slow_down()
     result = None
     error = None
     answer = None
@@ -61,6 +122,7 @@ def home():
             error = "Type a question, for example: Can Tunde take N45,000 on credit?"
         else:
             answer = ask_in_words(q)
+            store_decision_cap()
     elif request.method == "POST":
         form["customer"] = request.form.get("customer", "C001")
         form["amount"] = request.form.get("amount", "").replace(",", "").replace("N", "").strip()
@@ -68,6 +130,7 @@ def home():
             error = "Type the amount in naira, for example 45000."
         else:
             result = decide(form["customer"], int(form["amount"]), graph=get_graph())
+            store_decision_cap()
             result["customer_name"] = next((c["name"] for c in custs if c["id"] == form["customer"]), form["customer"])
             result["request"] = int(form["amount"])
             if result["verdict"] == CANNOT_TRACE:
@@ -82,7 +145,7 @@ def receipt_data(decision_id):
     dec = load_decision(decision_id, g)
     if dec is None:
         return None
-    state = read_state(g, dec["customer_id"])
+    state = read_state(g, dec["customer_id"], as_of=dec["as_of"])
     out = {"dec": dec, "state": state, "trace_ok": False, "trades": [], "payments": [],
            "promises": [], "orphans": [], "verify": None, "open_debt": None}
     if state is None:
@@ -123,10 +186,15 @@ def receipt_data(decision_id):
     return out
 
 
-@app.route("/demo")
+@app.route("/demo", methods=["GET", "POST"])
 def demo():
-    """Ask Tunde N45,000 fresh and land on the new receipt."""
+    """Ask Tunde N45,000 fresh and land on the new receipt. Writes, so POST only."""
+    if request.method != "POST":
+        return redirect(url_for("home"))
+    if too_many_writes():
+        return slow_down()
     res = decide("C001", 45000, graph=get_graph())
+    store_decision_cap()
     if not res.get("decision_id"):
         return render_template("gone.html", decision_id=None), 503
     return redirect(url_for("receipt", decision_id=res["decision_id"]))
@@ -178,6 +246,8 @@ def record(label, rid):
 
 @app.route("/whatif/<decision_id>", methods=["POST"])
 def whatif_route(decision_id):
+    if too_many_writes():
+        return slow_down()
     ids = request.get_json(silent=True) or {}
     try:
         res = whatif(decision_id, ids.get("remove", []))

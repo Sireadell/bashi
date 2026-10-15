@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Slow down | Bashi{% endblock %}
+{% block body %}
+<section class="card">
+  <h1>Slow down a little</h1>
+  <p>This is a public demo, so each visitor can ask only so many questions in ten minutes. Wait a few minutes and try again. Everything you already opened still works.</p>
+  <p class="hint"><a href="{{ url_for('home') }}">Back to the start</a></p>
+</section>
+{% endblock %}

@@ -2,6 +2,10 @@
 
 The real graph (shop_a) is only ever read. The copy is always deleted.
 """
+import threading
+import time
+import uuid
+
 import db as _db
 
 _cached = {}
@@ -33,7 +37,44 @@ def load_decision(decision_id, graph=None):
     row = r.result_set[0]
     keys = ["id", "customer_id", "request", "verdict", "reason", "created",
             "fingerprint", "rule_ids", "customer_name", "limit"]
-    return dict(zip(keys, row))
+    out = dict(zip(keys, row))
+    out["as_of"] = (g.query("MATCH (d:Decision {id:$d}) RETURN d.as_of", {"d": decision_id})
+                    .result_set[0][0]) or (out["created"] or "")[:10] or None
+    return out
+
+
+STALE_AFTER = 300      # seconds before a leftover copy counts as a crash leftover
+SWEEP_EVERY = 60
+_sweep = {"at": 0.0}
+_sweep_lock = threading.Lock()
+
+
+def sweep_stale_copies(db, now=None):
+    """Delete shop_a_whatif_* copies left behind by a crash. The copy name carries
+    the time it was made; a name without one is an old-style leftover."""
+    now = time.time() if now is None else now
+    with _sweep_lock:
+        if now - _sweep["at"] < SWEEP_EVERY:
+            return []
+        _sweep["at"] = now
+    removed = []
+    try:
+        names = db.list_graphs()
+    except Exception:
+        return removed
+    for name in names:
+        if not name.startswith(MAIN + "_whatif_"):
+            continue
+        parts = name.split("_")
+        stamp = parts[-2] if len(parts) >= 5 and parts[-2].isdigit() else None
+        if stamp is not None and now - int(stamp) < STALE_AFTER:
+            continue
+        try:
+            db.select_graph(name).delete()
+            removed.append(name)
+        except Exception:
+            pass
+    return removed
 
 
 def whatif(decision_id, remove):
@@ -43,20 +84,20 @@ def whatif(decision_id, remove):
     dec = load_decision(decision_id, main)
     if dec is None:
         raise ValueError("unknown decision " + str(decision_id))
-    copy_name = "%s_whatif_%s" % (MAIN, decision_id)
     db = get_db()
-    # clear any leftover from an earlier crash
-    try:
-        db.select_graph(copy_name).delete()
-    except Exception:
-        pass
+    sweep_stale_copies(db)
+    # Every call gets its own copy, so two runs on one receipt never touch each other.
+    copy_name = "%s_whatif_%s_%d_%s" % (MAIN, decision_id, int(time.time()), uuid.uuid4().hex[:6])
     try:
         main.copy(copy_name)
         cg = db.select_graph(copy_name)
         for rid in remove:
             cg.query("MATCH (n) WHERE n.id = $i AND (n:Trade OR n:Payment OR n:Promise) "
                      "DETACH DELETE n", {"i": rid})
-        new = decide(dec["customer_id"], dec["request"], graph=cg, save=False)
+        # Read the copy as it stood on the decision's day, so the baseline is the
+        # same data the original decision used and only the removal changes it.
+        new = decide(dec["customer_id"], dec["request"], graph=cg, save=False,
+                     as_of=dec["as_of"])
     finally:
         try:
             db.select_graph(copy_name).delete()

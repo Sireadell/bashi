@@ -10,7 +10,7 @@ from db import DEFAULT_GRAPH, get_db
 random.seed(42)
 
 TODAY = datetime.date(2026, 10, 14)
-LABELS = ["Customer", "Trade", "Payment", "Promise", "Rule", "Decision"]
+LABELS = ["Customer", "Trade", "Payment", "Promise", "Rule", "Decision", "Counter"]
 
 FIRST = ["Tunde", "Amaka", "Chidi", "Ngozi", "Bola", "Emeka", "Funke", "Ibrahim",
          "Halima", "Segun", "Yetunde", "Obinna", "Zainab", "Kunle", "Blessing",
@@ -131,6 +131,9 @@ def load(g, s):
     g.query("UNWIND $rows AS r MATCH (c:Customer {id:r.cid}), (p:Promise {id:r.prid}) "
             "CREATE (c)-[:BROKE]->(p)", {"rows": s["broke"]})
     g.query("UNWIND $rows AS r CREATE (:Rule {id:r.id, text:r.text})", {"rows": s["rules"]})
+    # Id counters: the next Decision is D0001, the next new Promise follows the planted ones.
+    g.query("CREATE (:Counter {id:'decision', n:0}), (:Counter {id:'promise', n:$n})",
+            {"n": len(s["promises"])})
     # Labelled demo scene, left unlinked on purpose (never silently fixed).
     ph = s["phantom"]
     g.query("MATCH (t:Trade {id:$t}), (p:Payment {id:$p}) "

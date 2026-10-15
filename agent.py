@@ -121,11 +121,9 @@ def list_customers(graph):
 
 
 def record_promise(graph, customer_id, amount, due, today=None):
-    """Write a Promise node (episodic memory). kept=false, no BROKE link: the
-    rule check only counts a promise as broken when the shop marks it so."""
-    rows = graph.query("MATCH (p:Promise) RETURN p.id").result_set
-    nums = [int(r[0][2:]) for r in rows if r[0] and r[0][2:].isdigit()]
-    pid = "PR%03d" % (max(nums, default=0) + 1)
+    """Write a Promise node (episodic memory). It starts as kept=false with no
+    BROKE link. The rule check adds the link once the due date has passed."""
+    pid = rules.allocate_id(graph, "promise")
     graph.query(
         "MATCH (c:Customer {id:$cid}) "
         "CREATE (c)-[:PROMISED]->(:Promise {id:$pid, date:$d, due:$due, amount:$amt, kept:false})",
@@ -149,6 +147,7 @@ class Run:
     def __init__(self, graph, question):
         self.graph = graph
         self.question = question
+        rules.mark_overdue_promises(graph)
         self.customers = list_customers(graph)
         self.parsed = parse_question(question, self.customers)
         self.by_id = {c["id"]: c for c in self.customers}
@@ -292,9 +291,11 @@ def build_reply(run, middle=None):
     if run.promise:
         pr = run.promise
         name = run.by_id[pr["customer_id"]]["name"]
-        text = "Noted. %s promised to pay %s by %s. Saved as %s; the next decision will see it." % (
-            name, naira(pr["amount"]), pr["due"], pr["id"])
-        return text if not middle else "Noted. %s Saved as %s; the next decision will see it." % (middle, pr["id"])
+        tail = "Saved as %s. It will be checked on %s, and counts as broken if still unpaid then." % (
+            pr["id"], pr["due"])
+        text = "Noted. %s promised to pay %s by %s. %s" % (
+            name, naira(pr["amount"]), pr["due"], tail)
+        return text if not middle else "Noted. %s %s" % (middle, tail)
     if run.decision:
         cid, amount, res = run.decision
         name = run.by_id[cid]["name"]

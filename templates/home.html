@@ -39,7 +39,7 @@
 {% if not result and not answer %}
 <section class="demo">
   <p class="kicker">Ninety second proof</p>
-  <a class="btn" href="{{ url_for('demo') }}">Try the Tunde demo</a>
+  <form method="post" action="{{ url_for('demo') }}"><button class="btn" type="submit">Try the Tunde demo</button></form>
   <p class="hint">Asks N45,000 for Tunde Adeyemi, then opens the receipt.</p>
 </section>
 {% endif %}

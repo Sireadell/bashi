@@ -10,6 +10,15 @@ I built Bashi for small shops that sell on credit. When a customer asks to buy o
 - A payment is linked to the sale it settles, so a sale that was already paid is never counted twice.
 - The rule: say no if what the customer owes plus the new request is over their limit, or if they broke a promise to pay.
 
+A promise to pay that is still unkept after its due date counts as broken the next time Bashi checks that customer. The check runs before every decision and never touches a promise marked kept. A saved decision remembers the day it was made, so replaying it later does not change just because time passed.
+
+## What this is not
+
+- The receipt replay is tamper-evident, not tamper-proof. If something changes a sale, a payment or a decision, the replay shows it. But anyone who can write to the database can rewrite a decision and its fingerprint together, and the replay would pass.
+- The data is synthetic. Every customer, amount and phone number is invented, so nothing here is advice about a real person or a real debt.
+- The yes or no comes from a fixed rule, two lines long. No model decides it.
+- The AI only picks which lookups to run and words one sentence. Every number and name in that sentence is checked against the records, and if the check fails, a plain template answers instead.
+
 ## Run it
 
 You need Python 3 and a FalkorDB instance (I use the free FalkorDB Cloud one).

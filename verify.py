@@ -47,7 +47,14 @@ def verify_decision(graph, d):
         return False, ["Decision %s has no readable record of what it used" % did]
     if fingerprint(old, verdict, request) != fp:
         problems.append("Decision %s itself was edited (its fingerprint no longer matches)" % did)
-    state = read_state(graph, cid)
+    # Read the records as they stood on the day of the decision, so a promise
+    # that fell overdue later does not make an old decision look tampered with.
+    meta = graph.query("MATCH (d:Decision {id:$did}) RETURN d.as_of, d.created",
+                       {"did": did}).result_set
+    as_of = None
+    if meta:
+        as_of = meta[0][0] or (meta[0][1] or "")[:10] or None
+    state = read_state(graph, cid, as_of=as_of)
     if state is None:
         return False, problems + ["Customer %s is missing now" % cid]
     # Only compare records this decision actually used.

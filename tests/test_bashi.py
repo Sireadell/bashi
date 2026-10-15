@@ -28,7 +28,9 @@ def test_tunde_is_no_because_of_pr001(graph):
 
 
 def test_removing_pr001_flips_to_yes(graph):
-    graph.query("MATCH (:Customer {id:'C001'})-[b:BROKE]->(:Promise {id:'PR001'}) DELETE b")
+    # Clearing the broken promise means the shop marks it kept; deleting only the
+    # link would be undone, because an unkept promise past its due date counts as broken.
+    graph.query("MATCH (:Customer {id:'C001'})-[b:BROKE]->(p:Promise {id:'PR001'}) DELETE b SET p.kept = true")
     r = decide("C001", 45000, graph=graph, save=False)
     assert r["verdict"] == "YES"
     assert r["broken_promises"] == []
