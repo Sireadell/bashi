@@ -10,7 +10,7 @@ You need: the GitHub repo with these files, a Render account, and the four Falko
 2. Click **New +**, then **Web Service**.
 3. Pick the Bashi repository. Click **Connect**.
 4. Language: **Docker**. Instance type: **Free**. Leave everything else as it is.
-5. Open **Environment Variables** and add these four, using the values from your FalkorDB Cloud page:
+5. Open **Environment Variables** and add these, using the values from your FalkorDB Cloud page:
    - `FALKORDB_HOST`
    - `FALKORDB_PORT`
    - `FALKORDB_USERNAME`

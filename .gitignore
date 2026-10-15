@@ -3,21 +3,4 @@
 !.env.example
 __pycache__/
 .venv/
-
-# working files, never published
-CONTRACT.md
-BUILD_PLAN.md
-COMPETITOR_SWEEP.md
-FIRST_2_HOURS.md
-GATE_RESULT.md
-IDEA_GATE_*.json
-RED_TEAM_REPORT.md
-competitor_sweep.ps1
-INTERNAL_NOTES.md
-headwater-graph/
-*notes*.md
-*research*.md
 .tamper_state.json
-docs/
-.claude/
-INTERNAL_TODO.md
