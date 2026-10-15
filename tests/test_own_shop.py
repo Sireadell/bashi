@@ -4,6 +4,7 @@ Loader and page tests use a tiny FAKE seed. The real seed (own_audit_seed.py) is
 for leaks and loaded into a private graph.
 """
 import copy
+import os
 import uuid
 
 import pytest
@@ -420,3 +421,120 @@ def test_keepalive_never_fails_because_of_the_own_shop(monkeypatch):
         raise RuntimeError("down")
     monkeypatch.setattr(dbmod, "get_db", boom)
     assert keepalive.once() == 0
+
+
+# ---------------------------------------------------------------- banner on receipts
+
+def test_real_banner_only_on_receipts_of_real_customers(picker):
+    picker.post("/", data={"customer": "CUST-A", "amount": "5000"})        # D1001, real
+    picker.post("/", data={"customer": "CUST-01", "amount": "5000"})       # D1002, invented
+    real = picker.get("/receipt/D1001").get_data(as_text=True)
+    invented = picker.get("/receipt/D1002").get_data(as_text=True)
+    assert ">%s<" % own_shop.LABEL_TEXT in real and "Invented customer, not real data" not in real
+    assert "Invented customer, not real data" in invented and own_shop.LABEL_TEXT not in invented
+
+
+def test_record_page_banner_follows_the_record_source(picker):
+    picker.post("/", data={"customer": "CUST-A", "amount": "5000"})
+    picker.post("/", data={"customer": "CUST-01", "amount": "5000"})
+    real = picker.get("/record/Trade/TR-1?d=D1001").get_data(as_text=True)
+    invented = picker.get("/record/Trade/TI-001?d=D1002").get_data(as_text=True)
+    assert ">%s<" % own_shop.LABEL_TEXT in real
+    assert "Invented customer, not real data" in invented and own_shop.LABEL_TEXT not in invented
+
+
+def test_practice_shop_receipt_keeps_the_practice_banner_even_when_own_is_selected(picker):
+    pick(picker, "demo")
+    r = picker.post("/demo")
+    pick(picker, "own")
+    page = picker.get(r.headers["Location"]).get_data(as_text=True)
+    assert "Demo data, all synthetic" in page and own_shop.LABEL_TEXT not in page
+
+
+# ---------------------------------------------------------------- tamper and verify on a chosen graph
+
+import json  # noqa: E402
+
+import db as dbmod  # noqa: E402
+import tamper  # noqa: E402
+import verify  # noqa: E402
+
+
+class _Db:
+    """Stands in for the database connection: hands out the graphs it was given."""
+    def __init__(self, **graphs):
+        self.graphs = graphs
+
+    def list_graphs(self):
+        return list(self.graphs)
+
+    def select_graph(self, name):
+        return self.graphs[name]
+
+
+@pytest.fixture()
+def tamper_env(own_graph, graph, monkeypatch, tmp_path):
+    monkeypatch.setattr(tamper, "STATE", str(tmp_path / "state.json"))
+    fake = _Db(shop_own=own_graph, shop_a=graph)
+    monkeypatch.setattr(dbmod, "get_db", lambda: fake)
+    return fake
+
+
+def test_graph_argument_parsing():
+    assert dbmod.pop_graph_arg(["TR-2", "300000", "--graph", "shop_own"]) == ("shop_own", ["TR-2", "300000"])
+    assert dbmod.pop_graph_arg(["--graph=shop_a", "--restore"]) == ("shop_a", ["--restore"])
+    assert dbmod.pop_graph_arg(["T1", "5"]) == (None, ["T1", "5"])
+
+
+def test_tools_default_to_the_own_shop_when_loaded_else_the_practice_shop(tamper_env, own_graph, graph):
+    assert dbmod.resolve_graph_name(tamper_env) == "shop_own"
+    assert dbmod.resolve_graph_name(tamper_env, "shop_a") == "shop_a"
+    assert dbmod.resolve_graph_name(_Db(shop_a=graph)) == "shop_a"           # no own graph
+    assert dbmod.resolve_graph_name(_Db(shop_own=graph, shop_a=graph)) == "shop_a"   # not an own shop
+
+
+def test_tamper_demo_on_a_real_audit_trade(tamper_env, own_graph, capsys):
+    did = decide("CUST-A", 10000, graph=own_graph)["decision_id"]
+    assert verify.main([]) == 0 and "Graph: shop_own" in capsys.readouterr().out
+    assert tamper.main(["tamper.py", "TR-1", "80000"]) == 0
+    out = capsys.readouterr().out
+    assert "Graph: shop_own" in out and "Trade TR-1 amount changed N50,000 -> N80,000" in out
+    assert "--graph shop_own" in out
+    assert verify.main(["--graph", "shop_own"]) == 1
+    out = capsys.readouterr().out
+    assert "FAIL  " + did in out and "Trade TR-1 amount changed N50,000 -> N80,000" in out
+    assert tamper.main(["tamper.py", "--restore", "--graph", "shop_own"]) == 0
+    assert "Restored Trade TR-1 amount to N50,000" in capsys.readouterr().out
+    assert verify.main(["--graph", "shop_own"]) == 0
+    assert "PASS  " + did in capsys.readouterr().out
+
+
+def test_tamper_state_is_kept_per_graph(tamper_env, own_graph, graph):
+    tamper.tamper(own_graph, "TR-1", 80000)
+    tamper.tamper(graph, "T0002", 12345)
+    saved = json.load(open(tamper.STATE))
+    assert saved == {own_graph.name: {"TR-1": 50000}, graph.name: {"T0002": saved[graph.name]["T0002"]}}
+    tamper.restore(own_graph)
+    assert own_graph.query("MATCH (t:Trade {id:'TR-1'}) RETURN t.amount").result_set[0][0] == 50000
+    assert json.load(open(tamper.STATE)).keys() == {graph.name}      # the other graph's change is still saved
+    tamper.restore(graph)
+    assert not os.path.exists(tamper.STATE)
+
+
+def test_old_flat_state_file_still_restores_on_the_practice_graph(tamper_env, graph):
+    amt = graph.query("MATCH (t:Trade {id:'T0002'}) RETURN t.amount").result_set[0][0]
+    graph.query("MATCH (t:Trade {id:'T0002'}) SET t.amount = 1")
+    with open(tamper.STATE, "w") as f:
+        json.dump({"T0002": amt}, f)
+    class AsPracticeShop:   # the test graph is a copy; the old file always meant the practice shop
+        name = "shop_a"
+        query = staticmethod(graph.query)
+    assert tamper.restore(AsPracticeShop()) == {"T0002": amt}
+    assert graph.query("MATCH (t:Trade {id:'T0002'}) RETURN t.amount").result_set[0][0] == amt
+
+
+def test_rules_tool_accepts_a_graph_name(tamper_env, capsys):
+    import rules
+    assert rules.main(["rules.py", "CUST-01", "5000", "--no-save", "--graph", "shop_own"]) == 0
+    out = capsys.readouterr().out
+    assert "Graph: shop_own" in out and "Verdict:      NO" in out and "PR001" in out

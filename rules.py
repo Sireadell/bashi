@@ -336,11 +336,14 @@ def decide(customer_id, request_amount, graph=None, save=True, today=None, as_of
 
 
 def main(argv):
-    args = [a for a in argv[1:] if not a.startswith("--")]
+    from db import open_graph, pop_graph_arg
+    name, rest = pop_graph_arg(argv[1:])
+    args = [a for a in rest if not a.startswith("--")]
     if len(args) != 2 or not args[1].lstrip("-").isdigit():
-        print("usage: python rules.py C001 45000 [--no-save]")
+        print("usage: python rules.py CUSTOMER 45000 [--no-save] [--graph NAME]")
         return 2
-    r = decide(args[0], int(args[1]), save="--no-save" not in argv)
+    _, graph, _ = open_graph(["--graph", name] if name else [])
+    r = decide(args[0], int(args[1]), graph=graph, save="--no-save" not in rest)
     print("Verdict:      %s" % r["verdict"])
     print("Why:          %s" % r["reason"])
     if r["open_debt"] is not None:

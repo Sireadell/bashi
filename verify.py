@@ -3,6 +3,9 @@
 For each Decision: rebuild its fingerprint from what it recorded, compare every
 linked record with what was recorded, re-run the rule on today's records.
 Prints PASS or FAIL per decision. Exit code 1 if any FAIL.
+
+  python verify.py                  the live default shop (shop_own if loaded, else shop_a)
+  python verify.py --graph shop_a   a named graph
 """
 import json
 import sys
@@ -83,9 +86,9 @@ def verify_decision(graph, d, state=None):
     return (not problems), problems
 
 
-def main():
-    from db import get_graph
-    graph = get_graph()
+def main(argv=None):
+    from db import open_graph
+    _, graph, _ = open_graph(sys.argv[1:] if argv is None else argv)
     rows = graph.query(
         "MATCH (d:Decision) RETURN d.id, d.customer_id, d.request, d.verdict, "
         "d.fingerprint, d.snapshot ORDER BY d.id").result_set

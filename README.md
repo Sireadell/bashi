@@ -4,7 +4,7 @@ Live demo: https://bashi-vrfv.onrender.com (no sign-up)
 
 I built Bashi for small shops that sell on credit. When a customer asks to buy on credit, Bashi answers yes or no, and it hands back a receipt that links the exact records it used: which sales, which payments, which broken promise. The answer comes from a fixed rule check over a FalkorDB graph, not from a guess, so anyone can look at the receipt and see why.
 
-**All data in this project is synthetic.** Every customer name, phone number and amount is invented. No real shop or person is in here.
+**Part of the demo data is real and part is invented.** The real part is 8 sales from my own shop audit, with names removed. Everything else is invented. See "Real vs invented" below.
 
 ## Why this exists
 
@@ -12,20 +12,33 @@ On 17 July 2026 I ran an audit (read-only) on a real shop's records. It found 8 
 
 I ran the same kind of check on the same shop on 15 October 2026 (494 sales, 46 credit accounts). 3 of the 46 accounts still had two records that differ, a total gap of N15,510.
 
-Bashi does not repair that shop's data. It is built around the same problem. It decides from linked records instead of a stored balance, shows the exact records on a receipt, flags a payment that is not linked to a sale but matches a still-open sale amount as a "possible phantom debt", and says CANNOT TRACE instead of guessing. The demo shop below is synthetic.
+Bashi does not repair that shop's data. It is built around the same problem. It decides from linked records instead of a stored balance, shows the exact records on a receipt, flags a payment that is not linked to a sale but matches a still-open sale amount as a "possible phantom debt", and says CANNOT TRACE instead of guessing. The live demo shows that case on the real audit records, next to invented customers.
+
+## Real vs invented
+
+The live site opens on my own shop view (graph `shop_own`). Every record is tagged real or invented, on the page and in the data.
+
+| | What it is |
+|---|---|
+| Real | The 8 credit sales from my own audit of 17 July 2026 (N388,340 in total). Each sale was recorded as paid, but the customer's ledger still showed the money as owed. The amounts still shown as owed and the sale dates come from the audit. Customers are coded CUST-A to CUST-D. |
+| Invented | 12 made-up customers (CUST-01 to CUST-12) with their sales, payments and promises, added so there is more to ask about. |
+| Assumed | Credit limits for all customers, and the payment dates of the 8 real sales (set equal to the sale dates). The audit log does not hold them. The page says so. |
+| Removed | Names, phone numbers, addresses, notes and item names. The data files hold only codes, amounts and dates, and the loader refuses anything else. |
+
+This is my own shop's data, used under the hackathon rule that data may be public, synthetic or your own. A picker on the page also keeps the "Practice shop (invented data)" (graph `shop_a`: Tunde Adeyemi and 24 other invented customers), which you can also pass to the command-line tools with `--graph shop_a`.
 
 ## The 90-second path (no sign-up, nothing to install)
 
-1. **Ask (about 15 seconds).** Open the live link. Tunde Adeyemi is already selected. Type 45000 and ask. The answer is NO.
-2. **Open the receipt (about 20 seconds).** It lists the exact sales, payments and the broken promise PR001 behind the NO. Click any record to see it.
-3. **Press what-if (about 20 seconds).** Next to PR001 press "What if this evidence did not exist". The answer flips to YES on a copy of the graph. The real data is never touched.
-4. **Run the tamper test (about 30 seconds).** In a terminal, with the repo set up as in "Run it" below:
+1. **Open the live link (about 5 seconds).** It opens on my own shop view.
+2. **Press "See the real audit case" (about 20 seconds).** The receipt of the real customer with the most money wrongly showing as owed opens. It lists the exact sales and payments, and flags the payment that is not linked to a sale as a possible phantom debt.
+3. **Go back and press "Try the demo", then what-if (about 25 seconds).** This asks N45,000 for an invented customer (CUST-01). The answer is NO. Open the receipt, press "What if this evidence did not exist" next to the broken promise, and the answer flips to YES on a copy of the graph. The real data is never touched.
+4. **Run the tamper test (about 40 seconds).** On the site, press "See the real audit case" once so a decision is saved. Then, in a terminal with the repo set up as in "Run it" below:
 
 ```powershell
-python tamper.py T0002 50000
-python verify.py        # FAIL, names Trade T0002
-python tamper.py --restore
-python verify.py        # PASS
+python tamper.py TR-2 300000 --graph shop_own
+python verify.py --graph shop_own     # FAIL, names Trade TR-2
+python tamper.py --restore --graph shop_own
+python verify.py --graph shop_own     # PASS
 ```
 
 ## Tracks entered
@@ -55,7 +68,7 @@ Stop FalkorDB and Bashi answers nothing. There is no local copy of the data to f
 
 ## Graph data model
 
-Graph name: `shop_a`. Every node has an `id` and an index on it.
+Two graphs use this same model. `shop_own` is the default on the live site (8 real audited sales plus invented customers, every record tagged real or invented). `shop_a` is the practice shop (25 invented customers), used by `seed.py`. `verify.py` and `tamper.py` take `--graph` and use `shop_own` when it is loaded. Every node has an `id` and an index on it.
 
 ```mermaid
 graph LR
@@ -72,7 +85,7 @@ graph LR
 
 | Node | What it is | Properties |
 |---|---|---|
-| Customer | a shop customer | id, name, phone, credit_limit, synthetic |
+| Customer | a shop customer | id, name, credit_limit, synthetic, source (`shop_own`); phone (`shop_a`) |
 | Trade | one credit sale | id, amount, date, item |
 | Payment | money received | id, amount, date |
 | Promise | a promise to pay | id, date, due, amount, kept |
@@ -90,7 +103,7 @@ graph LR
 | `(Decision)-[:USED_EVIDENCE]->(Trade, Payment or Promise)` | a record the decision read | none |
 | `(Decision)-[:APPLIED_RULE]->(Rule)` | the rules applied | none |
 
-The seed (`seed.py`) builds 25 customers and 120 credit sales, 30 of them unpaid or part paid. One payment for customer C002 is left unlinked on purpose, to show the phantom-debt warning.
+The practice seed (`seed.py`) builds 25 customers and 120 credit sales, 30 of them unpaid or part paid. One payment for customer C002 is left unlinked on purpose, to show the phantom-debt warning.
 
 ## Key Cypher queries
 
@@ -159,7 +172,7 @@ CREATE (c)-[:PROMISED]->(:Promise {id:$pid, date:$d, due:$due, amount:$amt, kept
 - **Not a smart credit score.** The yes or no comes from a fixed rule, two lines long, simple on purpose: say no if the debt plus the request is over the limit, or if there is a broken promise. No model decides it.
 - **Not an AI that decides.** The AI only picks which lookups to run and words one sentence. Every number and name in that sentence is checked against the records, and if the check fails, a plain template answers instead.
 - **Not far more accurate than a balance check.** On the scorecard below, Bashi gives the same answer as a balance-only check on 37 of 40 questions and a different one on 3. The gain is the receipt and the trace, not a bigger accuracy number.
-- **Not real data.** Every customer, amount and phone number is invented, so nothing here is advice about a real person or a real debt.
+- **Not a full set of real data.** Only 8 sales are real, and credit limits and payment dates for them are assumed. The rest is invented, so nothing here is advice about a real person or a real debt. Bashi does not repair that shop's data.
 
 ## Run it
 
@@ -182,7 +195,7 @@ ANTHROPIC_API_KEY=optional
 GEMINI_API_KEY=optional
 ```
 
-Build the demo shop (wipes and rebuilds the graph `shop_a`, takes a few seconds):
+Build the practice shop (wipes and rebuilds the graph `shop_a`, takes a few seconds; `python own_shop.py` does the same for `shop_own`):
 
 ```powershell
 python seed.py
@@ -194,17 +207,17 @@ Ask from the command line. Tunde asks for N45,000 and gets a NO because of one b
 python rules.py C001 45000
 ```
 
-Start the site and open http://127.0.0.1:5000. Press "Try the Tunde demo":
+Start the site and open http://127.0.0.1:5000. On the practice shop, press "Try the Tunde demo":
 
 ```powershell
 python app.py
 ```
 
-`verify.py` and the tamper test need at least one saved decision. On a fresh graph, ask once first (`python rules.py C001 45000`, or press the demo button), then run the tamper test above. Hosting steps are in `DEPLOY.md`.
+`verify.py` and the tamper test need at least one saved decision. On a fresh graph, ask once first (`python rules.py CUST-B 10000 --graph shop_own`, or press the demo button), then run the tamper test above. Hosting steps are in `DEPLOY.md`.
 
 ## Honest edge cases
 
-To replay every saved decision at any time, run `python verify.py`.
+To replay every saved decision at any time, run `python verify.py` (add `--graph shop_a` for the practice shop).
 
 If removing the evidence changes nothing, the page says so instead of pretending it mattered. If an amount cannot be traced to a sale and a payment, Bashi says it cannot trace it and gives no number.
 
@@ -224,7 +237,7 @@ Bashi against a plain "balance only" answer (all sales minus all payments, plus 
 | C002 Amaka Obi | N24,000 | NO | YES | a N12,000 payment was never linked to its sale |
 | C007 Funke Balogun | N30,000 | NO | YES | broken promise PR006 |
 
-The data is synthetic and only 3 of 40 differ, so this is a small gap. It is the gap Bashi is built for: the balance says yes where a broken promise or an unlinked payment says otherwise. Re-run it with `python scorecard.py` (writes `scorecard_results.json`).
+The scorecard runs on the invented practice shop, and only 3 of 40 differ, so this is a small gap. It is the gap Bashi is built for: the balance says yes where a broken promise or an unlinked payment says otherwise. Re-run it with `python scorecard.py` (writes `scorecard_results.json`).
 
 ## Tests
 

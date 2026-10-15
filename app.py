@@ -117,11 +117,23 @@ def graph_for_decision(decision_id):
     return first, get_graph(GRAPH_OF[first])
 
 
+PRACTICE_LABEL = "Demo data, all synthetic"
+INVENTED_LABEL = "Invented customer, not real data"
+
+
+def banner_for(shop, source):
+    """The banner for a page about one record. The real-audit banner is only for real customers;
+    invented customers get their own label; a receipt from the practice shop gets the practice one."""
+    if shop != "own":
+        return PRACTICE_LABEL
+    return INVENTED_LABEL if source == "invented" else OWN_LABEL
+
+
 @app.context_processor
 def shop_context():
     key = shop_key()
     return {"shop": {"key": key, "own": key == "own", "own_available": own_available(),
-                     "label": OWN_LABEL if key == "own" else "Demo data, all synthetic",
+                     "label": OWN_LABEL if key == "own" else PRACTICE_LABEL,
                      "explainer": OWN_EXPLAINER if key == "own" else None}}
 
 
@@ -215,13 +227,15 @@ def home():
 
 
 def receipt_data(decision_id):
-    _, g = graph_for_decision(decision_id)
+    shop, g = graph_for_decision(decision_id)
     dec = load_decision(decision_id, g)
     if dec is None:
         return None
     state = read_state(g, dec["customer_id"], as_of=dec["as_of"])
     src = g.query("MATCH (c:Customer {id:$c}) RETURN c.source", {"c": dec["customer_id"]}).result_set
-    out = {"dec": dec, "state": state, "tag": TAG.get(src[0][0]) if src else None, "trace_ok": False, "trades": [], "payments": [],
+    source = src[0][0] if src else None
+    out = {"dec": dec, "state": state, "tag": TAG.get(source), "banner": banner_for(shop, source),
+           "trace_ok": False, "trades": [], "payments": [],
            "promises": [], "orphans": [], "verify": None, "open_debt": None}
     if state is None:
         return out
@@ -359,8 +373,10 @@ def record(label, rid):
         r = g.query(q, {"i": rid}).result_set
         if r:
             props["customer"] = r[0][0]
+    shop = graph_for_decision(back)[0] if back else shop_key()
     return render_template("record.html", label=label, rid=rid, kind=LABELS[label],
-                           props=props, links=links, back=back)
+                           props=props, links=links, back=back,
+                           banner=banner_for(shop, props.get("source")))
 
 
 @app.route("/whatif/<decision_id>", methods=["POST"])

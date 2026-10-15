@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-<div class="demo-banner">{{ shop.label }}</div>
+<div class="demo-banner">{{ banner or shop.label }}</div>
 <header class="top">
   <a class="brand" href="{{ url_for('home') }}">Bashi</a>
   <span class="tag">A shop credit answer you can check</span>
