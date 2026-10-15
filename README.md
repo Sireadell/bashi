@@ -1,8 +1,24 @@
+Live demo: LIVE_URL_HERE (no sign-up)
+
 # Bashi
 
 I built Bashi for small shops that sell on credit. When a customer asks to buy on credit, Bashi answers yes or no, and it hands back a receipt that links the exact records it used: which sales, which payments, which broken promise. The answer comes from a fixed rule check over a FalkorDB graph, not from a guess, so anyone can look at the receipt and see why.
 
 **All data in this project is synthetic.** Every customer name, phone number and amount is invented. No real shop or person is in here.
+
+## The 90-second path (no sign-up, nothing to install)
+
+1. **Ask (about 15 seconds).** Open the live link. Tunde Adeyemi is already selected. Type 45000 and ask. The answer is NO.
+2. **Open the receipt (about 20 seconds).** It lists the exact sales, payments and the broken promise PR001 behind the NO. Click any record to see it.
+3. **Press what-if (about 20 seconds).** Next to PR001 press "What if this evidence did not exist". The answer flips to YES on a copy of the graph. The real data is never touched.
+4. **Run the tamper test (about 30 seconds).** In a terminal, with the repo set up as in "Run it" below:
+
+```powershell
+python tamper.py T0002 50000
+python verify.py        # FAIL, names Trade T0002
+python tamper.py --restore
+python verify.py        # PASS
+```
 
 ## How it works
 
@@ -12,12 +28,25 @@ I built Bashi for small shops that sell on credit. When a customer asks to buy o
 
 A promise to pay that is still unkept after its due date counts as broken the next time Bashi checks that customer. The check runs before every decision and never touches a promise marked kept. A saved decision remembers the day it was made, so replaying it later does not change just because time passed.
 
+## Where FalkorDB is needed
+
+The answer is a walk over links, so the graph is the product:
+
+- A payment is linked to the sale it settles `(Payment)-[:SETTLES]->(Trade)`. Open debt is the sales a customer made minus the payments linked to them. Without the link, a payment cannot be matched to the right sale.
+- A customer is linked to the promises they made and the ones they broke `(Customer)-[:PROMISED]->(Promise)`, `(Customer)-[:BROKE]->(Promise)`.
+- Every decision is saved as a node with `USED_EVIDENCE` links to the exact sales, payments and promises it read. The receipt page reads those links back and shows those records, nothing else.
+- The what-if button uses FalkorDB's `GRAPH.COPY` to copy the whole graph, delete one record on the copy, ask again, and delete the copy.
+- The receipt reads one customer's records in a single combined query (it used to be four).
+
+Stop FalkorDB and Bashi answers nothing. There is no local copy of the data to fall back on.
+
 ## What this is not
 
-- The receipt replay is tamper-evident, not tamper-proof. If something changes a sale, a payment or a decision, the replay shows it. But anyone who can write to the database can rewrite a decision and its fingerprint together, and the replay would pass.
-- The data is synthetic. Every customer, amount and phone number is invented, so nothing here is advice about a real person or a real debt.
-- The yes or no comes from a fixed rule, two lines long. No model decides it.
-- The AI only picks which lookups to run and words one sentence. Every number and name in that sentence is checked against the records, and if the check fails, a plain template answers instead.
+- **Not tamper-proof.** The replay is tamper-evident. If something changes a sale, a payment or a decision, the replay shows it. But anyone who can write to the database can rewrite a decision and its fingerprint together, and the replay would pass.
+- **Not a smart credit score.** The yes or no comes from a fixed rule, two lines long, simple on purpose: say no if the debt plus the request is over the limit, or if there is a broken promise. No model decides it.
+- **Not an AI that decides.** The AI only picks which lookups to run and words one sentence. Every number and name in that sentence is checked against the records, and if the check fails, a plain template answers instead.
+- **Not far more accurate than a balance check.** On the scorecard below, Bashi gives the same answer as a balance-only check on 37 of 40 questions and a different one on 3. The gain is the receipt and the trace, not a bigger accuracy number.
+- **Not real data.** Every customer, amount and phone number is invented, so nothing here is advice about a real person or a real debt.
 
 ## Run it
 
@@ -55,23 +84,9 @@ Start the site and open http://127.0.0.1:5000. Press "Try the Tunde demo":
 python app.py
 ```
 
-## The one-minute proof
+## Honest edge cases
 
-1. Ask for Tunde (C001) and N45,000. The answer is NO, and the receipt lists the exact sales, payments and the broken promise PR001 behind it.
-2. On the receipt press "What if this evidence did not exist" next to PR001. Bashi copies the graph, removes that record on the copy, runs the rule again and shows the answer flip to YES. The real data is never touched.
-3. Replay every saved decision:
-
-```powershell
-python verify.py
-```
-
-4. Change one sale by hand, then replay again. The replay fails and names the record that changed:
-
-```powershell
-python tamper.py T0002 50000
-python verify.py
-python tamper.py --restore
-```
+To replay every saved decision at any time, run `python verify.py`.
 
 If removing the evidence changes nothing, the page says so instead of pretending it mattered. If an amount cannot be traced to a sale and a payment, Bashi says it cannot trace it and gives no number.
 
