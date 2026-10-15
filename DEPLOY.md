@@ -15,7 +15,7 @@ You need: the GitHub repo with these files, a Render account, and the four Falko
    - `FALKORDB_PORT`
    - `FALKORDB_USERNAME`
    - `FALKORDB_PASSWORD`
-   - `ANTHROPIC_API_KEY` (optional; leave it out and the question box still works with fixed wording)
+   - `GEMINI_API_KEY` (optional but recommended: turns on the AI that picks the lookup and words the reply. Leave it out and the question box still works with fixed wording. If you also set `ANTHROPIC_API_KEY`, Claude is used first.)
 6. Click **Create Web Service** and wait for "Live" (about 3 to 5 minutes). On the first start it fills the demo shop by itself. If the data is already there it leaves it alone.
 7. Copy the address at the top, like `https://bashi-xxxx.onrender.com`.
 8. Check it: open `https://bashi-xxxx.onrender.com/health`. You should see `"ok": true` and `"customers": 25`.

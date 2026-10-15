@@ -170,3 +170,70 @@ def test_parsers():
     assert agent.parse_amounts("50k on credit") == [50000]
     assert agent.parse_amounts("by 2026-10-16 N10,000") == [10000]
     assert agent.parse_due("on Friday", today=agent.date(2026, 10, 14)) == "2026-10-16"
+
+
+# ------------------------------------------------------------------ Gemini route
+
+def call(_n, **args):
+    return {"functionCall": {"name": _n, "args": args}}
+
+
+def gturn(*parts):
+    return {"candidates": [{"content": {"role": "model", "parts": list(parts)}}]}
+
+
+class FakeGemini(agent.GeminiClient):
+    """Gemini client with the network call replaced by a fixed script."""
+
+    def __init__(self, turns, fail=None):
+        super().__init__("test-key-not-real", model="gemini-test")
+        self.turns, self.fail = list(turns), fail
+
+    def generate(self, contents):
+        if self.fail:
+            raise self.fail
+        return self.turns.pop(0)
+
+
+def gemini_script(final):
+    return [gturn(call("find_customer", name="Tunde")),
+            gturn(call("run_decision", customer_id="C001", amount=45000)),
+            gturn({"text": final})]
+
+
+def test_route_order_and_labels(monkeypatch):
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+    assert agent.make_client() is None
+    monkeypatch.setenv("GEMINI_API_KEY", "x")
+    c = agent.make_client()
+    assert isinstance(c, agent.GeminiClient) and agent.model_label(c).startswith("Google ")
+
+
+def test_gemini_good_sentence(graph):
+    r = agent.ask(Q, graph=graph, client=FakeGemini(gemini_script("Tunde has N10,000 open against a N60,000 limit.")))
+    assert r["mode"] == "model", r["note"]
+    assert r["verdict"] == "NO" and r["reply"].startswith("NO.")
+    assert r["answered_by"] == "Google gemini-test"
+    assert "[answered by: Google gemini-test]" in r["reply"]
+    assert "Claude" not in r["reply"]
+
+
+def test_gemini_failure_falls_back(graph):
+    r = agent.ask(Q, graph=graph, client=FakeGemini([], fail=TimeoutError("slow")))
+    assert r["mode"] == "fallback" and "TimeoutError" in r["note"]
+    assert r["verdict"] == "NO" and "built-in parser" in r["reply"]
+
+
+def test_gemini_cannot_flip_verdict(graph):
+    r = agent.ask(Q, graph=graph, client=FakeGemini(gemini_script("YES, approved! Tunde can have N45,000.")))
+    assert r["verdict"] == "NO" and r["reply"].startswith("NO.")
+    assert r["mode"] == "fallback" and "rejected" in r["note"]
+    assert "approved" not in r["reply"]
+
+
+def test_gemini_wrong_amount_tool_call_is_blocked(graph):
+    c = FakeGemini([gturn(call("run_decision", customer_id="C001", amount=1000)),
+                    gturn({"text": "Tunde has N10,000 open."})])
+    r = agent.ask(Q, graph=graph, client=c)
+    assert r["amount"] == 45000 and r["verdict"] == "NO" and r["blocked_model_calls"] == 1

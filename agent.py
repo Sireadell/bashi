@@ -1,6 +1,6 @@
 """Bashi agent: plain-English question in, checked answer out.
 
-The model (if a key is set) only chooses which lookups to run and words one
+The model (if a key is set: ANTHROPIC_API_KEY first, else GEMINI_API_KEY) only chooses which lookups to run and words one
 sentence. The YES/NO always comes from rules.decide, and every number, id and
 name in the model's sentence is checked against the records it was given. If the
 model is down, has no key, or its sentence fails the check, a fixed regex
@@ -10,6 +10,9 @@ import json
 import os
 import re
 import sys
+import time
+import urllib.error
+import urllib.request
 from datetime import date, datetime, timedelta
 
 from dotenv import load_dotenv
@@ -20,6 +23,7 @@ from rules import CANNOT_TRACE, naira, read_state
 load_dotenv()
 
 MODEL = "claude-haiku-5-5"
+GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-flash-latest")
 BASE_URL = os.environ.get("BASHI_BASE_URL", "http://127.0.0.1:5000")
 
 # ------------------------------------------------------------------ parsing
@@ -424,15 +428,91 @@ TOOLS = [
 ]
 
 
+class GeminiClient:
+    """Plain HTTPS client for Google's Gemini API. Same two jobs as the Claude route:
+    choose lookups and word one sentence. The key goes in a header, never in the
+    address, and is never printed."""
+
+    provider = "gemini"
+
+    def __init__(self, api_key, model=None, timeout=25.0):
+        self.api_key = api_key
+        self.model = model or GEMINI_MODEL
+        self.timeout = timeout
+        self.served = None   # the exact model version Google says answered
+
+    def generate(self, contents):
+        body = {
+            "systemInstruction": {"parts": [{"text": SYSTEM}]},
+            "contents": contents,
+            "tools": [{"functionDeclarations": [
+                {"name": t["name"], "description": t["description"], "parameters": t["input_schema"]}
+                for t in TOOLS]}],
+            "generationConfig": {"maxOutputTokens": 2048, "temperature": 0},
+        }
+        req = urllib.request.Request(
+            "https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent" % self.model,
+            data=json.dumps(body).encode(), method="POST",
+            headers={"Content-Type": "application/json", "x-goog-api-key": self.api_key})
+        data = None
+        for attempt in range(3):   # Google sometimes answers 503 "high demand"; retry briefly
+            try:
+                with urllib.request.urlopen(req, timeout=self.timeout) as resp:
+                    data = json.loads(resp.read().decode())
+                break
+            except urllib.error.HTTPError as e:
+                if e.code not in (429, 500, 503) or attempt == 2:
+                    raise
+                time.sleep(1.5 * (attempt + 1))
+        self.served = data.get("modelVersion") or self.served
+        return data
+
+    @property
+    def label(self):
+        return "Google " + (self.served or self.model)
+
+
 def make_client():
-    """An Anthropic client, or None when no key is set. The key is never printed."""
-    if not os.environ.get("ANTHROPIC_API_KEY"):
-        return None
-    import anthropic
-    return anthropic.Anthropic(timeout=25.0, max_retries=1)
+    """A model client, or None when no key is set. Claude first, then Gemini.
+    Keys are never printed."""
+    if os.environ.get("ANTHROPIC_API_KEY"):
+        import anthropic
+        return anthropic.Anthropic(timeout=25.0, max_retries=1)
+    if os.environ.get("GEMINI_API_KEY"):
+        return GeminiClient(os.environ["GEMINI_API_KEY"])
+    return None
+
+
+def model_label(client):
+    if getattr(client, "provider", "") == "gemini":
+        return client.label
+    return "Claude " + MODEL
+
+
+def run_gemini(client, run):
+    contents = [{"role": "user", "parts": [{"text": run.question}]}]
+    for _ in range(7):
+        data = client.generate(contents)
+        content = data["candidates"][0]["content"]
+        parts = content.get("parts") or []
+        contents.append({"role": "model", "parts": parts})
+        if data["candidates"][0].get("finishReason") == "MAX_TOKENS":
+            return ""   # cut-off sentence: never show it
+        calls = [p["functionCall"] for p in parts if "functionCall" in p]
+        if calls:
+            replies = []
+            for c in calls:
+                out = run.tool(c.get("name", ""), dict(c.get("args") or {}))
+                replies.append({"functionResponse": {"name": c.get("name", ""), "response": out}})
+            contents.append({"role": "user", "parts": replies})
+            continue
+        return " ".join(p["text"] for p in parts if p.get("text") and not p.get("thought")).strip()
+    return ""
 
 
 def run_model(client, run):
+    if getattr(client, "provider", "") == "gemini":
+        return run_gemini(client, run)
     msgs = [{"role": "user", "content": run.question}]
     for _ in range(7):
         resp = client.messages.create(model=MODEL, max_tokens=400, system=SYSTEM,
@@ -480,7 +560,7 @@ def ask(question, graph=None, client=None):
         else:
             mode, note = "fallback", "model wording rejected (%s)" % why
     reply = build_reply(run, middle)
-    label = ("Claude " + MODEL) if mode == "model" else "built-in parser and fixed wording"
+    label = model_label(client) if mode == "model" else "built-in parser and fixed wording"
     d = run.decision
     return {
         "mode": mode, "note": note, "answered_by": label,
