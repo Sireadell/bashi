@@ -75,6 +75,24 @@ python tamper.py --restore
 
 If removing the evidence changes nothing, the page says so instead of pretending it mattered. If an amount cannot be traced to a sale and a payment, Bashi says it cannot trace it and gives no number.
 
+## Scorecard
+
+Bashi against a plain "balance only" answer (all sales minus all payments, plus the request, against the limit; it ignores which sale a payment settles and ignores broken promises). 40 questions on the seeded shop: every one of the 25 customers once, 15 repeats, amounts spread between 30% and 130% of each limit (seed 42), plus Tunde at N45,000. Nothing is saved to the graph.
+
+| | Count |
+|---|---|
+| Questions | 40 |
+| Same answer | 37 |
+| Different | 3 |
+
+| Customer | Request | Bashi | Balance only | Why |
+|---|---|---|---|---|
+| C001 Tunde Adeyemi | N45,000 | NO | YES | broken promise PR001 |
+| C002 Amaka Obi | N24,000 | NO | YES | a N12,000 payment was never linked to its sale |
+| C007 Funke Balogun | N30,000 | NO | YES | broken promise PR006 |
+
+The data is synthetic and only 3 of 40 differ, so this is a small gap. It is the gap Bashi is built for: the balance says yes where a broken promise or an unlinked payment says otherwise. Re-run it with `python scorecard.py` (writes `scorecard_results.json`).
+
 ## Tests
 
 ```powershell
