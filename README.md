@@ -28,6 +28,11 @@ python tamper.py --restore
 python verify.py        # PASS
 ```
 
+## Tracks entered
+
+- **Track 01, Agents That Act on Connected Data (lead).** The agent answers a credit question from linked records in the graph, saves the decision back into the graph, and the receipt shows the exact records it used.
+- **Track 02, Agent Memory and Coordination.** Decisions and promises to pay are stored in the graph and survive restarts. A promise written in plain words ("Tunde promises N10,000 by Friday") becomes a node that the next decision for that customer reads. Stored decisions can be replayed later with `python verify.py`. The only hand-off is between the language step (picks lookups, words one sentence) and the fixed rule check, which makes the decision. It is not several agents talking to each other.
+
 ## How it works
 
 - Customers, sales, payments and promises to pay live as a graph in FalkorDB.
@@ -48,6 +53,106 @@ The answer is a walk over links, so the graph is the product:
 
 Stop FalkorDB and Bashi answers nothing. There is no local copy of the data to fall back on.
 
+## Graph data model
+
+Graph name: `shop_a`. Every node has an `id` and an index on it.
+
+```mermaid
+graph LR
+  C[Customer] -->|MADE| T[Trade]
+  P[Payment] -->|SETTLES amount| T
+  C -->|PROMISED| PR[Promise]
+  C -->|BROKE since| PR
+  D[Decision] -->|ABOUT| C
+  D -->|USED_EVIDENCE| T
+  D -->|USED_EVIDENCE| P
+  D -->|USED_EVIDENCE| PR
+  D -->|APPLIED_RULE| R[Rule]
+```
+
+| Node | What it is | Properties |
+|---|---|---|
+| Customer | a shop customer | id, name, phone, credit_limit, synthetic |
+| Trade | one credit sale | id, amount, date, item |
+| Payment | money received | id, amount, date |
+| Promise | a promise to pay | id, date, due, amount, kept |
+| Rule | one of the two rules | id, text |
+| Decision | one saved yes or no | id, customer_id, request, verdict, reason, created, as_of, open_debt, fingerprint, rule_ids, snapshot |
+| Counter | hands out the next D0001 or PR004 id | id, n |
+
+| Link | Meaning | Link properties |
+|---|---|---|
+| `(Customer)-[:MADE]->(Trade)` | the customer bought on credit | none |
+| `(Payment)-[:SETTLES]->(Trade)` | this payment paid all or part of this sale | `amount`: how much of the payment went to this sale |
+| `(Customer)-[:PROMISED]->(Promise)` | the customer promised to pay | none |
+| `(Customer)-[:BROKE]->(Promise)` | the promise is unkept and past its due date | `since`: the day the link was added (seeded ones have none) |
+| `(Decision)-[:ABOUT]->(Customer)` | who the decision was for | none |
+| `(Decision)-[:USED_EVIDENCE]->(Trade, Payment or Promise)` | a record the decision read | none |
+| `(Decision)-[:APPLIED_RULE]->(Rule)` | the rules applied | none |
+
+The seed (`seed.py`) builds 25 customers and 120 credit sales, 30 of them unpaid or part paid. One payment for customer C002 is left unlinked on purpose, to show the phantom-debt warning.
+
+## Key Cypher queries
+
+These are copied from the code. In plain words, "open debt" is all of a customer's sales minus the payment amounts linked to them.
+
+**1. Open debt walk** (`rules.py`, `read_state`). One round trip gets the customer, their sales with the payments settling each (if any), their promises and their broken promises. The code then adds it up: open debt = sum of sale amounts minus sum of `SETTLES.amount` (`evaluate`, same file). The sales-and-payments part:
+
+```cypher
+MATCH (c:Customer {id:$cid})-[:MADE]->(t:Trade)
+OPTIONAL MATCH (p:Payment)-[s:SETTLES]->(t)
+RETURN t.id, t.amount, t.date, p.id, p.amount, p.date, s.amount
+```
+
+The same debt as one Cypher sum, used as a seed check for Tunde (`seed.py`, `main`):
+
+```cypher
+MATCH (:Customer {id:'C001'})-[:MADE]->(t:Trade)
+OPTIONAL MATCH (:Payment)-[s:SETTLES]->(t)
+WITH t, coalesce(sum(s.amount),0) AS paid RETURN sum(t.amount - paid)
+```
+
+**2. Broken promises** (`rules.py`, `mark_overdue_promises`). Links every customer to each promise that is unkept and past its due date. Running it twice changes nothing, and kept promises are never touched. The decision then reads the `BROKE` links in query 1.
+
+```cypher
+MATCH (c:Customer)-[:PROMISED]->(p:Promise)
+WHERE p.kept = false AND p.due < $today
+MERGE (c)-[b:BROKE]->(p) ON CREATE SET b.since = $today
+```
+
+**3. Evidence save** (`rules.py`, `_save`). Stores the decision, then one `USED_EVIDENCE` link for every sale, payment and promise it read (the label changes per record), then the rules it applied.
+
+```cypher
+MATCH (c:Customer {id:$cid})
+CREATE (d:Decision {id:$did, customer_id:$cid, request:$req, verdict:$v, reason:$reason,
+  created:$created, fingerprint:$fp, rule_ids:$rids, snapshot:$snap, open_debt:$debt, as_of:$as_of})
+CREATE (d)-[:ABOUT]->(c)
+
+MATCH (d:Decision {id:$did}), (e:Trade {id:$eid}) CREATE (d)-[:USED_EVIDENCE]->(e)
+MATCH (d:Decision {id:$did}), (r:Rule {id:$rid}) CREATE (d)-[:APPLIED_RULE]->(r)
+```
+
+**4. Orphan payment check** (`rules.py`, `possible_phantoms`). Finds payments linked to no sale. If one has the same amount as a still-open sale, the receipt warns about a possible phantom debt. The debt is never changed.
+
+```cypher
+MATCH (p:Payment) WHERE NOT (p)-[:SETTLES]->() RETURN p.id, p.amount, p.date
+```
+
+**5. What-if** (`whatif.py`, `whatif`). Copies the whole graph with FalkorDB's `GRAPH.COPY` (called as `graph.copy(name)`), deletes the chosen record on the copy only, asks again on the copy, then deletes the copy.
+
+```cypher
+GRAPH.COPY shop_a shop_a_whatif_<decision id>_<time>_<random>
+MATCH (n) WHERE n.id = $i AND (n:Trade OR n:Payment OR n:Promise) DETACH DELETE n   // on the copy
+GRAPH.DELETE shop_a_whatif_<decision id>_<time>_<random>
+```
+
+Also in `rules.py`: `allocate_id` bumps the id counter in the graph with `MATCH (k:Counter {id:$k}) SET k.n = k.n + 1 RETURN k.n`, so two requests never get the same id. `agent.py` `record_promise` writes the promise from plain words:
+
+```cypher
+MATCH (c:Customer {id:$cid})
+CREATE (c)-[:PROMISED]->(:Promise {id:$pid, date:$d, due:$due, amount:$amt, kept:false})
+```
+
 ## What this is not
 
 - **Not tamper-proof.** The replay is tamper-evident. If something changes a sale, a payment or a decision, the replay shows it. But anyone who can write to the database can rewrite a decision and its fingerprint together, and the replay would pass.
@@ -58,13 +163,15 @@ Stop FalkorDB and Bashi answers nothing. There is no local copy of the data to f
 
 ## Run it
 
-You need Python 3 and a FalkorDB instance (I use the free FalkorDB Cloud one).
+You need Python 3 (the hosted site uses 3.13) and a FalkorDB instance. I use the free FalkorDB Cloud one. To run FalkorDB on your own machine instead, start FalkorDB's standard Docker image (`docker run -p 6379:6379 falkordb/falkordb`) and use host `localhost`, port `6379` and no username or password below.
 
 ```powershell
+git clone https://github.com/Sireadell/bashi
+cd bashi
 pip install -r requirements.txt
 ```
 
-Put your connection details in a `.env` file (never commit it). `ANTHROPIC_API_KEY` is optional: without it the plain-words box uses a built-in parser and fixed wording, and every reply says which mode answered.
+Copy `.env.example` to `.env`, fill in your connection details (never commit it). The two AI keys are optional: without one, the plain-words box uses a built-in parser and fixed wording, and every reply says which mode answered. If both are set, Claude is used first.
 
 ```
 FALKORDB_HOST=your-host
@@ -72,6 +179,7 @@ FALKORDB_PORT=your-port
 FALKORDB_USERNAME=your-username
 FALKORDB_PASSWORD=your-password
 ANTHROPIC_API_KEY=optional
+GEMINI_API_KEY=optional
 ```
 
 Build the demo shop (wipes and rebuilds the graph `shop_a`, takes a few seconds):
@@ -91,6 +199,8 @@ Start the site and open http://127.0.0.1:5000. Press "Try the Tunde demo":
 ```powershell
 python app.py
 ```
+
+`verify.py` and the tamper test need at least one saved decision. On a fresh graph, ask once first (`python rules.py C001 45000`, or press the demo button), then run the tamper test above. Hosting steps are in `DEPLOY.md`.
 
 ## Honest edge cases
 
@@ -126,4 +236,5 @@ The tests run against a copy of the graph and delete it afterwards.
 
 ## AI tools used
 
-- Claude Code (Anthropic) helped write the code in this repo.
+- **Claude Code (Anthropic)** was used to build this project: the code, tests and documentation.
+- **At run time, Claude (a Haiku model) or Gemini**, only if you set a key, and only for two jobs: choosing which lookups to run and wording one short sentence. They never make the yes or no. The rule check (`rules.py`) contains no AI, and a model sentence that fails the check against the records is replaced by fixed wording.
