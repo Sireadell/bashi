@@ -77,10 +77,10 @@ def sweep_stale_copies(db, now=None):
     return removed
 
 
-def whatif(decision_id, remove):
+def whatif(decision_id, remove, graph_name=MAIN):
     """Return original vs new verdict after deleting `remove` (record ids) on a copy."""
     remove = [x for x in (remove or []) if x]
-    main = get_graph(MAIN)
+    main = get_graph(graph_name)
     dec = load_decision(decision_id, main)
     if dec is None:
         raise ValueError("unknown decision " + str(decision_id))

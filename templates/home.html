@@ -1,5 +1,24 @@
 {% extends "base.html" %}
 {% block body %}
+{% if shop.own_available %}
+<section class="ask">
+  <form method="post" action="{{ url_for('choose_shop') }}">
+    <label>Shop
+      <select name="shop" onchange="this.form.submit()">
+        <option value="demo" {{ 'selected' if not shop.own }}>Practice shop (invented data)</option>
+        <option value="own" {{ 'selected' if shop.own }}>My own shop (names removed)</option>
+      </select>
+    </label>
+    <noscript><button class="btn" type="submit">Switch</button></noscript>
+  </form>
+</section>
+{% endif %}
+{% if shop.explainer %}
+<section class="card">
+  <h2>{{ shop.label }}</h2>
+  <p>{{ shop.explainer }}</p>
+</section>
+{% endif %}
 {% if result %}
 <section class="verdict {{ 'no' if result.verdict == 'NO' else 'yes' }}" aria-live="polite">
   <p class="who">{{ result.customer_name }} asks for {{ result.request|naira }} on credit</p>
@@ -29,18 +48,19 @@
   <h2>Ask in plain words</h2>
   <form method="post" action="{{ url_for('home') }}">
     <label>Your question
-      <input name="q" value="{{ form.q or '' }}" placeholder="Can Tunde take N45,000 on credit?" autocomplete="off" maxlength="300">
+      <input name="q" value="{{ form.q or '' }}" placeholder="{{ 'Can ' ~ custs[0].id ~ ' take N45,000 on credit?' if shop.own and custs else 'Can Tunde take N45,000 on credit?' }}" autocomplete="off" maxlength="300">
     </label>
     <button class="btn" type="submit">Ask</button>
   </form>
-  <p class="hint">You can also say: Tunde promised to pay N10,000 on Friday.</p>
+  <p class="hint">You can also say: {{ custs[0].id if shop.own and custs else 'Tunde' }} promised to pay N10,000 on Friday.</p>
 </section>
 
 {% if not result and not answer %}
 <section class="demo">
   <p class="kicker">Ninety second proof</p>
-  <form method="post" action="{{ url_for('demo') }}"><button class="btn" type="submit">Try the Tunde demo</button></form>
-  <p class="hint">Asks N45,000 for Tunde Adeyemi, then opens the receipt.</p>
+  <form method="post" action="{{ url_for('demo') }}"><button class="btn" type="submit">{{ 'Try the demo' if shop.own else 'Try the Tunde demo' }}</button></form>
+  {% if shop.own %}<form method="post" action="{{ url_for('demo_real') }}"><button class="btn" type="submit">See the real audit case</button></form>{% endif %}
+  <p class="hint">{% if shop.own %}The demo uses an invented customer: the answer is NO, and removing one record changes it. The real audit case opens the receipt of the real customer with the most money wrongly showing as owed.{% else %}Asks N45,000 for Tunde Adeyemi, then opens the receipt.{% endif %}</p>
 </section>
 {% endif %}
 
@@ -50,7 +70,7 @@
   <form method="post" action="{{ url_for('home') }}">
     <label>Customer
       <select name="customer">
-        {% for c in custs %}<option value="{{ c.id }}" {{ 'selected' if c.id == form.customer }}>{{ c.name }} ({{ c.id }}), limit {{ c.limit|naira }}</option>{% endfor %}
+        {% for c in custs %}<option value="{{ c.id }}" {{ 'selected' if c.id == form.customer }}>{{ c.name }} ({{ c.id }}){{ ', ' ~ c.tag if c.tag }}, limit {{ c.limit|naira }}</option>{% endfor %}
       </select>
     </label>
     <label>Amount in naira
@@ -58,6 +78,6 @@
     </label>
     <button class="btn" type="submit">Get the answer</button>
   </form>
-  {% if not result %}<p class="hint">Tunde Adeyemi is filled in with N45,000. Press the button, then open the receipt.</p>{% endif %}
+  {% if not result and not shop.own %}<p class="hint">Tunde Adeyemi is filled in with N45,000. Press the button, then open the receipt.</p>{% endif %}
 </section>
 {% endblock %}

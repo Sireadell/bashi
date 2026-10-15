@@ -96,6 +96,7 @@ def test_stale_whatif_copies_are_swept(graph):
 def test_keepalive_rebuilds_a_lost_graph(monkeypatch):
     monkeypatch.delenv("BASHI_URL", raising=False)
     counts, seeded = [0, 25], []
+    monkeypatch.setattr(keepalive, "keep_own_shop", lambda: None)
     monkeypatch.setattr(keepalive, "tiny_read", lambda: counts.pop(0))
     import startup
     monkeypatch.setattr(startup, "ensure_seeded", lambda: seeded.append(1))
@@ -104,6 +105,7 @@ def test_keepalive_rebuilds_a_lost_graph(monkeypatch):
 
 def test_keepalive_fails_when_repair_fails(monkeypatch):
     monkeypatch.delenv("BASHI_URL", raising=False)
+    monkeypatch.setattr(keepalive, "keep_own_shop", lambda: None)
     monkeypatch.setattr(keepalive, "tiny_read", lambda: 0)
     import startup
     monkeypatch.setattr(startup, "ensure_seeded", lambda: True)
@@ -112,6 +114,7 @@ def test_keepalive_fails_when_repair_fails(monkeypatch):
 
 def test_keepalive_leaves_a_healthy_graph_alone(monkeypatch):
     monkeypatch.delenv("BASHI_URL", raising=False)
+    monkeypatch.setattr(keepalive, "keep_own_shop", lambda: None)
     monkeypatch.setattr(keepalive, "tiny_read", lambda: 25)
     import startup
     monkeypatch.setattr(startup, "ensure_seeded", lambda: pytest.fail("must not reseed"))

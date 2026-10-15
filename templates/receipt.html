@@ -4,7 +4,7 @@
 <p class="crumbs"><a href="{{ url_for('home') }}">&larr; New question</a></p>
 
 <section class="verdict {{ 'no' if dec.verdict == 'NO' else 'yes' }}">
-  <p class="who">Receipt <span class="mono">{{ dec.id }}</span>: {{ dec.customer_name }} asked for {{ dec.request|naira }}</p>
+  <p class="who">Receipt <span class="mono">{{ dec.id }}</span>: {{ dec.customer_name }}{% if tag %} <b class="mono">({{ tag }})</b>{% endif %} asked for {{ dec.request|naira }}</p>
   <h1 class="big" id="orig-verdict">{{ dec.verdict }}</h1>
   <p class="why">{{ dec.reason|cap }}.</p>
   <p class="nums">
@@ -14,6 +14,7 @@
   </p>
 </section>
 
+{% if hint %}<p class="hint">Try it: press "What if this evidence did not exist" next to <b class="mono">{{ hint }}</b> below and watch the answer change.</p>{% endif %}
 <section id="whatif-panel" class="whatif" hidden aria-live="polite"></section>
 
 <section class="card">

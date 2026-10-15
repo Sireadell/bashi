@@ -7,6 +7,7 @@ from falkordb import FalkorDB
 load_dotenv()
 
 DEFAULT_GRAPH = "shop_a"
+OWN_GRAPH = "shop_own"
 
 
 def get_db():

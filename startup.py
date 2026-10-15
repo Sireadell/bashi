@@ -38,8 +38,23 @@ def ensure_seeded():
     return True
 
 
+def ensure_own_shop():
+    """Load the own shop when its graph is missing or empty. Safe to run on every start."""
+    import own_shop
+    db = get_db()
+    if not own_shop.needs_load(db):
+        return False
+    print("startup: loading the own shop (real audit plus invented filler)")
+    own_shop.load_seed(db)
+    return True
+
+
 def main():
     ensure_seeded()
+    try:
+        ensure_own_shop()
+    except Exception as e:  # the demo shop must still start if this fails
+        print("startup: own shop skipped (%s)" % type(e).__name__)
     try:
         ensure_indexes(get_db())
     except Exception as e:  # indexes only speed things up, never block the start

@@ -30,6 +30,24 @@ def tiny_read():
     return db.select_graph(DEFAULT_GRAPH).query("MATCH (c:Customer) RETURN count(c)").result_set[0][0]
 
 
+def keep_own_shop():
+    """Touch the own-shop graph so it stays alive, and rebuild it from the seed if it was lost.
+    Optional: any problem here is reported but never fails the run."""
+    try:
+        import own_shop
+        from db import OWN_GRAPH, get_db
+        db = get_db()
+        if own_shop.needs_load(db):
+            print("database: own shop is missing or empty, rebuilding it")
+            import startup
+            startup.ensure_own_shop()
+        else:
+            n = db.select_graph(OWN_GRAPH).query("MATCH (c:Customer) RETURN count(c)").result_set[0][0]
+            print("database own-shop customers:", n)
+    except Exception as e:
+        print("own shop check failed:", type(e).__name__)
+
+
 def once():
     url = os.environ.get("BASHI_URL")
     if url:
@@ -48,6 +66,7 @@ def once():
                 print("database: rebuild did not bring the customers back")
                 return 1
         print("database customers:", n)
+        keep_own_shop()
     except Exception as e:
         print("database read or rebuild failed:", type(e).__name__)
         return 1
