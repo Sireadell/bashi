@@ -1,4 +1,4 @@
-Live demo: LIVE_URL_HERE (no sign-up)
+Live demo: https://bashi-vrfv.onrender.com (no sign-up)
 
 # Bashi
 
