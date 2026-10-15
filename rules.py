@@ -45,36 +45,46 @@ def read_state(graph, customer_id, as_of=None):
              promises: {id: {amount, due, kept, broke}}}
     """
     p = {"cid": customer_id}
+    # One round trip for everything. Each branch is tagged so the rows can be
+    # told apart; columns a..g are filled according to the tag.
     rows = graph.query(
-        "MATCH (c:Customer {id:$cid}) RETURN c.id, c.credit_limit", p
-    ).result_set
-    if not rows:
-        return None
-    state = {
-        "customer": {"id": rows[0][0], "limit": rows[0][1]},
-        "trades": {}, "payments": {}, "settles": {}, "promises": {},
-    }
-    rows = graph.query(
+        "MATCH (c:Customer {id:$cid}) "
+        "RETURN 'C' AS k, c.id AS a, c.credit_limit AS b, null AS c, null AS d, "
+        "null AS e, null AS f, null AS g "
+        "UNION ALL "
         "MATCH (c:Customer {id:$cid})-[:MADE]->(t:Trade) "
         "OPTIONAL MATCH (p:Payment)-[s:SETTLES]->(t) "
-        "RETURN t.id, t.amount, t.date, p.id, p.amount, p.date, s.amount", p
+        "RETURN 'T' AS k, t.id AS a, t.amount AS b, t.date AS c, p.id AS d, "
+        "p.amount AS e, p.date AS f, s.amount AS g "
+        "UNION ALL "
+        "MATCH (c:Customer {id:$cid})-[:PROMISED]->(pr:Promise) "
+        "RETURN 'P' AS k, pr.id AS a, pr.amount AS b, pr.due AS c, pr.kept AS d, "
+        "null AS e, null AS f, null AS g "
+        "UNION ALL "
+        "MATCH (c:Customer {id:$cid})-[b:BROKE]->(pr:Promise) "
+        "RETURN 'B' AS k, pr.id AS a, pr.amount AS b, pr.due AS c, pr.kept AS d, "
+        "b.since AS e, null AS f, null AS g", p
     ).result_set
-    for tid, tamt, tdate, pid, pamt, pdate, samt in rows:
+    cust = [r for r in rows if r[0] == "C"]
+    if not cust:
+        return None
+    state = {
+        "customer": {"id": cust[0][1], "limit": cust[0][2]},
+        "trades": {}, "payments": {}, "settles": {}, "promises": {},
+    }
+    for k, tid, tamt, tdate, pid, pamt, pdate, samt in rows:
+        if k != "T":
+            continue
         state["trades"][tid] = {"amount": tamt, "date": tdate}
         if pid is not None:
             state["payments"][pid] = {"amount": pamt, "date": pdate}
             state["settles"]["%s>%s" % (pid, tid)] = samt
-    rows = graph.query(
-        "MATCH (c:Customer {id:$cid})-[:PROMISED]->(pr:Promise) "
-        "RETURN pr.id, pr.amount, pr.due, pr.kept", p
-    ).result_set
-    for prid, amt, due, kept in rows:
-        state["promises"][prid] = {"amount": amt, "due": due, "kept": kept, "broke": False}
-    rows = graph.query(
-        "MATCH (c:Customer {id:$cid})-[b:BROKE]->(pr:Promise) "
-        "RETURN pr.id, pr.amount, pr.due, pr.kept, b.since", p
-    ).result_set
-    for prid, amt, due, kept, since in rows:
+    for k, prid, amt, due, kept, *_ in rows:
+        if k == "P":
+            state["promises"][prid] = {"amount": amt, "due": due, "kept": kept, "broke": False}
+    for k, prid, amt, due, kept, since, *_ in rows:
+        if k != "B":
+            continue
         if as_of and since and since > as_of:
             continue
         rec = state["promises"].setdefault(

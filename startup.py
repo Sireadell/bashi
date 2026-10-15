@@ -16,6 +16,17 @@ def graph_is_populated(db):
     return bool(rows) and rows[0][0] > 0
 
 
+def ensure_indexes(db):
+    """Make sure every label has an index on id. Safe to run on every start."""
+    from seed import LABELS
+    g = db.select_graph(DEFAULT_GRAPH)
+    have = {row[0] for row in g.query("CALL db.indexes()").result_set}
+    for label in LABELS:
+        if label not in have:
+            g.query("CREATE INDEX FOR (n:%s) ON (n.id)" % label)
+            print("startup: added missing index on %s.id" % label)
+
+
 def ensure_seeded():
     """Return True if it had to seed, False if the data was already there."""
     if graph_is_populated(get_db()):
@@ -29,6 +40,10 @@ def ensure_seeded():
 
 def main():
     ensure_seeded()
+    try:
+        ensure_indexes(get_db())
+    except Exception as e:  # indexes only speed things up, never block the start
+        print("startup: index check skipped (%s)" % type(e).__name__)
     port = os.environ.get("PORT", "10000")
     os.execvp(sys.executable, [sys.executable, "-m", "gunicorn", "app:app",
                                "--bind", "0.0.0.0:" + port, "--workers", "1",

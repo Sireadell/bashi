@@ -169,15 +169,16 @@ def receipt_data(decision_id):
     for prid in sorted(state["promises"]):
         out["promises"].append({"id": prid, **state["promises"][prid]})
     # Same check as verify.py: one shared function, no second copy of the logic.
-    snap = g.query("MATCH (d:Decision {id:$d}) RETURN d.snapshot", {"d": decision_id}).result_set
+    # The snapshot came with the decision, and the records were read above on
+    # the same day verify would use, so neither is fetched a second time.
     ok, problems = verify_decision(
         g, (dec["id"], dec["customer_id"], dec["request"], dec["verdict"],
-            dec["fingerprint"], snap[0][0] if snap else None))
+            dec["fingerprint"], dec["snapshot"]), state=state)
     out["verify"] = {"ok": ok, "problems": problems}
     # Possible phantom debt: unlinked payment with the same amount as a still-open sale.
     open_amounts = {t["amount"]: t["id"] for t in out["trades"] if t["open"] > 0 and t["settled"] == 0}
     if open_amounts:
-        rows = get_graph().query(
+        rows = g.query(
             "MATCH (p:Payment) WHERE NOT (p)-[:SETTLES]->(:Trade) RETURN p.id, p.amount, p.date").result_set
         for pid, amt, date in rows:
             if amt in open_amounts:

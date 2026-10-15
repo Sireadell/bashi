@@ -31,15 +31,15 @@ def load_decision(decision_id, graph=None):
     r = g.query(
         "MATCH (d:Decision {id:$d})-[:ABOUT]->(c:Customer) "
         "RETURN d.id, d.customer_id, d.request, d.verdict, d.reason, d.created, "
-        "d.fingerprint, d.rule_ids, c.name, c.credit_limit", {"d": decision_id})
+        "d.fingerprint, d.rule_ids, c.name, c.credit_limit, d.as_of, d.snapshot", {"d": decision_id})
     if not r.result_set:
         return None
     row = r.result_set[0]
     keys = ["id", "customer_id", "request", "verdict", "reason", "created",
             "fingerprint", "rule_ids", "customer_name", "limit"]
     out = dict(zip(keys, row))
-    out["as_of"] = (g.query("MATCH (d:Decision {id:$d}) RETURN d.as_of", {"d": decision_id})
-                    .result_set[0][0]) or (out["created"] or "")[:10] or None
+    out["as_of"] = row[10] or (out["created"] or "")[:10] or None
+    out["snapshot"] = row[11]
     return out
 
 

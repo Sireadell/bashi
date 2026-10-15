@@ -36,9 +36,10 @@ def diff_snapshots(old, new):
     return msgs
 
 
-def verify_decision(graph, d):
+def verify_decision(graph, d, state=None):
     """d = (id, customer_id, request, verdict, fingerprint, snapshot_json).
-    Returns (ok, [problems])."""
+    state: records the caller already read for this decision's day (as_of), so
+    they are not read twice. Returns (ok, [problems])."""
     did, cid, request, verdict, fp, snap_json = d
     problems = []
     try:
@@ -49,12 +50,13 @@ def verify_decision(graph, d):
         problems.append("Decision %s itself was edited (its fingerprint no longer matches)" % did)
     # Read the records as they stood on the day of the decision, so a promise
     # that fell overdue later does not make an old decision look tampered with.
-    meta = graph.query("MATCH (d:Decision {id:$did}) RETURN d.as_of, d.created",
-                       {"did": did}).result_set
-    as_of = None
-    if meta:
-        as_of = meta[0][0] or (meta[0][1] or "")[:10] or None
-    state = read_state(graph, cid, as_of=as_of)
+    if state is None:
+        meta = graph.query("MATCH (d:Decision {id:$did}) RETURN d.as_of, d.created",
+                           {"did": did}).result_set
+        as_of = None
+        if meta:
+            as_of = meta[0][0] or (meta[0][1] or "")[:10] or None
+        state = read_state(graph, cid, as_of=as_of)
     if state is None:
         return False, problems + ["Customer %s is missing now" % cid]
     # Only compare records this decision actually used.
