@@ -6,6 +6,14 @@ I built Bashi for small shops that sell on credit. When a customer asks to buy o
 
 **All data in this project is synthetic.** Every customer name, phone number and amount is invented. No real shop or person is in here.
 
+## Why this exists
+
+On 17 July 2026 I ran an audit (read-only) on a real shop's records. It found 8 sales marked fully paid while the customer's account ledger still showed debt, N388,340 in total. The cause: one payment updates two separate records, the sale and the ledger, and one of them can lag or fail. Each screen looks right on its own, so nobody sees the gap. I fixed the cause afterwards.
+
+I ran the same kind of check on the same shop on 15 October 2026 (494 sales, 46 credit accounts). 3 of the 46 accounts still had two records that differ, a total gap of N15,510.
+
+Bashi does not repair that shop's data. It is built around the same problem. It decides from linked records instead of a stored balance, shows the exact records on a receipt, flags a payment that is not linked to a sale but matches a still-open sale amount as a "possible phantom debt", and says CANNOT TRACE instead of guessing. The demo shop below is synthetic.
+
 ## The 90-second path (no sign-up, nothing to install)
 
 1. **Ask (about 15 seconds).** Open the live link. Tunde Adeyemi is already selected. Type 45000 and ask. The answer is NO.
