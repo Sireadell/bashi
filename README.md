@@ -253,6 +253,20 @@ Honest limit: the amounts and sale dates come from my audit, but the payment rec
 | The tests pass | `python -m pytest` (about 16 minutes, it talks to a hosted database) |
 | The audit figures (N388,340, 494 sales, 46 accounts) are from my shop | A visitor cannot check these. They are my own read-only audit, names removed. |
 
+## Use it from other tools
+
+Another AI app can ask Bashi "can customer X take N naira on credit?" and get a YES or NO with a receipt link it can re-check later. There are plain web addresses and an MCP address (MCP is a standard way for AI tools to plug into other tools). The answer is still the same two fixed rules, with no AI in the decision. Full guide with one example per address: [AGENTS.md](AGENTS.md).
+
+| Address | What it does |
+|---|---|
+| `POST /api/decide` | Body `{"customer": "C001", "amount": 45000}`. Returns the answer, reasons, receipt link, verify link and the records used. |
+| `GET /api/receipt/<id>` | The full receipt as data. |
+| `GET /api/verify/<id>` | Re-checks one saved decision and returns `verified` true or false. |
+| `GET /api/whatif/<id>?remove=<record id>` | The answer if that record had never existed, run on a throwaway copy. |
+| `POST /mcp` | MCP tools: `decide_credit`, `get_receipt`, `verify_decision`, `what_if_remove_evidence`, `list_customers`. `python mcp_stdio.py` gives the same tools for Claude Desktop. |
+
+Tests: `python -m pytest tests/test_api_mcp.py -q`.
+
 ## Scorecard
 
 Bashi against a plain "balance only" answer (all sales minus all payments, plus the request, against the limit; it ignores which sale a payment settles and ignores broken promises). 40 questions on the seeded shop: every one of the 25 customers once, 15 repeats, amounts spread between 30% and 130% of each limit (seed 42), plus Tunde at N45,000. Nothing is saved to the graph.

@@ -1,0 +1,24 @@
+# Bashi
+
+> Bashi answers one question for a shop: can this customer take this amount on credit? It says YES, NO or CANNOT TRACE with a receipt that links the exact records used. The answer comes from two fixed rules, not an AI guess, and anyone can re-check a receipt.
+
+Full guide with examples: /AGENTS.md
+
+## Routes (plain JSON)
+
+- POST /api/decide : body {"customer": "C001", "amount": 45000, "shop": "shop_a"}. Returns the answer, plain-words reasons, decision id, receipt link, verify link, fingerprint and the record ids used.
+- GET /api/receipt/<id> : the full receipt as JSON.
+- GET /api/verify/<id> : re-checks one saved decision. Returns verified true or false.
+- GET /api/whatif/<id>?remove=<record id> : the answer if that record had never existed, run on a throwaway copy.
+- GET /api/customers : the customer ids you can ask about.
+
+## MCP
+
+- POST /mcp : MCP over HTTP (JSON-RPC 2.0, protocol 2025-06-18). GET /mcp describes it.
+- Tools: decide_credit, get_receipt, verify_decision, what_if_remove_evidence, list_customers.
+- For Claude Desktop, run mcp_stdio.py (same tools over stdio).
+
+## Good to know
+
+- Data is the demo shop (all invented) or the owner's own shop with names removed. Each receipt says which.
+- Limits: 20 decisions or what-ifs per 10 minutes per visitor. Bashi cannot add or change shop records through these routes.
