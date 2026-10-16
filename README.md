@@ -1,5 +1,5 @@
 Live demo: https://bashi-vrfv.onrender.com (no sign-up)
-Demo video: https://youtu.be/xMeDgNsZwU0
+Demo video: https://youtu.be/Xpq_LN4h9XA
 
 # Bashi
 
