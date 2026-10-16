@@ -59,3 +59,58 @@ tr.total td{border-top:2px solid var(--ink);border-bottom:0;font-size:17px}
 @media (max-width:560px){body{font-size:16px}th,td{padding:7px 5px}.mini{width:100%}}
 .v.cant{font-size:34px;color:var(--warn)}
 .demo{margin:14px 0;padding:18px 20px;border:2px solid var(--ink);background:var(--card)}
+
+/* polish */
+:root{--focus:#0b57d0;--shadow:0 1px 2px rgba(28,26,22,.06),0 4px 14px rgba(28,26,22,.05)}
+@media (prefers-color-scheme:dark){:root{--focus:#9cc2ff;--shadow:none}}
+body{line-height:1.55}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+select:focus-visible,input:focus-visible{outline-offset:0;border-color:var(--focus)}
+main{padding-top:4px}
+.top{padding-top:22px;padding-bottom:6px}
+.ask,.card,.demo,.verdict,.whatif{box-shadow:var(--shadow)}
+.ask,.card{padding:22px 24px}
+h2{font-size:21px;letter-spacing:-.01em}
+.card h2{font-size:19px}
+.hero{padding:26px 4px 6px}
+.lead{font-size:clamp(28px,5.6vw,44px);line-height:1.12;letter-spacing:-.025em;margin:0 0 12px;max-width:21em}
+.sub{font-size:19px;color:var(--mute);margin:0;max-width:34em}
+.demo{border-width:2px;padding:22px 24px}
+.demo .kicker{margin-bottom:12px}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 14px}
+.actions form{margin:0}
+.btn{border:2px solid var(--ink);font-size:18px;padding:14px 26px}
+.btn.alt{background:transparent;color:var(--ink)}
+.btn.alt:hover{background:var(--ink);color:var(--paper);opacity:1}
+.demo .btn:not(.alt){font-size:20px}
+.demo .hint{margin:0;font-size:15px}
+.hint,.small{font-size:15px}
+.shoppick{padding:14px 24px}
+.shoppick label{margin:0}
+.verdict{padding:24px 26px 26px;border-width:3px}
+.verdict .who{font-size:18px}
+.big{font-size:clamp(96px,28vw,200px);font-weight:800;letter-spacing:-.05em;margin:4px 0 6px}
+.nums b{font-size:26px}
+.nums{padding-top:10px;border-top:1px solid var(--line)}
+.whatif{border-width:3px;padding:22px 26px}
+.whatif.flipped{background:var(--card);box-shadow:inset 8px 0 0 var(--yes),var(--shadow)}
+.whatif.same{border-style:solid;border-color:var(--line)}
+.whatif .kicker{font-size:13px}
+.pair{gap:10px 22px;margin:8px 0 14px}
+.side{padding:10px 18px 12px;border:1px solid var(--line);background:var(--paper);min-width:150px}
+.lbl{font-size:14px;font-weight:600}
+.v{font-size:clamp(56px,13vw,96px);font-weight:800;letter-spacing:-.04em}
+.v.cant{font-size:clamp(28px,6vw,40px);padding:14px 0}
+.arrow{font-size:clamp(34px,8vw,56px);color:var(--ink)}
+.mini{min-height:44px;padding:9px 12px}
+@media (max-width:560px){
+ .top{padding-top:16px}.brand{font-size:26px}
+ .ask,.card,.demo{padding:18px 16px}.verdict{padding:18px 16px 20px}.whatif{padding:18px 16px}
+ .actions .btn{width:100%;text-align:center}.actions form{flex:1 1 100%}
+ .btn{width:100%}.nums{gap:8px 18px}
+ .side{flex:1 1 40%;min-width:0}.pair{gap:8px}
+ .arrow{flex:0 0 auto}
+ .mini{width:auto;max-width:7.5em;white-space:normal;line-height:1.2}
+ td,th{font-size:14px}
+ .nums span{min-width:40%}
+}
