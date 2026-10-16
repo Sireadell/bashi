@@ -222,6 +222,37 @@ To replay every saved decision at any time, run `python verify.py` (add `--graph
 
 If removing the evidence changes nothing, the page says so instead of pretending it mattered. If an amount cannot be traced to a sale and a payment, Bashi says it cannot trace it and gives no number.
 
+## Against the plain alternatives
+
+Most small shops use one of two things: a notebook or spreadsheet ledger, or a balance check (add up the sales, subtract the payments, compare with the limit). Both give one number. Neither shows which sale a payment settled, and neither knows about a broken promise.
+
+On the 8 real audit sales (names removed), the shop's own ledger showed N388,340 owed. A balance check reads that number and stops there. Bashi walks from each sale to the payments linked to it, and for all 8 it finds a payment of the same amount that was recorded but never linked. It flags each one as a possible phantom debt and does not change the debt. You can see this on the live site with "See the real audit case".
+
+| Customer (real, coded) | Sales flagged | Unlinked payments found | Amount |
+|---|---|---|---|
+| CUST-A | TR-1, TR-6 | N1,280 and N50 | N1,330 |
+| CUST-B | TR-2, TR-3, TR-4 | N224,960, N47,500, N70,750 | N343,210 |
+| CUST-C | TR-5, TR-7 | N200 and N100 | N300 |
+| CUST-D | TR-8 | N43,500 | N43,500 |
+| **Total** | **8 of 8** | | **N388,340** |
+
+Honest limit: the amounts and sale dates come from my audit, but the payment records in the demo graph are rebuilt from it, and their dates are assumed. So this shows what Bashi does with records shaped like the audit finding. It does not prove those customers paid.
+
+## Claims and how to check them
+
+| Claim | How to check it |
+|---|---|
+| The 8 real audit sales add up to N388,340 and all 8 are flagged | Open the live site, press "See the real audit case", read the receipt |
+| A broken promise turns a YES into a NO, and removing it flips the answer back | Live site: "Try the demo", open the receipt, press "What if this evidence did not exist" |
+| The real data is never changed by the what-if | The what-if runs on a copy of the graph; read `whatif.py`, or ask twice and compare receipts |
+| A tampered record is caught on replay | Run the four tamper commands in "The 90-second path" |
+| Bashi gives the same answer as a balance check on 37 of 40 questions | `python scorecard.py`, then read `scorecard_results.json` |
+| The yes or no contains no AI | Read `rules.py`; no model is called inside `decide` |
+| A model sentence that fails the check is replaced | Read `agent.py`; the reply says which mode answered |
+| Every record on the page is tagged real or invented | Look at the tags on the live pages and in `own_audit_seed.py` |
+| The tests pass | `python -m pytest` (about 16 minutes, it talks to a hosted database) |
+| The audit figures (N388,340, 494 sales, 46 accounts) are from my shop | A visitor cannot check these. They are my own read-only audit, names removed. |
+
 ## Scorecard
 
 Bashi against a plain "balance only" answer (all sales minus all payments, plus the request, against the limit; it ignores which sale a payment settles and ignores broken promises). 40 questions on the seeded shop: every one of the 25 customers once, 15 repeats, amounts spread between 30% and 130% of each limit (seed 42), plus Tunde at N45,000. Nothing is saved to the graph.
