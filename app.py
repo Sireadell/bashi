@@ -4,9 +4,11 @@ import threading
 import time
 from collections import deque
 
-from flask import Flask, abort, jsonify, make_response, redirect, render_template, request, url_for
+from flask import (Flask, abort, jsonify, make_response, redirect, render_template, request,
+                   send_from_directory, url_for)
 
 import agent
+import agent_api
 from db import DEFAULT_GRAPH, OWN_GRAPH
 from own_shop import EXPLAINER as OWN_EXPLAINER
 from own_shop import LABEL_TEXT as OWN_LABEL
@@ -16,6 +18,7 @@ from rules import (CANNOT_TRACE, CANNOT_TRACE_TEXT, RULES, decide, evaluate,
 from verify import verify_decision
 from whatif import get_graph, load_decision, whatif
 
+ROOT = os.path.dirname(os.path.abspath(__file__))
 app = Flask(__name__)
 app.jinja_env.filters["cap"] = lambda s: (s[:1].upper() + s[1:]) if s else s
 app.jinja_env.filters["naira"] = lambda n: naira(n) if isinstance(n, int) else CANNOT_TRACE_TEXT
@@ -33,10 +36,15 @@ _site_hits = deque()
 _hits_lock = threading.Lock()
 
 
+READ_LIMIT = 120        # lighter limit for the read-only agent routes, per visitor per window
+_read_hits = {}
+
+
 def reset_limits():
     with _hits_lock:
         _hits.clear()
         _site_hits.clear()
+        _read_hits.clear()
 
 
 def client_ip():
@@ -60,6 +68,22 @@ def too_many_writes():
         if len(_hits) > 5000:   # drop visitors with nothing recent
             for k in [k for k, v in _hits.items() if not v or now - v[-1] > WINDOW]:
                 del _hits[k]
+        return False
+
+
+def too_many_reads():
+    """A lighter limit for read-only agent routes (receipts, checks, lists)."""
+    now = time.time()
+    with _hits_lock:
+        q = _read_hits.setdefault(client_ip(), deque())
+        while q and now - q[0] > WINDOW:
+            q.popleft()
+        if len(q) >= READ_LIMIT:
+            return True
+        q.append(now)
+        if len(_read_hits) > 5000:
+            for k in [k for k, v in _read_hits.items() if not v or now - v[-1] > WINDOW]:
+                del _read_hits[k]
         return False
 
 
@@ -228,6 +252,12 @@ def home():
 
 def receipt_data(decision_id):
     shop, g = graph_for_decision(decision_id)
+    return build_receipt(shop, g, decision_id)
+
+
+def build_receipt(shop, g, decision_id):
+    """The receipt for one decision, read from the graph `g` of shop `shop`.
+    Shared by the receipt page, the JSON routes and the MCP tools."""
     dec = load_decision(decision_id, g)
     if dec is None:
         return None
@@ -392,6 +422,115 @@ def whatif_route(decision_id):
     except Exception as e:
         return jsonify(error="what-if failed: " + type(e).__name__), 500
     return jsonify(res)
+
+
+# ---------------------------------------------------------------- agent door
+# Plain JSON routes and an MCP endpoint for other tools and AI apps. The work
+# lives in agent_api.py so the routes and the MCP tools cannot drift apart.
+
+def base_url():
+    proto = request.headers.get("X-Forwarded-Proto", request.scheme).split(",")[0].strip()
+    return "%s://%s" % (proto if proto in ("http", "https") else request.scheme, request.host)
+
+
+def api_error(status, message):
+    return jsonify(error=message), status
+
+
+def api_call(fn, write=False, *args, **kw):
+    """Run an agent_api function and turn its errors into JSON with the right status."""
+    if (too_many_writes() if write else too_many_reads()):
+        return api_error(429, "Too many requests from you just now. Wait a few minutes and try again.")
+    try:
+        return jsonify(fn(*args, **kw))
+    except agent_api.ApiError as e:
+        return api_error(e.status, e.message)
+
+
+@app.errorhandler(404)
+def not_found(e):
+    if request.path.startswith(("/api/", "/mcp")):
+        return api_error(404, "Not found.")
+    return e
+
+
+@app.errorhandler(405)
+def not_allowed(e):
+    if request.path.startswith(("/api/", "/mcp")):
+        return api_error(405, "That method is not allowed here.")
+    return e
+
+
+@app.route("/api/decide", methods=["POST"])
+def api_decide():
+    body = request.get_json(silent=True)
+    if not isinstance(body, dict):
+        return api_error(400, 'Send a JSON body like {"customer": "C001", "amount": 45000}.')
+    try:     # check the input first, so a typo does not use up a write
+        agent_api.check_customer(body.get("customer"))
+        agent_api.check_amount(body.get("amount"))
+        agent_api.resolve_shop(body.get("shop"))
+    except agent_api.ApiError as e:
+        return api_error(e.status, e.message)
+    return api_call(agent_api.decide_credit, True, body.get("customer"), body.get("amount"),
+                    body.get("shop"), base_url())
+
+
+@app.route("/api/receipt/<decision_id>")
+def api_receipt(decision_id):
+    return api_call(agent_api.get_receipt, False, decision_id, base_url())
+
+
+@app.route("/api/verify/<decision_id>")
+def api_verify(decision_id):
+    return api_call(agent_api.verify_decision, False, decision_id)
+
+
+@app.route("/api/whatif/<decision_id>")
+def api_whatif(decision_id):
+    try:
+        agent_api.check_decision_id(decision_id)
+        remove = agent_api.check_remove(
+            [p for v in request.args.getlist("remove") for p in v.split(",") if p.strip()])
+    except agent_api.ApiError as e:
+        return api_error(e.status, e.message)
+    return api_call(agent_api.what_if_remove_evidence, True, decision_id, remove)
+
+
+@app.route("/api/customers")
+def api_customers():
+    return api_call(agent_api.list_customers, False, request.args.get("shop"))
+
+
+@app.route("/mcp", methods=["GET", "POST"])
+def mcp():
+    """MCP over HTTP: JSON-RPC 2.0, one request one reply, no sessions."""
+    if request.method == "GET":
+        return jsonify(agent_api.server_info(base_url()))
+    msg = request.get_json(silent=True)
+    if msg is None:
+        return jsonify(agent_api._rpc_error(None, -32700, "Parse error")), 400
+    if isinstance(msg, list):
+        return jsonify(agent_api._rpc_error(None, -32600, "Send one message at a time (no batches)")), 400
+
+    def guard(tool):
+        limited = too_many_writes() if tool in agent_api.WRITE_TOOLS else too_many_reads()
+        return "Too many requests from you just now. Wait a few minutes and try again." if limited else None
+
+    reply = agent_api.handle_rpc(msg, base_url(), guard)
+    if reply is None:
+        return "", 202
+    return jsonify(reply)
+
+
+@app.route("/llms.txt")
+def llms_txt():
+    return send_from_directory(ROOT, "llms.txt", mimetype="text/plain")
+
+
+@app.route("/AGENTS.md")
+def agents_md():
+    return send_from_directory(ROOT, "AGENTS.md", mimetype="text/markdown")
 
 
 if __name__ == "__main__":
