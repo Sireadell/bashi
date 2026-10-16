@@ -1,4 +1,5 @@
 Live demo: https://bashi-vrfv.onrender.com (no sign-up)
+Demo video: https://youtu.be/xMeDgNsZwU0
 
 # Bashi
 
@@ -245,7 +246,7 @@ The scorecard runs on the invented practice shop, and only 3 of 40 differ, so th
 python -m pytest
 ```
 
-The tests run against a copy of the graph and delete it afterwards.
+There are 96 tests. The full run takes about 16 minutes because it talks to a hosted database. The tests run against a copy of the graph and delete it afterwards.
 
 ## AI tools used
 
