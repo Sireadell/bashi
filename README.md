@@ -25,18 +25,18 @@ I loaded my whole shop's record into the live site, with names removed (pick "My
 |---|---|
 | Credit sales N7,097,241 minus payments N6,516,828 = N580,413 owed | The same totals, but every payment is matched to a sale and each match is saved in the graph |
 | One number per customer | Each sale shows whether it is cleared or still open, and which payment cleared it |
-| 12 accounts owe money | 15 accounts still have a sale open |
+| Cannot say which sale is old and unpaid | Shows the open sales by date, so you can see who is behind |
 | Cannot say why | Marks each link "inferred" and shows the rule that made it |
 
-How the matching works. For each customer, oldest first: a payment equal to a whole sale clears that sale (214 links). Anything left goes to the oldest open sale, split across sales if needed (539 links). A payment never clears a sale dated after it. Each match is saved as an `INFERRED_SETTLES` link in FalkorDB, separate from a link a person confirmed, and it is part of the receipt fingerprint, so changing one makes the check fail. Money that no sale could use is shown on the receipt and is never counted against a later sale.
+How the matching works. For each customer, oldest first. Rule 1: a payment equal to a whole sale clears that sale (214 links). Rule 2: what is left of a payment goes to the oldest open sale dated on or before the payment, split across sales if needed (539 links). Rule 3: money still left was paid before the sales that are open, so it is treated as a deposit on the oldest one and marked as such (20 links). Each match is saved as an `INFERRED_SETTLES` link in FalkorDB, separate from a link a person confirmed, and it is part of the receipt fingerprint, so changing one makes the check fail.
 
 What it found, on my real records:
 
-- 9 of 45 accounts get a different amount owed than the plain balance gives.
-- N136,700 of payments were recorded before any sale they could clear. A plain balance quietly uses that money to cover other debts. It could be a real deposit or a wrong date. Bashi shows it and does not decide which.
-- The biggest case is one account where the plain balance says N137,750 owed and the matched figure is N249,250, because N111,500 of its payments came before the sales. The button "See the account the plain balance gets most wrong" opens it.
+- 773 links in total. The total still owed after matching is N586,913, against N580,413 for the plain balance. The N6,500 gap is two accounts that paid more than they were ever sold; Bashi shows that money and does not subtract it from other people's debts.
+- N130,200 across 7 accounts was recorded as paid before the sale it was applied to. It could be a real deposit or a wrong date. Bashi marks every such link and does not decide which. The biggest is one account with N111,500, and the lead button "See the account with the most money paid before the sale" opens it.
+- 12 accounts still have money owed, and the receipt shows exactly which of their sales are open.
 
-Honest limits. The matching is a rule, not a fact: nobody has confirmed these links with the customers. The rule is deliberately strict, so a deposit paid before a sale is not allowed to clear it, and that can make Bashi stricter than the shop owner would be. Credit limits are assumed (N100,000, N300,000 or N500,000 depending on the customer's biggest sale). On a spread of 135 questions (each of the 45 customers asked for 50%, 75% and 100% of their limit), Bashi and the plain balance give a different yes or no on only 4, so the gain is the per-sale picture and the receipt, not a big change in answers.
+Honest limits. The matching is a rule, not a fact: nobody has confirmed these links with the customers. Rule 3 is a choice. I first made the matching stricter and refused to count money paid before a sale; the sealed test below showed that wrongly refused customers who had paid a deposit, so I changed it. Credit limits are assumed (N100,000, N300,000 or N500,000 depending on the customer's biggest sale). On a spread of questions across the 45 real accounts, Bashi's yes or no stays very close to the plain balance's, so on this shop the gain is the per-sale picture and the receipt, not a big change in answers. Where it does change answers is shown in the sealed test.
 
 ## Real vs invented
 
@@ -294,17 +294,19 @@ Tests: `python -m pytest tests/test_api_mcp.py -q`.
 
 ## Sealed test
 
-The scorecard below is small and runs on invented data, so I added a harder exam. I wrote 55 shop-credit cases built around the situations Bashi exists for: payments never tied to a sale, broken promises, deposits paid before a sale, sales with no amount, and one customer's payment that must not clear another customer's sale. Each case has the correct answer, worked out by plain arithmetic from the story of the case (not by Bashi's code). I locked the answers by hashing them and pushed the hash (commit `977f5bd`, [sealed/KEY_HASH.txt](sealed/KEY_HASH.txt)) before running anything on them. Re-run it with `python sealed/run_sealed.py`; it refuses to run if a single answer changed. Full report: [sealed/RESULTS.md](sealed/RESULTS.md).
+The scorecard below is small and runs on invented data, so I added a harder exam. I wrote 55 shop-credit cases built around the situations Bashi exists for: payments never tied to a sale, broken promises, deposits paid before a sale, sales with no amount, and one customer's payment that must not clear another customer's sale. Each case has the correct answer, worked out by plain arithmetic from the story of the case (not by Bashi's code). I locked the answers by hashing them and pushed the hash (commit `977f5bd`, [sealed/KEY_HASH.txt](sealed/KEY_HASH.txt)) before running anything on them. Re-run it with `python sealed/run_sealed.py`; it refuses to run if a single answer changed. Full reports: [sealed/RESULTS.md](sealed/RESULTS.md) (after the fix) and [sealed/RESULTS_run1.md](sealed/RESULTS_run1.md) (before it).
 
-| Method | Right (of 55) | Wrongly approved | Naira wrongly approved | Wrongly refused |
+| Method | First run | After I changed one rule | Wrongly approved | Naira wrongly approved |
 |---|---|---|---|---|
-| Plain balance check | 41 | 14 | N258,001 | 0 |
-| Bashi, confirmed links only | 47 | 0 | N0 | 8 |
-| Bashi with payment matching | 51 | 0 | N0 | 4 |
+| Plain balance check | 41 of 55 | 41 of 55 | 14 | N258,001 |
+| Bashi, confirmed links only | 47 of 55 | 47 of 55 | 0 | N0 |
+| Bashi with payment matching | 51 of 55 | 55 of 55 | 0 | N0 |
 
-Where Bashi wins: all 7 broken-promise cases and all 4 missing-amount cases (the balance check misses every one, and approves them). Where it loses: the 4 "deposit paid before the sale" cases. Bashi's matching rule will not let a payment clear a sale dated after it, so it refuses people who in fact had paid up front. The balance check gets those right. I kept that rule strict on purpose, because a refusal is the safer mistake for a lender, but it is a real cost and the table shows it.
+Where Bashi wins: all 7 broken-promise cases and all 4 missing-amount cases. The balance check misses every one of them and says yes. Bashi never wrongly approved a customer in either run.
 
-What this test is not. I wrote the cases and I wrote Bashi, so I was not blind to how it behaves. The cases are small and tidy. I did not include reversed or refunded sales (Bashi cannot record a reversal yet) and I did not run an AI-only answer for comparison. My first run crashed in the matching code on a sale with no amount; I fixed the code and added a test, and the cases and the hash were not touched.
+What changed between the two runs, and why it is not a clean result. The first run showed one weakness: the 4 "deposit paid before the sale" cases. My matching rule would not let a payment clear a later sale, so Bashi refused customers who had in fact paid up front (the balance check got those right). I changed the rule so that money paid before a sale is applied to the oldest open sale as a deposit, clearly marked. That brought the 4 cases right. Because I changed the rule after seeing the answer, the second column is not an independent exam. It shows the fix works on the cases that exposed the problem; the first column is the sealed result.
+
+What this test is not. I wrote the cases and I wrote Bashi, so I was not blind to how it behaves. The cases are small and tidy. I did not include reversed or refunded sales (Bashi cannot record a reversal yet) and I did not run an AI-only answer for comparison. A bug in the matching code on sales with no amount also showed up while running this; I fixed it and added a test, and the cases and the hash were not touched.
 
 ## Scorecard
 

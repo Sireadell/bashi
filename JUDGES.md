@@ -6,7 +6,7 @@ Live site: https://bashi-vrfv.onrender.com (no sign-up). The free host sleeps wh
 |---|---|---|
 | 0:00 | Open the live site. | It opens on my own shop view. The page says Bashi answers yes or no for credit and shows the records behind it. FalkorDB is named in the footer. |
 | 0:30 | Press "See the real audit case". | A receipt for a real customer. The 8 real audit sales are flagged as possible phantom debts (N388,340 in total). The fingerprint shows "Verified". |
-| 1:30 | In the shop list at the bottom, pick "My whole shop (real records, names removed)". Press "See the account the plain balance gets most wrong". | The receipt of one real account. Every payment matched to a sale is marked "inferred" with the rule that made it. A note shows N111,500 of payments that no sale could use. |
+| 1:30 | In the shop list at the bottom, pick "My whole shop (real records, names removed)". Press "See the account with the most money paid before the sale". | The receipt of one real account. Every payment matched to a sale is marked "inferred" with the rule that made it. A note shows N111,500 that was paid before the sales it was applied to, treated as deposits. |
 | 2:30 | Go back, pick "Practice shop", press "Try the Tunde demo", open the receipt, then press "What if this evidence did not exist" next to the broken promise. | The answer flips from NO to YES on a copy of the graph. The real data is never touched. |
 | 3:30 | Open `/mcp` or read AGENTS.md. | The agent routes and the MCP tools another AI tool can call. |
 | 4:00 | In a terminal, run the four tamper commands in "The 90-second path" in the README. | `verify.py` fails and names the changed record, then passes after the restore. |
