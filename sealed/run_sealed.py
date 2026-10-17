@@ -29,12 +29,21 @@ from rules import CANNOT_TRACE, decide  # noqa: E402
 ARMS = ("Bashi, confirmed links only", "Bashi with payment matching", "Balance only")
 
 
-def load_key():
-    with open(os.path.join(HERE, "cases.json"), encoding="utf-8") as fh:
+SETS = {"a": ("cases.json", "KEY_HASH.txt", "RESULTS.md", "results.json", "977f5bd"),
+        "b": ("cases_b.json", "KEY_HASH_B.txt", "RESULTS_B.md", "results_b.json", "a5e2bd8")}
+
+
+def which_set():
+    return "b" if "b" in [a.lower() for a in sys.argv[1:]] else "a"
+
+
+def load_key(which=None):
+    cases_file, hash_file = SETS[which or which_set()][:2]
+    with open(os.path.join(HERE, cases_file), encoding="utf-8") as fh:
         cases = json.load(fh)
     body = json.dumps(cases, sort_keys=True, separators=(",", ":"))
     digest = hashlib.sha256(body.encode("utf-8")).hexdigest()
-    with open(os.path.join(HERE, "KEY_HASH.txt"), encoding="utf-8") as fh:
+    with open(os.path.join(HERE, hash_file), encoding="utf-8") as fh:
         sealed = fh.read().split()[-1]
     if digest != sealed:
         raise SystemExit("The answer key does not match its fingerprint. Not running.")
@@ -151,10 +160,11 @@ def naira(n):
 
 def write_report(cases, answers, scores, classes, digest):
     n = len(cases)
+    which = which_set()
     lines = ["# Sealed test results", "",
              "This is a test I wrote. The %d cases and their correct answers were fixed, hashed and pushed "
-             "(commit 977f5bd) before any system was run on them. Fingerprint (sha256): `%s`. "
-             "`python sealed/run_sealed.py` re-checks that fingerprint and refuses to run if it differs." % (n, digest),
+             "(commit %s) before any system was run on them. Fingerprint (sha256): `%s`. "
+             "`python sealed/run_sealed.py%s` re-checks that fingerprint and refuses to run if it differs." % (n, SETS[which][4], digest, " b" if which == "b" else ""),
              "", "I chose the cases to cover the situations Bashi was built for, so this shows what it does there. "
              "It is not a measure of accuracy on real shops. I also wrote Bashi, so I was not blind to how it behaves.", "",
              "## Result", "",
@@ -178,9 +188,9 @@ def write_report(cases, answers, scores, classes, digest):
                 " | ".join(answers[a][c["id"]] + ("" if answers[a][c["id"]] == c["correct"] else " (wrong)") for a in ARMS)))
     lines += ["", "## What is not covered", "",
               "- Sales that were reversed or refunded: Bashi has no way to record a reversal yet, so there are no such cases.",
-              "- An AI-only answer is not compared here. I did not run a model on these cases.",
+              "- A plain AI model was scored separately, see RESULTS_ai_only.md and RESULTS_ai_only_b.md. It also got every case right.",
               "- The cases are small and tidy. Real records are messier, which is why the whole-shop view marks every matched link as inferred.", ""]
-    with open(os.path.join(HERE, "RESULTS.md"), "w", encoding="utf-8") as fh:
+    with open(os.path.join(HERE, SETS[which_set()][2]), "w", encoding="utf-8") as fh:
         fh.write("\n".join(lines))
 
 
@@ -190,7 +200,7 @@ def main():
     scores = score(cases, answers)
     classes = by_class(cases, answers)
     write_report(cases, answers, scores, classes, digest)
-    with open(os.path.join(HERE, "results.json"), "w", encoding="utf-8") as fh:
+    with open(os.path.join(HERE, SETS[which_set()][3]), "w", encoding="utf-8") as fh:
         json.dump({"fingerprint": digest, "scores": scores, "answers": answers}, fh, indent=1, sort_keys=True)
     for a in ARMS:
         print("%-30s right %2d/%d  wrong approvals %d (%s)  wrong refusals %d  other %d" % (

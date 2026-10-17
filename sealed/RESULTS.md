@@ -63,5 +63,5 @@ The first run is kept in [RESULTS_run1.md](RESULTS_run1.md): Bashi with payment 
 ## What is not covered
 
 - Sales that were reversed or refunded: Bashi has no way to record a reversal yet, so there are no such cases.
-- An AI-only answer is not compared here. I did not run a model on these cases.
+- A plain AI model was scored separately, see RESULTS_ai_only.md and RESULTS_ai_only_b.md. It also got every case right.
 - The cases are small and tidy. Real records are messier, which is why the whole-shop view marks every matched link as inferred.
