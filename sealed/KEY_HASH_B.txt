@@ -1,0 +1,2 @@
+sha256 of the 200 set-B cases and their correct answers, canonical JSON (sorted keys, no spaces), seed 20261017:
+9915a63d879de640203689dab2e7b1927dc49a771396b2083881c4fe559d0763

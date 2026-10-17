@@ -1,0 +1,5888 @@
+[
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_within",
+  "correct": "YES",
+  "id": "B001",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 5000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 75000,
+    "date": "2026-08-02",
+    "linked": true,
+    "n": 2,
+    "paid_for": 2
+   }
+  ],
+  "promises": [],
+  "request": 155000,
+  "sales": [
+   {
+    "amount": 5000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 75000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Owes some, asks within the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_within",
+  "correct": "YES",
+  "id": "B002",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 90000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 95000,
+    "date": "2026-08-02",
+    "linked": true,
+    "n": 2,
+    "paid_for": 2
+   },
+   {
+    "amount": 15000,
+    "date": "2026-08-03",
+    "linked": true,
+    "n": 3,
+    "paid_for": 3
+   }
+  ],
+  "promises": [],
+  "request": 45000,
+  "sales": [
+   {
+    "amount": 90000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 95000,
+    "date": "2026-07-11",
+    "n": 2
+   },
+   {
+    "amount": 15000,
+    "date": "2026-07-12",
+    "n": 3
+   }
+  ],
+  "story": "Owes some, asks within the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_within",
+  "correct": "YES",
+  "id": "B003",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 5000,
+  "sales": [],
+  "story": "Owes some, asks within the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_within",
+  "correct": "YES",
+  "id": "B004",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 50000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 15000,
+    "date": "2026-08-02",
+    "linked": true,
+    "n": 2,
+    "paid_for": 3
+   }
+  ],
+  "promises": [],
+  "request": 125000,
+  "sales": [
+   {
+    "amount": 50000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 60000,
+    "date": "2026-07-11",
+    "n": 2
+   },
+   {
+    "amount": 15000,
+    "date": "2026-07-12",
+    "n": 3
+   }
+  ],
+  "story": "Owes some, asks within the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_within",
+  "correct": "YES",
+  "id": "B005",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 100000,
+  "sales": [],
+  "story": "Owes some, asks within the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_within",
+  "correct": "YES",
+  "id": "B006",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 150000,
+  "sales": [
+   {
+    "amount": 50000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Owes some, asks within the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_within",
+  "correct": "YES",
+  "id": "B007",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 5000,
+  "sales": [],
+  "story": "Owes some, asks within the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_within",
+  "correct": "YES",
+  "id": "B008",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 15000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 3
+   }
+  ],
+  "promises": [],
+  "request": 50000,
+  "sales": [
+   {
+    "amount": 30000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 55000,
+    "date": "2026-07-11",
+    "n": 2
+   },
+   {
+    "amount": 15000,
+    "date": "2026-07-12",
+    "n": 3
+   }
+  ],
+  "story": "Owes some, asks within the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_within",
+  "correct": "YES",
+  "id": "B009",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 65000,
+  "sales": [],
+  "story": "Owes some, asks within the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_within",
+  "correct": "YES",
+  "id": "B010",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 75000,
+  "sales": [],
+  "story": "Owes some, asks within the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_within",
+  "correct": "YES",
+  "id": "B011",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 90000,
+  "sales": [],
+  "story": "Owes some, asks within the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_within",
+  "correct": "YES",
+  "id": "B012",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 40000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 2
+   }
+  ],
+  "promises": [],
+  "request": 20000,
+  "sales": [
+   {
+    "amount": 80000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 40000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Owes some, asks within the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_within",
+  "correct": "YES",
+  "id": "B013",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 75000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 2
+   }
+  ],
+  "promises": [],
+  "request": 155000,
+  "sales": [
+   {
+    "amount": 70000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 75000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Owes some, asks within the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_within",
+  "correct": "YES",
+  "id": "B014",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 100000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 190000,
+  "sales": [
+   {
+    "amount": 100000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 25000,
+    "date": "2026-07-11",
+    "n": 2
+   },
+   {
+    "amount": 85000,
+    "date": "2026-07-12",
+    "n": 3
+   }
+  ],
+  "story": "Owes some, asks within the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_within",
+  "correct": "YES",
+  "id": "B015",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 85000,
+  "sales": [],
+  "story": "Owes some, asks within the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_within",
+  "correct": "YES",
+  "id": "B016",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 120000,
+  "sales": [
+   {
+    "amount": 60000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 50000,
+    "date": "2026-07-11",
+    "n": 2
+   },
+   {
+    "amount": 60000,
+    "date": "2026-07-12",
+    "n": 3
+   }
+  ],
+  "story": "Owes some, asks within the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_within",
+  "correct": "YES",
+  "id": "B017",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 35000,
+  "sales": [],
+  "story": "Owes some, asks within the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_within",
+  "correct": "YES",
+  "id": "B018",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 140000,
+  "sales": [
+   {
+    "amount": 15000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 75000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Owes some, asks within the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_within",
+  "correct": "YES",
+  "id": "B019",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 180000,
+  "sales": [
+   {
+    "amount": 100000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Owes some, asks within the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_within",
+  "correct": "YES",
+  "id": "B020",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 230000,
+  "sales": [
+   {
+    "amount": 40000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Owes some, asks within the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_over",
+  "correct": "NO",
+  "id": "B021",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 1000,
+  "sales": [
+   {
+    "amount": 75000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 55000,
+    "date": "2026-07-11",
+    "n": 2
+   },
+   {
+    "amount": 90000,
+    "date": "2026-07-12",
+    "n": 3
+   }
+  ],
+  "story": "Owes a lot, asks above the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_over",
+  "correct": "NO",
+  "id": "B022",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 1000,
+  "sales": [
+   {
+    "amount": 80000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 95000,
+    "date": "2026-07-11",
+    "n": 2
+   },
+   {
+    "amount": 85000,
+    "date": "2026-07-12",
+    "n": 3
+   }
+  ],
+  "story": "Owes a lot, asks above the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_over",
+  "correct": "NO",
+  "id": "B023",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 50000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 115000,
+  "sales": [
+   {
+    "amount": 100000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 40000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Owes a lot, asks above the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_over",
+  "correct": "NO",
+  "id": "B024",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 15000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 85000,
+  "sales": [
+   {
+    "amount": 35000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 90000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Owes a lot, asks above the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_over",
+  "correct": "NO",
+  "id": "B025",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 1000,
+  "sales": [
+   {
+    "amount": 135000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Owes a lot, asks above the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_over",
+  "correct": "NO",
+  "id": "B026",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 45000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 45000,
+    "date": "2026-08-02",
+    "linked": true,
+    "n": 2,
+    "paid_for": 3
+   }
+  ],
+  "promises": [],
+  "request": 1000,
+  "sales": [
+   {
+    "amount": 90000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 130000,
+    "date": "2026-07-11",
+    "n": 2
+   },
+   {
+    "amount": 95000,
+    "date": "2026-07-12",
+    "n": 3
+   }
+  ],
+  "story": "Owes a lot, asks above the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_over",
+  "correct": "NO",
+  "id": "B027",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 90000,
+  "sales": [
+   {
+    "amount": 100000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 40000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Owes a lot, asks above the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_over",
+  "correct": "NO",
+  "id": "B028",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 70000,
+  "sales": [
+   {
+    "amount": 45000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 75000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Owes a lot, asks above the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_over",
+  "correct": "NO",
+  "id": "B029",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 55000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 1000,
+  "sales": [
+   {
+    "amount": 115000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 130000,
+    "date": "2026-07-11",
+    "n": 2
+   },
+   {
+    "amount": 130000,
+    "date": "2026-07-12",
+    "n": 3
+   }
+  ],
+  "story": "Owes a lot, asks above the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_over",
+  "correct": "NO",
+  "id": "B030",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 1000,
+  "sales": [
+   {
+    "amount": 65000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 120000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Owes a lot, asks above the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_over",
+  "correct": "NO",
+  "id": "B031",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 15000,
+  "sales": [
+   {
+    "amount": 145000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Owes a lot, asks above the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_over",
+  "correct": "NO",
+  "id": "B032",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 90000,
+  "sales": [
+   {
+    "amount": 90000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Owes a lot, asks above the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_over",
+  "correct": "NO",
+  "id": "B033",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 60000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 1000,
+  "sales": [
+   {
+    "amount": 125000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 65000,
+    "date": "2026-07-11",
+    "n": 2
+   },
+   {
+    "amount": 75000,
+    "date": "2026-07-12",
+    "n": 3
+   }
+  ],
+  "story": "Owes a lot, asks above the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_over",
+  "correct": "NO",
+  "id": "B034",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 80000,
+  "sales": [
+   {
+    "amount": 40000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Owes a lot, asks above the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_over",
+  "correct": "NO",
+  "id": "B035",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 110000,
+  "sales": [
+   {
+    "amount": 95000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Owes a lot, asks above the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_over",
+  "correct": "NO",
+  "id": "B036",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 40000,
+  "sales": [
+   {
+    "amount": 115000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 55000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Owes a lot, asks above the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_over",
+  "correct": "NO",
+  "id": "B037",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 25000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 80000,
+  "sales": [
+   {
+    "amount": 50000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Owes a lot, asks above the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_over",
+  "correct": "NO",
+  "id": "B038",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 50000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 1000,
+  "sales": [
+   {
+    "amount": 105000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 95000,
+    "date": "2026-07-11",
+    "n": 2
+   },
+   {
+    "amount": 70000,
+    "date": "2026-07-12",
+    "n": 3
+   }
+  ],
+  "story": "Owes a lot, asks above the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_over",
+  "correct": "NO",
+  "id": "B039",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 40000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 135000,
+  "sales": [
+   {
+    "amount": 80000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Owes a lot, asks above the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_over",
+  "correct": "NO",
+  "id": "B040",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 85000,
+  "sales": [
+   {
+    "amount": 50000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Owes a lot, asks above the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "boundary",
+  "correct": "YES",
+  "id": "B041",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 20000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 55000,
+  "sales": [
+   {
+    "amount": 40000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 75000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Asks exactly the room left"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "boundary",
+  "correct": "NO",
+  "id": "B042",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 35000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 1,
+  "sales": [
+   {
+    "amount": 75000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 70000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Asks one naira over the room left"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "boundary",
+  "correct": "YES",
+  "id": "B043",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 145000,
+  "sales": [
+   {
+    "amount": 55000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Asks exactly the room left"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "boundary",
+  "correct": "NO",
+  "id": "B044",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 20000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 80001,
+  "sales": [
+   {
+    "amount": 45000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 45000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Asks one naira over the room left"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "boundary",
+  "correct": "YES",
+  "id": "B045",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 185000,
+  "sales": [
+   {
+    "amount": 50000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 65000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Asks exactly the room left"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "boundary",
+  "correct": "NO",
+  "id": "B046",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 1,
+  "sales": [
+   {
+    "amount": 25000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 80000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Asks one naira over the room left"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "boundary",
+  "correct": "YES",
+  "id": "B047",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 70000,
+  "sales": [
+   {
+    "amount": 30000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Asks exactly the room left"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "boundary",
+  "correct": "NO",
+  "id": "B048",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 105001,
+  "sales": [
+   {
+    "amount": 45000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Asks one naira over the room left"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "boundary",
+  "correct": "YES",
+  "id": "B049",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 25000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 125000,
+  "sales": [
+   {
+    "amount": 50000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Asks exactly the room left"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "boundary",
+  "correct": "NO",
+  "id": "B050",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 250001,
+  "sales": [
+   {
+    "amount": 20000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 30000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Asks one naira over the room left"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "boundary",
+  "correct": "YES",
+  "id": "B051",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 30000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 115000,
+  "sales": [
+   {
+    "amount": 65000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Asks exactly the room left"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "boundary",
+  "correct": "NO",
+  "id": "B052",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 10000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 140001,
+  "sales": [
+   {
+    "amount": 20000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Asks one naira over the room left"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "boundary",
+  "correct": "YES",
+  "id": "B053",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 55000,
+  "sales": [
+   {
+    "amount": 60000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 85000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Asks exactly the room left"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "boundary",
+  "correct": "NO",
+  "id": "B054",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 40000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 160001,
+  "sales": [
+   {
+    "amount": 80000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Asks one naira over the room left"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "boundary",
+  "correct": "YES",
+  "id": "B055",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 20000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 275000,
+  "sales": [
+   {
+    "amount": 45000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Asks exactly the room left"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "boundary",
+  "correct": "NO",
+  "id": "B056",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 25000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 95001,
+  "sales": [
+   {
+    "amount": 50000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 30000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Asks one naira over the room left"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "B057",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 35000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 60000,
+    "date": "2026-08-02",
+    "linked": true,
+    "n": 2,
+    "paid_for": 2
+   }
+  ],
+  "promises": [
+   {
+    "amount": 20000,
+    "due": "2026-09-30",
+    "kept": false
+   }
+  ],
+  "request": 140000,
+  "sales": [
+   {
+    "amount": 35000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 60000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Broken promise, small ask"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "B058",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 30000,
+    "due": "2026-09-01",
+    "kept": false
+   }
+  ],
+  "request": 200000,
+  "sales": [],
+  "story": "Broken promise, small ask"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "B059",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 30000,
+    "due": "2026-09-20",
+    "kept": false
+   }
+  ],
+  "request": 75000,
+  "sales": [
+   {
+    "amount": 50000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Broken promise, small ask"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "B060",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 15000,
+    "due": "2026-09-20",
+    "kept": false
+   },
+   {
+    "amount": 5000,
+    "due": "2026-07-20",
+    "kept": true
+   }
+  ],
+  "request": 115000,
+  "sales": [
+   {
+    "amount": 45000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 15000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Broken promise, small ask"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "B061",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 30000,
+    "due": "2026-09-20",
+    "kept": false
+   }
+  ],
+  "request": 115000,
+  "sales": [
+   {
+    "amount": 35000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Broken promise, small ask"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "B062",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 60000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 2
+   }
+  ],
+  "promises": [
+   {
+    "amount": 5000,
+    "due": "2026-09-20",
+    "kept": false
+   }
+  ],
+  "request": 110000,
+  "sales": [
+   {
+    "amount": 10000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 60000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Broken promise, small ask"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "B063",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 10000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [
+   {
+    "amount": 20000,
+    "due": "2026-09-20",
+    "kept": false
+   }
+  ],
+  "request": 35000,
+  "sales": [
+   {
+    "amount": 10000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Broken promise, small ask"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "B064",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 30000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 2
+   }
+  ],
+  "promises": [
+   {
+    "amount": 10000,
+    "due": "2026-08-15",
+    "kept": false
+   }
+  ],
+  "request": 90000,
+  "sales": [
+   {
+    "amount": 60000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 30000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Broken promise, small ask"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "B065",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 15000,
+    "due": "2026-09-30",
+    "kept": false
+   }
+  ],
+  "request": 200000,
+  "sales": [],
+  "story": "Broken promise, small ask"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "B066",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 15000,
+    "due": "2026-08-15",
+    "kept": false
+   }
+  ],
+  "request": 145000,
+  "sales": [],
+  "story": "Broken promise, small ask"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "B067",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 25000,
+    "due": "2026-09-20",
+    "kept": false
+   }
+  ],
+  "request": 15000,
+  "sales": [],
+  "story": "Broken promise, small ask"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "B068",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 30000,
+    "due": "2026-08-15",
+    "kept": false
+   }
+  ],
+  "request": 100000,
+  "sales": [],
+  "story": "Broken promise, small ask"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "B069",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 55000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [
+   {
+    "amount": 10000,
+    "due": "2026-09-30",
+    "kept": false
+   },
+   {
+    "amount": 20000,
+    "due": "2026-07-20",
+    "kept": true
+   }
+  ],
+  "request": 245000,
+  "sales": [
+   {
+    "amount": 55000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 55000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Broken promise, small ask"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "B070",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 45000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [
+   {
+    "amount": 15000,
+    "due": "2026-09-20",
+    "kept": false
+   }
+  ],
+  "request": 200000,
+  "sales": [
+   {
+    "amount": 45000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Broken promise, small ask"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "B071",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 10000,
+    "due": "2026-09-30",
+    "kept": false
+   },
+   {
+    "amount": 10000,
+    "due": "2026-07-20",
+    "kept": true
+   }
+  ],
+  "request": 5000,
+  "sales": [],
+  "story": "Broken promise, small ask"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "B072",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 5000,
+    "due": "2026-09-01",
+    "kept": false
+   },
+   {
+    "amount": 20000,
+    "due": "2026-07-20",
+    "kept": true
+   }
+  ],
+  "request": 195000,
+  "sales": [
+   {
+    "amount": 5000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Broken promise, small ask"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "B073",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 30000,
+    "due": "2026-09-30",
+    "kept": false
+   },
+   {
+    "amount": 10000,
+    "due": "2026-07-20",
+    "kept": true
+   }
+  ],
+  "request": 50000,
+  "sales": [],
+  "story": "Broken promise, small ask"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "B074",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 5000,
+    "due": "2026-09-20",
+    "kept": false
+   }
+  ],
+  "request": 245000,
+  "sales": [],
+  "story": "Broken promise, small ask"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "B075",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 25000,
+    "due": "2026-09-20",
+    "kept": false
+   },
+   {
+    "amount": 20000,
+    "due": "2026-07-20",
+    "kept": true
+   }
+  ],
+  "request": 40000,
+  "sales": [],
+  "story": "Broken promise, small ask"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "B076",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 15000,
+    "due": "2026-09-30",
+    "kept": false
+   }
+  ],
+  "request": 25000,
+  "sales": [
+   {
+    "amount": 50000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Broken promise, small ask"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "B077",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 25000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 2
+   }
+  ],
+  "promises": [
+   {
+    "amount": 25000,
+    "due": "2026-08-15",
+    "kept": false
+   }
+  ],
+  "request": 185000,
+  "sales": [
+   {
+    "amount": 15000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 25000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Broken promise, small ask"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "B078",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 55000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [
+   {
+    "amount": 25000,
+    "due": "2026-09-20",
+    "kept": false
+   }
+  ],
+  "request": 10000,
+  "sales": [
+   {
+    "amount": 55000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Broken promise, small ask"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "B079",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 20000,
+    "due": "2026-09-01",
+    "kept": false
+   },
+   {
+    "amount": 5000,
+    "due": "2026-07-20",
+    "kept": true
+   }
+  ],
+  "request": 150000,
+  "sales": [],
+  "story": "Broken promise, small ask"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "B080",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 35000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 2
+   }
+  ],
+  "promises": [
+   {
+    "amount": 30000,
+    "due": "2026-09-30",
+    "kept": false
+   }
+  ],
+  "request": 70000,
+  "sales": [
+   {
+    "amount": 30000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 35000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Broken promise, small ask"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "kept_promise",
+  "correct": "YES",
+  "id": "B081",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 35000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [
+   {
+    "amount": 25000,
+    "due": "2026-07-15",
+    "kept": true
+   },
+   {
+    "amount": 30000,
+    "due": "2026-09-10",
+    "kept": true
+   }
+  ],
+  "request": 50000,
+  "sales": [
+   {
+    "amount": 35000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Only kept promises"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "kept_promise",
+  "correct": "YES",
+  "id": "B082",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 20000,
+    "due": "2026-07-15",
+    "kept": true
+   },
+   {
+    "amount": 30000,
+    "due": "2026-07-15",
+    "kept": true
+   }
+  ],
+  "request": 85000,
+  "sales": [],
+  "story": "Only kept promises"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "kept_promise",
+  "correct": "YES",
+  "id": "B083",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 5000,
+    "due": "2026-08-20",
+    "kept": true
+   },
+   {
+    "amount": 10000,
+    "due": "2026-07-15",
+    "kept": true
+   }
+  ],
+  "request": 35000,
+  "sales": [
+   {
+    "amount": 15000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 50000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Only kept promises"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "kept_promise",
+  "correct": "YES",
+  "id": "B084",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 50000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [
+   {
+    "amount": 15000,
+    "due": "2026-09-10",
+    "kept": true
+   }
+  ],
+  "request": 200000,
+  "sales": [
+   {
+    "amount": 50000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 15000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Only kept promises"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "kept_promise",
+  "correct": "YES",
+  "id": "B085",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 5000,
+    "due": "2026-09-10",
+    "kept": true
+   },
+   {
+    "amount": 25000,
+    "due": "2026-07-15",
+    "kept": true
+   }
+  ],
+  "request": 110000,
+  "sales": [
+   {
+    "amount": 45000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 45000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Only kept promises"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "kept_promise",
+  "correct": "YES",
+  "id": "B086",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 30000,
+    "due": "2026-08-20",
+    "kept": true
+   },
+   {
+    "amount": 15000,
+    "due": "2026-07-15",
+    "kept": true
+   }
+  ],
+  "request": 85000,
+  "sales": [],
+  "story": "Only kept promises"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "kept_promise",
+  "correct": "YES",
+  "id": "B087",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 35000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [
+   {
+    "amount": 10000,
+    "due": "2026-08-20",
+    "kept": true
+   },
+   {
+    "amount": 30000,
+    "due": "2026-09-10",
+    "kept": true
+   }
+  ],
+  "request": 15000,
+  "sales": [
+   {
+    "amount": 35000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Only kept promises"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "kept_promise",
+  "correct": "YES",
+  "id": "B088",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 30000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 40000,
+    "date": "2026-08-02",
+    "linked": true,
+    "n": 2,
+    "paid_for": 2
+   }
+  ],
+  "promises": [
+   {
+    "amount": 25000,
+    "due": "2026-09-10",
+    "kept": true
+   },
+   {
+    "amount": 10000,
+    "due": "2026-08-20",
+    "kept": true
+   }
+  ],
+  "request": 20000,
+  "sales": [
+   {
+    "amount": 30000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 40000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Only kept promises"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "kept_promise",
+  "correct": "YES",
+  "id": "B089",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 15000,
+    "due": "2026-08-20",
+    "kept": true
+   },
+   {
+    "amount": 20000,
+    "due": "2026-07-15",
+    "kept": true
+   }
+  ],
+  "request": 40000,
+  "sales": [],
+  "story": "Only kept promises"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "kept_promise",
+  "correct": "YES",
+  "id": "B090",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 55000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [
+   {
+    "amount": 20000,
+    "due": "2026-07-15",
+    "kept": true
+   },
+   {
+    "amount": 10000,
+    "due": "2026-09-10",
+    "kept": true
+   }
+  ],
+  "request": 95000,
+  "sales": [
+   {
+    "amount": 55000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Only kept promises"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "kept_promise",
+  "correct": "YES",
+  "id": "B091",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 30000,
+    "due": "2026-08-20",
+    "kept": true
+   }
+  ],
+  "request": 15000,
+  "sales": [],
+  "story": "Only kept promises"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "kept_promise",
+  "correct": "YES",
+  "id": "B092",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 25000,
+    "due": "2026-09-10",
+    "kept": true
+   },
+   {
+    "amount": 20000,
+    "due": "2026-08-20",
+    "kept": true
+   }
+  ],
+  "request": 95000,
+  "sales": [
+   {
+    "amount": 50000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 55000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Only kept promises"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "promise_not_due",
+  "correct": "YES",
+  "id": "B093",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 30000,
+    "due": "2026-10-25",
+    "kept": false
+   }
+  ],
+  "request": 250000,
+  "sales": [
+   {
+    "amount": 5000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 45000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Promise not yet due"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "promise_not_due",
+  "correct": "YES",
+  "id": "B094",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 10000,
+    "due": "2026-10-25",
+    "kept": false
+   }
+  ],
+  "request": 240000,
+  "sales": [
+   {
+    "amount": 45000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Promise not yet due"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "promise_not_due",
+  "correct": "YES",
+  "id": "B095",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 25000,
+    "due": "2026-10-25",
+    "kept": false
+   }
+  ],
+  "request": 40000,
+  "sales": [
+   {
+    "amount": 30000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Promise not yet due"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "promise_not_due",
+  "correct": "YES",
+  "id": "B096",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 5000,
+    "due": "2026-10-25",
+    "kept": false
+   }
+  ],
+  "request": 40000,
+  "sales": [
+   {
+    "amount": 55000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 25000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Promise not yet due"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "promise_not_due",
+  "correct": "YES",
+  "id": "B097",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 10000,
+    "due": "2026-10-01",
+    "kept": false
+   }
+  ],
+  "request": 35000,
+  "sales": [],
+  "story": "Promise not yet due"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "promise_not_due",
+  "correct": "YES",
+  "id": "B098",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 15000,
+    "due": "2026-10-01",
+    "kept": false
+   }
+  ],
+  "request": 75000,
+  "sales": [
+   {
+    "amount": 30000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 45000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Promise not yet due"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "promise_not_due",
+  "correct": "YES",
+  "id": "B099",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 20000,
+    "due": "2026-10-10",
+    "kept": false
+   }
+  ],
+  "request": 220000,
+  "sales": [],
+  "story": "Promise not yet due"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "promise_not_due",
+  "correct": "YES",
+  "id": "B100",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 15000,
+    "due": "2026-10-01",
+    "kept": false
+   }
+  ],
+  "request": 95000,
+  "sales": [
+   {
+    "amount": 50000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 5000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Promise not yet due"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "promise_not_due",
+  "correct": "YES",
+  "id": "B101",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 25000,
+    "due": "2026-10-01",
+    "kept": false
+   }
+  ],
+  "request": 115000,
+  "sales": [
+   {
+    "amount": 20000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Promise not yet due"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "promise_not_due",
+  "correct": "YES",
+  "id": "B102",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 20000,
+    "due": "2026-10-01",
+    "kept": false
+   }
+  ],
+  "request": 50000,
+  "sales": [],
+  "story": "Promise not yet due"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "YES",
+  "id": "B103",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 15000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 2
+   }
+  ],
+  "promises": [],
+  "request": 35000,
+  "sales": [
+   {
+    "amount": 65000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 15000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "NO",
+  "id": "B104",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 50000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 2
+   },
+   {
+    "amount": 30000,
+    "date": "2026-08-02",
+    "linked": false,
+    "n": 2,
+    "paid_for": 3
+   }
+  ],
+  "promises": [
+   {
+    "amount": 25000,
+    "due": "2026-08-15",
+    "kept": false
+   }
+  ],
+  "request": 120000,
+  "sales": [
+   {
+    "amount": 80000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 50000,
+    "date": "2026-07-11",
+    "n": 2
+   },
+   {
+    "amount": 30000,
+    "date": "2026-07-12",
+    "n": 3
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "YES",
+  "id": "B105",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 35000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 35000,
+  "sales": [
+   {
+    "amount": 35000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "NO",
+  "id": "B106",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 55000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 30000,
+    "date": "2026-08-02",
+    "linked": false,
+    "n": 2,
+    "paid_for": 3
+   }
+  ],
+  "promises": [],
+  "request": 140000,
+  "sales": [
+   {
+    "amount": 55000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 20000,
+    "date": "2026-07-11",
+    "n": 2
+   },
+   {
+    "amount": 30000,
+    "date": "2026-07-12",
+    "n": 3
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "YES",
+  "id": "B107",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 265000,
+  "sales": [
+   {
+    "amount": 15000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "NO",
+  "id": "B108",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 35000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 315000,
+  "sales": [
+   {
+    "amount": 35000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "YES",
+  "id": "B109",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 55000,
+  "sales": [
+   {
+    "amount": 45000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "NO",
+  "id": "B110",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 175000,
+  "sales": [
+   {
+    "amount": 40000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "YES",
+  "id": "B111",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 55000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 45000,
+  "sales": [
+   {
+    "amount": 55000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 70000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "NO",
+  "id": "B112",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 25000,
+  "sales": [
+   {
+    "amount": 50000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 35000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "YES",
+  "id": "B113",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 60000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 155000,
+  "sales": [
+   {
+    "amount": 60000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 35000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "NO",
+  "id": "B114",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 75000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 165000,
+  "sales": [
+   {
+    "amount": 75000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "YES",
+  "id": "B115",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 75000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 160000,
+  "sales": [
+   {
+    "amount": 75000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "NO",
+  "id": "B116",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 35000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 70000,
+    "date": "2026-08-02",
+    "linked": false,
+    "n": 2,
+    "paid_for": 2
+   }
+  ],
+  "promises": [],
+  "request": 150000,
+  "sales": [
+   {
+    "amount": 35000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 70000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "YES",
+  "id": "B117",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 45000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 25000,
+    "date": "2026-08-02",
+    "linked": false,
+    "n": 2,
+    "paid_for": 2
+   },
+   {
+    "amount": 45000,
+    "date": "2026-08-03",
+    "linked": false,
+    "n": 3,
+    "paid_for": 3
+   }
+  ],
+  "promises": [],
+  "request": 50000,
+  "sales": [
+   {
+    "amount": 45000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 25000,
+    "date": "2026-07-11",
+    "n": 2
+   },
+   {
+    "amount": 45000,
+    "date": "2026-07-12",
+    "n": 3
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "NO",
+  "id": "B118",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 30000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 2
+   }
+  ],
+  "promises": [
+   {
+    "amount": 15000,
+    "due": "2026-08-15",
+    "kept": false
+   }
+  ],
+  "request": 160000,
+  "sales": [
+   {
+    "amount": 50000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 30000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "YES",
+  "id": "B119",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 20000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 40000,
+  "sales": [
+   {
+    "amount": 20000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "NO",
+  "id": "B120",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 30000,
+    "due": "2026-08-15",
+    "kept": false
+   }
+  ],
+  "request": 145000,
+  "sales": [
+   {
+    "amount": 80000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "YES",
+  "id": "B121",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 15000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 2
+   }
+  ],
+  "promises": [],
+  "request": 5000,
+  "sales": [
+   {
+    "amount": 60000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 15000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "NO",
+  "id": "B122",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 75000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 350000,
+  "sales": [
+   {
+    "amount": 75000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "YES",
+  "id": "B123",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 80000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 2
+   },
+   {
+    "amount": 75000,
+    "date": "2026-08-02",
+    "linked": false,
+    "n": 2,
+    "paid_for": 3
+   }
+  ],
+  "promises": [],
+  "request": 110000,
+  "sales": [
+   {
+    "amount": 40000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 80000,
+    "date": "2026-07-11",
+    "n": 2
+   },
+   {
+    "amount": 75000,
+    "date": "2026-07-12",
+    "n": 3
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "NO",
+  "id": "B124",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 80000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 50000,
+    "date": "2026-08-02",
+    "linked": false,
+    "n": 2,
+    "paid_for": 2
+   }
+  ],
+  "promises": [],
+  "request": 265000,
+  "sales": [
+   {
+    "amount": 80000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 50000,
+    "date": "2026-07-11",
+    "n": 2
+   },
+   {
+    "amount": 40000,
+    "date": "2026-07-12",
+    "n": 3
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "YES",
+  "id": "B125",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 75000,
+  "sales": [
+   {
+    "amount": 25000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "NO",
+  "id": "B126",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 70000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 110000,
+  "sales": [
+   {
+    "amount": 70000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "YES",
+  "id": "B127",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 30000,
+  "sales": [
+   {
+    "amount": 70000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "NO",
+  "id": "B128",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 60000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 15000,
+    "date": "2026-08-02",
+    "linked": false,
+    "n": 2,
+    "paid_for": 2
+   },
+   {
+    "amount": 70000,
+    "date": "2026-08-03",
+    "linked": false,
+    "n": 3,
+    "paid_for": 3
+   }
+  ],
+  "promises": [],
+  "request": 125000,
+  "sales": [
+   {
+    "amount": 60000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 15000,
+    "date": "2026-07-11",
+    "n": 2
+   },
+   {
+    "amount": 70000,
+    "date": "2026-07-12",
+    "n": 3
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "YES",
+  "id": "B129",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 10000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 55000,
+    "date": "2026-08-02",
+    "linked": false,
+    "n": 2,
+    "paid_for": 2
+   }
+  ],
+  "promises": [],
+  "request": 35000,
+  "sales": [
+   {
+    "amount": 10000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 55000,
+    "date": "2026-07-11",
+    "n": 2
+   },
+   {
+    "amount": 65000,
+    "date": "2026-07-12",
+    "n": 3
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "NO",
+  "id": "B130",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 10000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 25000,
+    "date": "2026-08-02",
+    "linked": false,
+    "n": 2,
+    "paid_for": 2
+   }
+  ],
+  "promises": [],
+  "request": 175000,
+  "sales": [
+   {
+    "amount": 10000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 25000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Payments recorded but not tied to sales"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "deposit_first",
+  "correct": "YES",
+  "id": "B131",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 40000,
+    "date": "2026-07-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 70000,
+  "sales": [
+   {
+    "amount": 85000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 80000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Money paid before the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "deposit_first",
+  "correct": "NO",
+  "id": "B132",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 100000,
+  "sales": [
+   {
+    "amount": 100000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Money paid before the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "deposit_first",
+  "correct": "YES",
+  "id": "B133",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 10000,
+    "date": "2026-07-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 2
+   }
+  ],
+  "promises": [],
+  "request": 185000,
+  "sales": [
+   {
+    "amount": 100000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 25000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Money paid before the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "deposit_first",
+  "correct": "NO",
+  "id": "B134",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 15000,
+    "date": "2026-07-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 120000,
+  "sales": [
+   {
+    "amount": 35000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Money paid before the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "deposit_first",
+  "correct": "YES",
+  "id": "B135",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 10000,
+    "date": "2026-07-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 115000,
+  "sales": [
+   {
+    "amount": 25000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Money paid before the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "deposit_first",
+  "correct": "NO",
+  "id": "B136",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 20000,
+    "date": "2026-07-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 80000,
+    "date": "2026-07-01",
+    "linked": false,
+    "n": 2,
+    "paid_for": 2
+   }
+  ],
+  "promises": [],
+  "request": 90000,
+  "sales": [
+   {
+    "amount": 45000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 80000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Money paid before the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "deposit_first",
+  "correct": "YES",
+  "id": "B137",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 80000,
+    "date": "2026-07-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 20000,
+    "date": "2026-07-01",
+    "linked": false,
+    "n": 2,
+    "paid_for": 2
+   }
+  ],
+  "promises": [],
+  "request": 25000,
+  "sales": [
+   {
+    "amount": 80000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 45000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Money paid before the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "deposit_first",
+  "correct": "NO",
+  "id": "B138",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 60000,
+    "date": "2026-07-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 125000,
+  "sales": [
+   {
+    "amount": 60000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 30000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Money paid before the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "deposit_first",
+  "correct": "YES",
+  "id": "B139",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 35000,
+    "date": "2026-07-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 85000,
+  "sales": [
+   {
+    "amount": 35000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Money paid before the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "deposit_first",
+  "correct": "NO",
+  "id": "B140",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 40000,
+    "date": "2026-07-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 2
+   }
+  ],
+  "promises": [],
+  "request": 1000,
+  "sales": [
+   {
+    "amount": 70000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 80000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Money paid before the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "deposit_first",
+  "correct": "YES",
+  "id": "B141",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 65000,
+    "date": "2026-07-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 2
+   }
+  ],
+  "promises": [],
+  "request": 5000,
+  "sales": [
+   {
+    "amount": 70000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 65000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Money paid before the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "deposit_first",
+  "correct": "NO",
+  "id": "B142",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 45000,
+    "date": "2026-07-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 2
+   }
+  ],
+  "promises": [],
+  "request": 100000,
+  "sales": [
+   {
+    "amount": 70000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 90000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Money paid before the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "deposit_first",
+  "correct": "YES",
+  "id": "B143",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 25000,
+    "date": "2026-07-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 50000,
+    "date": "2026-07-01",
+    "linked": false,
+    "n": 2,
+    "paid_for": 2
+   }
+  ],
+  "promises": [],
+  "request": 15000,
+  "sales": [
+   {
+    "amount": 55000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 50000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Money paid before the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "deposit_first",
+  "correct": "NO",
+  "id": "B144",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 100000,
+    "date": "2026-07-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 115000,
+  "sales": [
+   {
+    "amount": 100000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Money paid before the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "deposit_first",
+  "correct": "YES",
+  "id": "B145",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 40000,
+    "date": "2026-07-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 5000,
+  "sales": [
+   {
+    "amount": 40000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 95000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Money paid before the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "deposit_first",
+  "correct": "NO",
+  "id": "B146",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 90000,
+    "date": "2026-07-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 255000,
+  "sales": [
+   {
+    "amount": 90000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Money paid before the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "split_payment",
+  "correct": "YES",
+  "id": "B147",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 20000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 20000,
+    "date": "2026-08-02",
+    "linked": true,
+    "n": 2,
+    "paid_for": 1
+   },
+   {
+    "amount": 20000,
+    "date": "2026-08-03",
+    "linked": true,
+    "n": 3,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 55000,
+  "sales": [
+   {
+    "amount": 70000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "One sale paid in pieces"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "split_payment",
+  "correct": "NO",
+  "id": "B148",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 35000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 35000,
+    "date": "2026-08-02",
+    "linked": true,
+    "n": 2,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 135000,
+  "sales": [
+   {
+    "amount": 70000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "One sale paid in pieces"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "split_payment",
+  "correct": "YES",
+  "id": "B149",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 55000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 55000,
+    "date": "2026-08-02",
+    "linked": true,
+    "n": 2,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 25000,
+  "sales": [
+   {
+    "amount": 110000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "One sale paid in pieces"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "split_payment",
+  "correct": "NO",
+  "id": "B150",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 15000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 15000,
+    "date": "2026-08-02",
+    "linked": true,
+    "n": 2,
+    "paid_for": 1
+   },
+   {
+    "amount": 15000,
+    "date": "2026-08-03",
+    "linked": true,
+    "n": 3,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 170000,
+  "sales": [
+   {
+    "amount": 50000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "One sale paid in pieces"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "split_payment",
+  "correct": "YES",
+  "id": "B151",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 30000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 30000,
+    "date": "2026-08-02",
+    "linked": true,
+    "n": 2,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 80000,
+  "sales": [
+   {
+    "amount": 65000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "One sale paid in pieces"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "split_payment",
+  "correct": "NO",
+  "id": "B152",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 30000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 30000,
+    "date": "2026-08-02",
+    "linked": true,
+    "n": 2,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 300000,
+  "sales": [
+   {
+    "amount": 65000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "One sale paid in pieces"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "split_payment",
+  "correct": "YES",
+  "id": "B153",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 20000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 20000,
+    "date": "2026-08-02",
+    "linked": true,
+    "n": 2,
+    "paid_for": 1
+   },
+   {
+    "amount": 20000,
+    "date": "2026-08-03",
+    "linked": true,
+    "n": 3,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 20000,
+  "sales": [
+   {
+    "amount": 70000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "One sale paid in pieces"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "split_payment",
+  "correct": "NO",
+  "id": "B154",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 35000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 35000,
+    "date": "2026-08-02",
+    "linked": true,
+    "n": 2,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 155000,
+  "sales": [
+   {
+    "amount": 70000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "One sale paid in pieces"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "split_payment",
+  "correct": "YES",
+  "id": "B155",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 50000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 50000,
+    "date": "2026-08-02",
+    "linked": true,
+    "n": 2,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 95000,
+  "sales": [
+   {
+    "amount": 100000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "One sale paid in pieces"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "split_payment",
+  "correct": "NO",
+  "id": "B156",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 20000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 20000,
+    "date": "2026-08-02",
+    "linked": true,
+    "n": 2,
+    "paid_for": 1
+   },
+   {
+    "amount": 20000,
+    "date": "2026-08-03",
+    "linked": true,
+    "n": 3,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 185000,
+  "sales": [
+   {
+    "amount": 60000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "One sale paid in pieces"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "split_payment",
+  "correct": "YES",
+  "id": "B157",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 25000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 25000,
+    "date": "2026-08-02",
+    "linked": true,
+    "n": 2,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 150000,
+  "sales": [
+   {
+    "amount": 50000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "One sale paid in pieces"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "split_payment",
+  "correct": "NO",
+  "id": "B158",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 60000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 60000,
+    "date": "2026-08-02",
+    "linked": true,
+    "n": 2,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 205000,
+  "sales": [
+   {
+    "amount": 120000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "One sale paid in pieces"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "split_payment",
+  "correct": "YES",
+  "id": "B159",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 25000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 25000,
+    "date": "2026-08-02",
+    "linked": true,
+    "n": 2,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 270000,
+  "sales": [
+   {
+    "amount": 50000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "One sale paid in pieces"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "split_payment",
+  "correct": "NO",
+  "id": "B160",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 35000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 35000,
+    "date": "2026-08-02",
+    "linked": true,
+    "n": 2,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 140000,
+  "sales": [
+   {
+    "amount": 75000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "One sale paid in pieces"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "split_payment",
+  "correct": "YES",
+  "id": "B161",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 10000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 10000,
+    "date": "2026-08-02",
+    "linked": true,
+    "n": 2,
+    "paid_for": 1
+   },
+   {
+    "amount": 10000,
+    "date": "2026-08-03",
+    "linked": true,
+    "n": 3,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 115000,
+  "sales": [
+   {
+    "amount": 30000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "One sale paid in pieces"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "split_payment",
+  "correct": "NO",
+  "id": "B162",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 15000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 15000,
+    "date": "2026-08-02",
+    "linked": true,
+    "n": 2,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 175000,
+  "sales": [
+   {
+    "amount": 30000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "One sale paid in pieces"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "overpayment",
+  "correct": "YES",
+  "id": "B163",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 25000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 295000,
+  "sales": [
+   {
+    "amount": 15000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Paid more than the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "overpayment",
+  "correct": "NO",
+  "id": "B164",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 15000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 320000,
+  "sales": [
+   {
+    "amount": 10000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 25000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Paid more than the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "overpayment",
+  "correct": "YES",
+  "id": "B165",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 25000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 20000,
+  "sales": [
+   {
+    "amount": 10000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 15000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Paid more than the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "overpayment",
+  "correct": "NO",
+  "id": "B166",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 25000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 160000,
+  "sales": [
+   {
+    "amount": 10000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Paid more than the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "overpayment",
+  "correct": "YES",
+  "id": "B167",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 45000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 15000,
+  "sales": [
+   {
+    "amount": 30000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Paid more than the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "overpayment",
+  "correct": "NO",
+  "id": "B168",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 40000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 200000,
+  "sales": [
+   {
+    "amount": 15000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Paid more than the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "overpayment",
+  "correct": "YES",
+  "id": "B169",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 55000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 60000,
+  "sales": [
+   {
+    "amount": 50000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 25000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Paid more than the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "overpayment",
+  "correct": "NO",
+  "id": "B170",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 35000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 305000,
+  "sales": [
+   {
+    "amount": 10000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 20000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Paid more than the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "overpayment",
+  "correct": "YES",
+  "id": "B171",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 75000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 150000,
+  "sales": [
+   {
+    "amount": 50000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Paid more than the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "overpayment",
+  "correct": "NO",
+  "id": "B172",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 45000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 225000,
+  "sales": [
+   {
+    "amount": 35000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 15000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Paid more than the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "overpayment",
+  "correct": "YES",
+  "id": "B173",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 75000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 90000,
+  "sales": [
+   {
+    "amount": 60000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Paid more than the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "overpayment",
+  "correct": "NO",
+  "id": "B174",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 70000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 225000,
+  "sales": [
+   {
+    "amount": 40000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Paid more than the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "missing_data",
+  "correct": "REFUSE",
+  "id": "B175",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 30000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": null
+   }
+  ],
+  "promises": [],
+  "request": 25000,
+  "sales": [
+   {
+    "amount": null,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "A sale has no amount"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "missing_data",
+  "correct": "REFUSE",
+  "id": "B176",
+  "limit": 150000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 5000,
+  "sales": [
+   {
+    "amount": null,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "A sale has no amount"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "missing_data",
+  "correct": "REFUSE",
+  "id": "B177",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 10000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": null
+   }
+  ],
+  "promises": [],
+  "request": 50000,
+  "sales": [
+   {
+    "amount": null,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "A sale has no amount"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "missing_data",
+  "correct": "REFUSE",
+  "id": "B178",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 20000,
+  "sales": [
+   {
+    "amount": 20000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": null,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "A sale has no amount"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "missing_data",
+  "correct": "REFUSE",
+  "id": "B179",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 35000,
+  "sales": [
+   {
+    "amount": 60000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 55000,
+    "date": "2026-07-11",
+    "n": 2
+   },
+   {
+    "amount": null,
+    "date": "2026-07-12",
+    "n": 3
+   }
+  ],
+  "story": "A sale has no amount"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "missing_data",
+  "correct": "REFUSE",
+  "id": "B180",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 30000,
+  "sales": [
+   {
+    "amount": null,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "A sale has no amount"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "missing_data",
+  "correct": "REFUSE",
+  "id": "B181",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 25000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": null
+   }
+  ],
+  "promises": [],
+  "request": 5000,
+  "sales": [
+   {
+    "amount": null,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 30000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "A sale has no amount"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "missing_data",
+  "correct": "REFUSE",
+  "id": "B182",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 20000,
+  "sales": [
+   {
+    "amount": null,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 45000,
+    "date": "2026-07-11",
+    "n": 2
+   },
+   {
+    "amount": 30000,
+    "date": "2026-07-12",
+    "n": 3
+   }
+  ],
+  "story": "A sale has no amount"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "missing_data",
+  "correct": "REFUSE",
+  "id": "B183",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 5000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": null
+   }
+  ],
+  "promises": [],
+  "request": 10000,
+  "sales": [
+   {
+    "amount": 55000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": null,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "A sale has no amount"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "missing_data",
+  "correct": "REFUSE",
+  "id": "B184",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 30000,
+  "sales": [
+   {
+    "amount": 20000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": null,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "A sale has no amount"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "others_payment",
+  "correct": "NO",
+  "id": "B185",
+  "limit": 150000,
+  "other_payments": [
+   30000
+  ],
+  "payments": [],
+  "promises": [],
+  "request": 130000,
+  "sales": [
+   {
+    "amount": 30000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Someone else paid the same amount"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "others_payment",
+  "correct": "YES",
+  "id": "B186",
+  "limit": 100000,
+  "other_payments": [
+   50000
+  ],
+  "payments": [],
+  "promises": [],
+  "request": 15000,
+  "sales": [
+   {
+    "amount": 50000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Someone else paid the same amount"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "others_payment",
+  "correct": "NO",
+  "id": "B187",
+  "limit": 200000,
+  "other_payments": [
+   70000
+  ],
+  "payments": [],
+  "promises": [],
+  "request": 185000,
+  "sales": [
+   {
+    "amount": 70000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Someone else paid the same amount"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "others_payment",
+  "correct": "YES",
+  "id": "B188",
+  "limit": 300000,
+  "other_payments": [
+   45000
+  ],
+  "payments": [],
+  "promises": [],
+  "request": 195000,
+  "sales": [
+   {
+    "amount": 45000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Someone else paid the same amount"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "others_payment",
+  "correct": "NO",
+  "id": "B189",
+  "limit": 150000,
+  "other_payments": [
+   20000
+  ],
+  "payments": [],
+  "promises": [],
+  "request": 145000,
+  "sales": [
+   {
+    "amount": 20000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Someone else paid the same amount"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "others_payment",
+  "correct": "YES",
+  "id": "B190",
+  "limit": 100000,
+  "other_payments": [
+   50000
+  ],
+  "payments": [],
+  "promises": [],
+  "request": 35000,
+  "sales": [
+   {
+    "amount": 50000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Someone else paid the same amount"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "others_payment",
+  "correct": "NO",
+  "id": "B191",
+  "limit": 150000,
+  "other_payments": [
+   45000
+  ],
+  "payments": [],
+  "promises": [],
+  "request": 135000,
+  "sales": [
+   {
+    "amount": 45000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Someone else paid the same amount"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "others_payment",
+  "correct": "YES",
+  "id": "B192",
+  "limit": 150000,
+  "other_payments": [
+   20000
+  ],
+  "payments": [],
+  "promises": [],
+  "request": 20000,
+  "sales": [
+   {
+    "amount": 20000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Someone else paid the same amount"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "others_payment",
+  "correct": "NO",
+  "id": "B193",
+  "limit": 200000,
+  "other_payments": [
+   70000
+  ],
+  "payments": [],
+  "promises": [],
+  "request": 165000,
+  "sales": [
+   {
+    "amount": 70000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Someone else paid the same amount"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "others_payment",
+  "correct": "YES",
+  "id": "B194",
+  "limit": 300000,
+  "other_payments": [
+   40000
+  ],
+  "payments": [],
+  "promises": [],
+  "request": 95000,
+  "sales": [
+   {
+    "amount": 40000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Someone else paid the same amount"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "mixed",
+  "correct": "YES",
+  "id": "B195",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 55000,
+    "date": "2026-08-01",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 20000,
+    "date": "2026-08-02",
+    "linked": false,
+    "n": 2,
+    "paid_for": 3
+   },
+   {
+    "amount": 70000,
+    "date": "2026-08-03",
+    "linked": true,
+    "n": 3,
+    "paid_for": 4
+   }
+  ],
+  "promises": [
+   {
+    "amount": 15000,
+    "due": "2026-08-10",
+    "kept": true
+   }
+  ],
+  "request": 65000,
+  "sales": [
+   {
+    "amount": 55000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 15000,
+    "date": "2026-07-11",
+    "n": 2
+   },
+   {
+    "amount": 20000,
+    "date": "2026-07-12",
+    "n": 3
+   },
+   {
+    "amount": 70000,
+    "date": "2026-07-13",
+    "n": 4
+   }
+  ],
+  "story": "Several sales, mixed payment situations"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "mixed",
+  "correct": "YES",
+  "id": "B196",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 45000,
+    "date": "2026-07-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 30000,
+    "date": "2026-08-02",
+    "linked": false,
+    "n": 2,
+    "paid_for": 2
+   }
+  ],
+  "promises": [
+   {
+    "amount": 5000,
+    "due": "2026-08-10",
+    "kept": true
+   }
+  ],
+  "request": 80000,
+  "sales": [
+   {
+    "amount": 45000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 30000,
+    "date": "2026-07-11",
+    "n": 2
+   },
+   {
+    "amount": 10000,
+    "date": "2026-07-12",
+    "n": 3
+   }
+  ],
+  "story": "Several sales, mixed payment situations"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "mixed",
+  "correct": "NO",
+  "id": "B197",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 15000,
+    "date": "2026-07-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 70000,
+    "date": "2026-07-01",
+    "linked": false,
+    "n": 2,
+    "paid_for": 2
+   }
+  ],
+  "promises": [
+   {
+    "amount": 30000,
+    "due": "2026-09-30",
+    "kept": false
+   }
+  ],
+  "request": 170000,
+  "sales": [
+   {
+    "amount": 15000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 70000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Several sales, mixed payment situations"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "mixed",
+  "correct": "YES",
+  "id": "B198",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 10000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 10000,
+    "date": "2026-08-02",
+    "linked": true,
+    "n": 2,
+    "paid_for": 2
+   }
+  ],
+  "promises": [
+   {
+    "amount": 20000,
+    "due": "2026-08-10",
+    "kept": true
+   }
+  ],
+  "request": 15000,
+  "sales": [
+   {
+    "amount": 10000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 10000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Several sales, mixed payment situations"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "mixed",
+  "correct": "NO",
+  "id": "B199",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 50000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 20000,
+    "date": "2026-08-02",
+    "linked": true,
+    "n": 2,
+    "paid_for": 2
+   }
+  ],
+  "promises": [],
+  "request": 150000,
+  "sales": [
+   {
+    "amount": 50000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 20000,
+    "date": "2026-07-11",
+    "n": 2
+   }
+  ],
+  "story": "Several sales, mixed payment situations"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "mixed",
+  "correct": "NO",
+  "id": "B200",
+  "limit": 200000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 15000,
+    "date": "2026-08-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 65000,
+    "date": "2026-08-02",
+    "linked": true,
+    "n": 2,
+    "paid_for": 2
+   },
+   {
+    "amount": 60000,
+    "date": "2026-08-03",
+    "linked": true,
+    "n": 3,
+    "paid_for": 3
+   },
+   {
+    "amount": 45000,
+    "date": "2026-08-04",
+    "linked": true,
+    "n": 4,
+    "paid_for": 4
+   }
+  ],
+  "promises": [],
+  "request": 250000,
+  "sales": [
+   {
+    "amount": 15000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 65000,
+    "date": "2026-07-11",
+    "n": 2
+   },
+   {
+    "amount": 60000,
+    "date": "2026-07-12",
+    "n": 3
+   },
+   {
+    "amount": 45000,
+    "date": "2026-07-13",
+    "n": 4
+   }
+  ],
+  "story": "Several sales, mixed payment situations"
+ }
+]
