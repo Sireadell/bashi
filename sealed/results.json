@@ -95,10 +95,10 @@
    "Q35": "NO",
    "Q36": "NO",
    "Q37": "NO",
-   "Q38": "NO",
-   "Q39": "NO",
-   "Q40": "NO",
-   "Q41": "NO",
+   "Q38": "YES",
+   "Q39": "YES",
+   "Q40": "YES",
+   "Q41": "YES",
    "Q42": "YES",
    "Q43": "NO",
    "Q44": "YES",
@@ -184,9 +184,9 @@
   "Bashi with payment matching": {
    "naira_wrongly_approved": 0,
    "other_wrong": 0,
-   "right": 51,
+   "right": 55,
    "wrong_approvals": 0,
-   "wrong_refusals": 4
+   "wrong_refusals": 0
   },
   "Bashi, confirmed links only": {
    "naira_wrongly_approved": 0,

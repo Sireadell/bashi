@@ -4,12 +4,16 @@ This is a test I wrote. The 55 cases and their correct answers were fixed, hashe
 
 I chose the cases to cover the situations Bashi was built for, so this shows what it does there. It is not a measure of accuracy on real shops. I also wrote Bashi, so I was not blind to how it behaves.
 
+## History
+
+The first run is kept in [RESULTS_run1.md](RESULTS_run1.md): Bashi with payment matching scored 51 of 55, and the 4 misses were the "deposit paid before the sale" cases. After seeing that, I changed the matching rule (money paid before a sale is now applied to the oldest open sale as a marked deposit) and ran again, which gave the table below. The cases and the hash were not changed, but the second run is not an independent exam, because I changed the rule after seeing the answers.
+
 ## Result
 
 | Method | Right | Wrongly approved | Naira wrongly approved | Wrongly refused | Other wrong |
 |---|---|---|---|---|---|
 | Bashi, confirmed links only | 47 of 55 | 0 | N0 | 8 | 0 |
-| Bashi with payment matching | 51 of 55 | 0 | N0 | 4 | 0 |
+| Bashi with payment matching | 55 of 55 | 0 | N0 | 0 | 0 |
 | Balance only | 41 of 55 | 14 | N258,001 | 0 | 0 |
 
 ## By kind of case
@@ -23,7 +27,7 @@ I chose the cases to cover the situations Bashi was built for, so this shows wha
 | kept_promise | 4 | 4 | 4 | 4 |
 | promise_not_due | 3 | 3 | 3 | 3 |
 | unlinked_payment | 8 | 4 | 8 | 7 |
-| deposit_first | 4 | 0 | 0 | 4 |
+| deposit_first | 4 | 0 | 4 | 4 |
 | split_payment | 4 | 4 | 4 | 4 |
 | overpayment | 3 | 3 | 3 | 1 |
 | missing_data | 4 | 4 | 4 | 0 |
@@ -45,10 +49,10 @@ I chose the cases to cover the situations Bashi was built for, so this shows wha
 | Q32 | unlinked_payment | Two same-size sales, one paid, not tied | YES | NO (wrong) | YES | YES |
 | Q33 | unlinked_payment | Big limit, paid 200,000, not tied | YES | NO (wrong) | YES | YES |
 | Q36 | unlinked_payment | Paid, not tied, but a broken promise | NO | NO | NO | YES (wrong) |
-| Q38 | deposit_first | Deposit of 50,000 before the sale | YES | NO (wrong) | NO (wrong) | YES |
-| Q39 | deposit_first | Deposit of 40,000 before the sale | YES | NO (wrong) | NO (wrong) | YES |
-| Q40 | deposit_first | Deposit of 30,000 on a 70,000 sale | YES | NO (wrong) | NO (wrong) | YES |
-| Q41 | deposit_first | Deposit of 20,000 before the sale | YES | NO (wrong) | NO (wrong) | YES |
+| Q38 | deposit_first | Deposit of 50,000 before the sale | YES | NO (wrong) | YES | YES |
+| Q39 | deposit_first | Deposit of 40,000 before the sale | YES | NO (wrong) | YES | YES |
+| Q40 | deposit_first | Deposit of 30,000 on a 70,000 sale | YES | NO (wrong) | YES | YES |
+| Q41 | deposit_first | Deposit of 20,000 before the sale | YES | NO (wrong) | YES | YES |
 | Q47 | overpayment | Same, asks one naira over the limit | NO | NO | NO | YES (wrong) |
 | Q48 | overpayment | Extra on one sale does not clear the other | NO | NO | NO | YES (wrong) |
 | Q49 | missing_data | Only sale has no amount | REFUSE | REFUSE | REFUSE | YES (wrong) |
