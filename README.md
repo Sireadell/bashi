@@ -5,7 +5,7 @@ Demo video: https://youtu.be/Xpq_LN4h9XA
 
 I built Bashi for small shops that sell on credit. When a customer asks to buy on credit, Bashi answers yes or no, and it hands back a receipt that links the exact records it used: which sales, which payments, which broken promise. The answer comes from a fixed rule check over a FalkorDB graph, not from a guess, so anyone can look at the receipt and see why.
 
-**Part of the demo data is real and part is invented.** The real part is 8 sales from my own shop audit, with names removed. Everything else is invented. See "Real vs invented" below.
+**Part of the demo data is real and part is invented.** The real part is my own shop: the 8 sales from my audit, and a separate view of my whole shop's records (45 customers, 544 sales, 543 payments), all with names removed. Everything else is invented. See "Real vs invented" below.
 
 ## Why this exists
 
@@ -15,6 +15,29 @@ I ran the same kind of check on the same shop on 15 October 2026 (494 sales, 46 
 
 Bashi does not repair that shop's data. It is built around the same problem. It decides from linked records instead of a stored balance, shows the exact records on a receipt, flags a payment that is not linked to a sale but matches a still-open sale amount as a "possible phantom debt", and says CANNOT TRACE instead of guessing. The live demo shows that case on the real audit records, next to invented customers.
 
+## The same problem in my whole shop, and what the graph does about it
+
+My shop writes down every payment against the customer, never against a particular sale. So the books can tell you what a customer owes in total, but not which sale a payment cleared. That is how a sale can sit marked unpaid after the money came in: nothing connects the two.
+
+I loaded my whole shop's record into the live site, with names removed (pick "My whole shop" in the shop list). It holds 45 customers, 544 credit sales and 543 payments. None of the 543 payments is tied to a sale.
+
+| Plain balance check | Bashi on the same records |
+|---|---|
+| Credit sales N7,097,241 minus payments N6,516,828 = N580,413 owed | The same totals, but every payment is matched to a sale and each match is saved in the graph |
+| One number per customer | Each sale shows whether it is cleared or still open, and which payment cleared it |
+| 12 accounts owe money | 15 accounts still have a sale open |
+| Cannot say why | Marks each link "inferred" and shows the rule that made it |
+
+How the matching works. For each customer, oldest first: a payment equal to a whole sale clears that sale (214 links). Anything left goes to the oldest open sale, split across sales if needed (539 links). A payment never clears a sale dated after it. Each match is saved as an `INFERRED_SETTLES` link in FalkorDB, separate from a link a person confirmed, and it is part of the receipt fingerprint, so changing one makes the check fail. Money that no sale could use is shown on the receipt and is never counted against a later sale.
+
+What it found, on my real records:
+
+- 9 of 45 accounts get a different amount owed than the plain balance gives.
+- N136,700 of payments were recorded before any sale they could clear. A plain balance quietly uses that money to cover other debts. It could be a real deposit or a wrong date. Bashi shows it and does not decide which.
+- The biggest case is one account where the plain balance says N137,750 owed and the matched figure is N249,250, because N111,500 of its payments came before the sales. The button "See the account the plain balance gets most wrong" opens it.
+
+Honest limits. The matching is a rule, not a fact: nobody has confirmed these links with the customers. The rule is deliberately strict, so a deposit paid before a sale is not allowed to clear it, and that can make Bashi stricter than the shop owner would be. Credit limits are assumed (N100,000, N300,000 or N500,000 depending on the customer's biggest sale). On a spread of 135 questions (each of the 45 customers asked for 50%, 75% and 100% of their limit), Bashi and the plain balance give a different yes or no on only 4, so the gain is the per-sale picture and the receipt, not a big change in answers.
+
 ## Real vs invented
 
 The live site opens on my own shop view (graph `shop_own`). Every record is tagged real or invented, on the page and in the data.
@@ -22,6 +45,7 @@ The live site opens on my own shop view (graph `shop_own`). Every record is tagg
 | | What it is |
 |---|---|
 | Real | The 8 credit sales from my own audit of 17 July 2026 (N388,340 in total). Each sale was recorded as paid, but the customer's ledger still showed the money as owed. The amounts still shown as owed and the sale dates come from the audit. Customers are coded CUST-A to CUST-D. |
+| Real (whole shop) | The "My whole shop" view: 45 customers, 544 credit sales and 543 payments from my shop's own records, names removed. Customers are coded CUST-001 to CUST-045. Credit limits are assumed. Payment-to-sale links are inferred by rule and marked inferred. |
 | Invented | 12 made-up customers (CUST-01 to CUST-12) with their sales, payments and promises, added so there is more to ask about. |
 | Assumed | Credit limits for all customers, and the payment dates of the 8 real sales (set equal to the sale dates). The audit log does not hold them. The page says so. |
 | Removed | Names, phone numbers, addresses, notes and item names. The data files hold only codes, amounts and dates, and the loader refuses anything else. |
@@ -291,7 +315,7 @@ The scorecard runs on the invented practice shop, and only 3 of 40 differ, so th
 python -m pytest
 ```
 
-There are 96 tests. The full run takes about 16 minutes because it talks to a hosted database. The tests run against a copy of the graph and delete it afterwards.
+There are 157 tests. The full run takes about 20 minutes because it talks to a hosted database. The tests run against a copy of the graph and delete it afterwards.
 
 ## AI tools used
 
