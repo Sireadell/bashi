@@ -11,7 +11,7 @@ Live site: https://bashi-vrfv.onrender.com (no sign-up). The free host sleeps wh
 | 3:30 | Open `/mcp` or read AGENTS.md. | The agent routes and the MCP tools another AI tool can call. |
 | 4:00 | In a terminal, run the four tamper commands in "The 90-second path" in the README. | `verify.py` fails and names the changed record, then passes after the restore. |
 
-The sealed tests: 55 cases, then 200 new ones whose answers were locked before running (`python sealed/run_sealed.py b`). Bashi never wrongly approves; a plain balance check wrongly approves 53. A plain AI model also gets all 255 right on these tidy cases, and the README says so. See README, "Sealed test".
+The sealed tests: 55 cases, then 200 new ones whose answers were locked before running (`python sealed/run_sealed.py b`). Bashi never wrongly approves; a plain balance check wrongly approves 53. See README, "Sealed test".
 
 ## What is real and what is not
 

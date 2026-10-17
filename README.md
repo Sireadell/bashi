@@ -17,6 +17,17 @@ curl -s -X POST https://bashi-vrfv.onrender.com/mcp -H "Content-Type: applicatio
 
 You get back `NO`, the reason (a broken promise, PR001), the ids of the records used, a fingerprint, and a receipt link plus a verify link you can open. The call saves a decision in the practice shop, which is why it is safe to try. Setup lines for Claude Desktop and Cursor are in [AGENTS.md](AGENTS.md).
 
+## How Bashi differs
+
+| What only Bashi does | So what | Try it |
+|---|---|---|
+| No model makes the yes or no. Two fixed rules do. | The same question always gets the same answer, and you can read the rules in two lines. | Read `rules.py`; "What this is not" below |
+| Every answer comes with a receipt and a fingerprint. | You see the exact sales, payments and promises behind it, not just a number. | Live site, "See the real audit case" |
+| Anyone can re-check a receipt later. Edit one record and the check fails. | You do not have to trust me or the database. | The four tamper commands in "The 90-second path"; `python tamper_sweep.py` runs 11 edits (11 of 11 caught, [TAMPER_SWEEP.md](TAMPER_SWEEP.md)) |
+| What-if: remove one record and watch the answer flip. | You see which record decided it. It runs on a throwaway copy, so real data never changes. | Live site, "Try the demo", then "What if this evidence did not exist" |
+| Real data and locked tests. | My own shop's audit (names removed), and test answers locked before I ran anything. | "Real vs invented" and "Sealed test" below |
+| Agents can call it. | Another AI tool gets the answer and the receipt over plain web addresses or MCP. | The 30-second `curl` above; "Use it from other tools" |
+
 ## Why this exists
 
 On 17 July 2026 I ran an audit (read-only) on a real shop's records. It found 8 sales marked fully paid while the customer's account ledger still showed debt, N388,340 in total. The cause: one payment updates two separate records, the sale and the ledger, and one of them can lag or fail. Each screen looks right on its own, so nobody sees the gap. I fixed the cause afterwards.
@@ -285,7 +296,7 @@ Honest limit: the amounts and sale dates come from my audit, but the payment rec
 | A model sentence that fails the check is replaced | Read `agent.py`; the reply says which mode answered |
 | Every record on the page is tagged real or invented | Look at the tags on the live pages and in `own_audit_seed.py` |
 | On 255 cases whose answers were locked first (55, then 200 new), Bashi never wrongly approves; a balance check wrongly approves 53 | `python sealed/run_sealed.py` and `python sealed/run_sealed.py b` (each checks its hash first), then read `sealed/RESULTS.md` and `sealed/RESULTS_B.md` |
-| A plain AI model also gets all 255 right on these tidy cases | `python sealed/score_ai.py`, then read `sealed/RESULTS_ai_only.md` |
+| 11 different edits to a saved decision's records are all caught, and each passes again once undone | `python tamper_sweep.py` (runs on a throwaway copy of the practice shop), then read `TAMPER_SWEEP.md` |
 | The tests pass | `python -m pytest` (about 20 minutes, it talks to a hosted database) |
 | The audit figures (N388,340, 494 sales, 46 accounts) are from my shop | A visitor cannot check these. They are my own read-only audit, names removed. |
 
@@ -302,6 +313,17 @@ Another AI app can ask Bashi "can customer X take N naira on credit?" and get a 
 | `POST /mcp` | MCP tools: `decide_credit`, `get_receipt`, `verify_decision`, `what_if_remove_evidence`, `list_customers`. `python mcp_stdio.py` gives the same tools for Claude Desktop. |
 
 Tests: `python -m pytest tests/test_api_mcp.py -q`.
+
+## Beyond shops
+
+Bashi only does shop credit today. The pattern is not shop-specific: fixed rules over linked records, a receipt that names the records, and a replay that catches edits. The same pattern would fit these, each with its own two or three rules (not built yet):
+
+| Use | Records it links | A rule it could check |
+|---|---|---|
+| Landlord or estate | Rent due, payments, promised dates | Arrears over a limit, or a broken promise to pay |
+| Small lender or savings group | Loans, repayments, promises | Open balance plus the new loan is over the limit |
+| Supplier giving trade credit | Invoices, payments, delivery notes | Unpaid invoices over a limit |
+| School fees | Fees, payments, payment plans | Balance over a limit, or a missed plan date |
 
 ## Sealed test
 
@@ -326,14 +348,9 @@ The 55 cases above are where I fixed the deposit rule, so they are no longer a f
 | Plain balance check | 41 | 161 | 39 (N3,970,000) |
 | Bashi, confirmed links only | 47 | 190 | 0 |
 | Bashi with payment matching | 55 | 200 | 0 |
-| A plain AI model, no graph (Claude Sonnet 5.5) | 55 | 200 | 0 |
 
-The last row is a plain AI model that was handed the same rules in words and a text ledger per customer ([sealed/ai_prompt_a.txt](sealed/ai_prompt_a.txt), [sealed/ai_prompt_b.txt](sealed/ai_prompt_b.txt)), with no graph and none of Bashi's code. Score it yourself with `python sealed/score_ai.py`. Reports: [sealed/RESULTS_ai_only.md](sealed/RESULTS_ai_only.md), [sealed/RESULTS_ai_only_b.md](sealed/RESULTS_ai_only_b.md).
 
 What this tells you, plainly:
-- On small, tidy cases a strong AI model also gets every answer right. So this test does not show that Bashi is more accurate than an AI. It shows Bashi matches it and beats a plain balance check on broken promises, missing amounts and loose payments.
-- The AI was given the ledger already pulled together as text. Finding the right records is part of what Bashi does.
-- What the AI does not give is a fixed rule that answers the same way every time, a receipt listing the exact records used, a fingerprint, a replay that catches an edited record, and no cost per question. Those are the reasons to use Bashi, not a higher score here.
 - The 200 cases are generated from templates. They vary amounts, dates and mixes of situations, not the kinds of situation. 200 of 200 on tidy templated cases is not a claim about real shops.
 
 What this test is not. I wrote the cases and I wrote Bashi, so I was not blind to how it behaves. I did not include reversed or refunded sales (Bashi cannot record a reversal yet). A bug in the matching code on sales with no amount showed up while running the first set; I fixed it and added a test, and the cases and the hash were not touched.

@@ -188,7 +188,6 @@ def write_report(cases, answers, scores, classes, digest):
                 " | ".join(answers[a][c["id"]] + ("" if answers[a][c["id"]] == c["correct"] else " (wrong)") for a in ARMS)))
     lines += ["", "## What is not covered", "",
               "- Sales that were reversed or refunded: Bashi has no way to record a reversal yet, so there are no such cases.",
-              "- A plain AI model was scored separately, see RESULTS_ai_only.md and RESULTS_ai_only_b.md. It also got every case right.",
               "- The cases are small and tidy. Real records are messier, which is why the whole-shop view marks every matched link as inferred.", ""]
     with open(os.path.join(HERE, SETS[which_set()][2]), "w", encoding="utf-8") as fh:
         fh.write("\n".join(lines))

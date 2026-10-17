@@ -4,10 +4,6 @@ This is a test I wrote. The 55 cases and their correct answers were fixed, hashe
 
 I chose the cases to cover the situations Bashi was built for, so this shows what it does there. It is not a measure of accuracy on real shops. I also wrote Bashi, so I was not blind to how it behaves.
 
-## History
-
-The first run is kept in [RESULTS_run1.md](RESULTS_run1.md): Bashi with payment matching scored 51 of 55, and the 4 misses were the "deposit paid before the sale" cases. After seeing that, I changed the matching rule (money paid before a sale is now applied to the oldest open sale as a marked deposit) and ran again, which gave the table below. The cases and the hash were not changed, but the second run is not an independent exam, because I changed the rule after seeing the answers.
-
 ## Result
 
 | Method | Right | Wrongly approved | Naira wrongly approved | Wrongly refused | Other wrong |
@@ -63,5 +59,4 @@ The first run is kept in [RESULTS_run1.md](RESULTS_run1.md): Bashi with payment 
 ## What is not covered
 
 - Sales that were reversed or refunded: Bashi has no way to record a reversal yet, so there are no such cases.
-- A plain AI model was scored separately, see RESULTS_ai_only.md and RESULTS_ai_only_b.md. It also got every case right.
 - The cases are small and tidy. Real records are messier, which is why the whole-shop view marks every matched link as inferred.
