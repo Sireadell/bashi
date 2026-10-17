@@ -330,6 +330,7 @@ def build_receipt(shop, g, decision_id):
             dec["fingerprint"], dec["snapshot"]), state=state)
     out["verify"] = {"ok": ok, "problems": problems}
     out["inferred_count"] = len(state.get("inferred", {}))
+    out["deposits"] = sum(state["settles"][k] for k, m in state.get("inferred", {}).items() if m == "deposit")
     out["unapplied"] = None
     if out["inferred_count"]:
         # Money this customer paid that no sale could use (paid before the sale, or more than
