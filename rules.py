@@ -50,35 +50,48 @@ def read_state(graph, customer_id, as_of=None):
     rows = graph.query(
         "MATCH (c:Customer {id:$cid}) "
         "RETURN 'C' AS k, c.id AS a, c.credit_limit AS b, null AS c, null AS d, "
-        "null AS e, null AS f, null AS g "
+        "null AS e, null AS f, null AS g, null AS h "
         "UNION ALL "
         "MATCH (c:Customer {id:$cid})-[:MADE]->(t:Trade) "
         "OPTIONAL MATCH (p:Payment)-[s:SETTLES]->(t) "
         "RETURN 'T' AS k, t.id AS a, t.amount AS b, t.date AS c, p.id AS d, "
-        "p.amount AS e, p.date AS f, s.amount AS g "
+        "p.amount AS e, p.date AS f, s.amount AS g, null AS h "
+        "UNION ALL "
+        "MATCH (c:Customer {id:$cid})-[:MADE]->(t:Trade)<-[s:INFERRED_SETTLES]-(p:Payment) "
+        "RETURN 'I' AS k, t.id AS a, t.amount AS b, t.date AS c, p.id AS d, "
+        "p.amount AS e, p.date AS f, s.amount AS g, s.method AS h "
         "UNION ALL "
         "MATCH (c:Customer {id:$cid})-[:PROMISED]->(pr:Promise) "
         "RETURN 'P' AS k, pr.id AS a, pr.amount AS b, pr.due AS c, pr.kept AS d, "
-        "null AS e, null AS f, null AS g "
+        "null AS e, null AS f, null AS g, null AS h "
         "UNION ALL "
         "MATCH (c:Customer {id:$cid})-[b:BROKE]->(pr:Promise) "
         "RETURN 'B' AS k, pr.id AS a, pr.amount AS b, pr.due AS c, pr.kept AS d, "
-        "b.since AS e, null AS f, null AS g", p
+        "b.since AS e, null AS f, null AS g, null AS h", p
     ).result_set
     cust = [r for r in rows if r[0] == "C"]
     if not cust:
         return None
     state = {
         "customer": {"id": cust[0][1], "limit": cust[0][2]},
-        "trades": {}, "payments": {}, "settles": {}, "promises": {},
+        "trades": {}, "payments": {}, "settles": {}, "promises": {}, "inferred": {},
     }
-    for k, tid, tamt, tdate, pid, pamt, pdate, samt in rows:
+    for k, tid, tamt, tdate, pid, pamt, pdate, samt, *_ in rows:
         if k != "T":
             continue
         state["trades"][tid] = {"amount": tamt, "date": tdate}
         if pid is not None:
             state["payments"][pid] = {"amount": pamt, "date": pdate}
             state["settles"]["%s>%s" % (pid, tid)] = samt
+    # Links proposed by linking.py (a payment matched to a sale by rule, not
+    # confirmed by a person). They count toward the debt, and are kept apart in
+    # state["inferred"] so every receipt can say which links are inferred.
+    for k, tid, tamt, tdate, pid, pamt, pdate, samt, method in rows:
+        if k != "I":
+            continue
+        state["payments"][pid] = {"amount": pamt, "date": pdate}
+        state["settles"]["%s>%s" % (pid, tid)] = samt
+        state["inferred"]["%s>%s" % (pid, tid)] = method
     for k, prid, amt, due, kept, *_ in rows:
         if k == "P":
             state["promises"][prid] = {"amount": amt, "due": due, "kept": kept, "broke": False}
@@ -168,8 +181,16 @@ def possible_phantoms(graph, state):
                    and isinstance(t["amount"], int)}
     if not open_trades:
         return []
-    orphans = graph.query(
-        "MATCH (p:Payment) WHERE NOT (p)-[:SETTLES]->() RETURN p.id, p.amount, p.date").result_set
+    if graph.query("MATCH ()-[r:PAID]->() RETURN count(r)").result_set[0][0]:
+        # Payments are tied to customers here, so only this customer's own payments
+        # can be a phantom, and a payment already matched by rule is not an orphan.
+        orphans = graph.query(
+            "MATCH (:Customer {id:$cid})-[:PAID]->(p:Payment) "
+            "WHERE NOT (p)-[:SETTLES]->() AND NOT (p)-[:INFERRED_SETTLES]->() "
+            "RETURN p.id, p.amount, p.date", {"cid": state["customer"]["id"]}).result_set
+    else:
+        orphans = graph.query(
+            "MATCH (p:Payment) WHERE NOT (p)-[:SETTLES]->() RETURN p.id, p.amount, p.date").result_set
     found = []
     for tid, t in sorted(open_trades.items()):
         left = t["amount"] - open_by_trade.get(tid, 0)
@@ -198,7 +219,10 @@ def snapshot_of(state):
     for i, v in state["promises"].items():
         snap["Promise:" + i] = dict(v)
     for k, v in state["settles"].items():
-        snap["Settles:" + k] = {"amount": v}
+        rec = {"amount": v}
+        if k in state.get("inferred", {}):
+            rec["inferred"] = state["inferred"][k]    # tampering with the method is caught too
+        snap["Settles:" + k] = rec
     return snap
 
 
@@ -288,11 +312,14 @@ def _save(graph, customer_id, request_amount, state, result, fp, snap, as_of):
          "fp": fp, "rids": json.dumps(sorted(RULES)),
          "snap": json.dumps(snap, sort_keys=True), "debt": result["open_debt"],
          "as_of": as_of})
+    by_label = {}
     for ev in evidence_list(state):
+        by_label.setdefault(ev["label"], []).append(ev["id"])
+    for label, ids in by_label.items():       # one call per record type, not one per record
         graph.query(
-            "MATCH (d:Decision {id:$did}), (e:%s {id:$eid}) "
-            "CREATE (d)-[:USED_EVIDENCE]->(e)" % ev["label"],
-            {"did": did, "eid": ev["id"]})
+            "UNWIND $ids AS eid MATCH (d:Decision {id:$did}), (e:%s {id:eid}) "
+            "CREATE (d)-[:USED_EVIDENCE]->(e)" % label,
+            {"did": did, "ids": ids})
     for rid in RULES:
         graph.query("MATCH (d:Decision {id:$did}), (r:Rule {id:$rid}) "
                     "CREATE (d)-[:APPLIED_RULE]->(r)", {"did": did, "rid": rid})
