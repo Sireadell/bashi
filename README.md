@@ -274,7 +274,8 @@ Honest limit: the amounts and sale dates come from my audit, but the payment rec
 | The yes or no contains no AI | Read `rules.py`; no model is called inside `decide` |
 | A model sentence that fails the check is replaced | Read `agent.py`; the reply says which mode answered |
 | Every record on the page is tagged real or invented | Look at the tags on the live pages and in `own_audit_seed.py` |
-| On 55 cases whose answers were locked first, Bashi never wrongly approves and a balance check wrongly approves 14 (N258,001) | `python sealed/run_sealed.py` (checks the hash first), then read `sealed/RESULTS.md` |
+| On 255 cases whose answers were locked first (55, then 200 new), Bashi never wrongly approves; a balance check wrongly approves 53 | `python sealed/run_sealed.py` and `python sealed/run_sealed.py b` (each checks its hash first), then read `sealed/RESULTS.md` and `sealed/RESULTS_B.md` |
+| A plain AI model also gets all 255 right on these tidy cases | `python sealed/score_ai.py`, then read `sealed/RESULTS_ai_only.md` |
 | The tests pass | `python -m pytest` (about 20 minutes, it talks to a hosted database) |
 | The audit figures (N388,340, 494 sales, 46 accounts) are from my shop | A visitor cannot check these. They are my own read-only audit, names removed. |
 
@@ -306,7 +307,26 @@ Where Bashi wins: all 7 broken-promise cases and all 4 missing-amount cases. The
 
 What changed between the two runs, and why it is not a clean result. The first run showed one weakness: the 4 "deposit paid before the sale" cases. My matching rule would not let a payment clear a later sale, so Bashi refused customers who had in fact paid up front (the balance check got those right). I changed the rule so that money paid before a sale is applied to the oldest open sale as a deposit, clearly marked. That brought the 4 cases right. Because I changed the rule after seeing the answer, the second column is not an independent exam. It shows the fix works on the cases that exposed the problem; the first column is the sealed result.
 
-What this test is not. I wrote the cases and I wrote Bashi, so I was not blind to how it behaves. The cases are small and tidy. I did not include reversed or refunded sales (Bashi cannot record a reversal yet) and I did not run an AI-only answer for comparison. A bug in the matching code on sales with no amount also showed up while running this; I fixed it and added a test, and the cases and the hash were not touched.
+### A second, untouched exam: 200 cases
+
+The 55 cases above are where I fixed the deposit rule, so they are no longer a fair exam for it. I then generated a second set of 200 cases from a fixed seed ([sealed/make_key_b.py](sealed/make_key_b.py)), with the answers worked out by plain arithmetic from each story, and pushed its fingerprint first (commit `a5e2bd8`, [sealed/KEY_HASH_B.txt](sealed/KEY_HASH_B.txt)). Bashi's rules were not changed after that. Re-run it with `python sealed/run_sealed.py b`. Report: [sealed/RESULTS_B.md](sealed/RESULTS_B.md).
+
+| Method | 55 cases (rule fixed on these) | 200 new cases | Wrongly approved on the 200 |
+|---|---|---|---|
+| Plain balance check | 41 | 161 | 39 (N3,970,000) |
+| Bashi, confirmed links only | 47 | 190 | 0 |
+| Bashi with payment matching | 55 | 200 | 0 |
+| A plain AI model, no graph (Claude Sonnet 5.5) | 55 | 200 | 0 |
+
+The last row is a plain AI model that was handed the same rules in words and a text ledger per customer ([sealed/ai_prompt_a.txt](sealed/ai_prompt_a.txt), [sealed/ai_prompt_b.txt](sealed/ai_prompt_b.txt)), with no graph and none of Bashi's code. Score it yourself with `python sealed/score_ai.py`. Reports: [sealed/RESULTS_ai_only.md](sealed/RESULTS_ai_only.md), [sealed/RESULTS_ai_only_b.md](sealed/RESULTS_ai_only_b.md).
+
+What this tells you, plainly:
+- On small, tidy cases a strong AI model also gets every answer right. So this test does not show that Bashi is more accurate than an AI. It shows Bashi matches it and beats a plain balance check on broken promises, missing amounts and loose payments.
+- The AI was given the ledger already pulled together as text. Finding the right records is part of what Bashi does.
+- What the AI does not give is a fixed rule that answers the same way every time, a receipt listing the exact records used, a fingerprint, a replay that catches an edited record, and no cost per question. Those are the reasons to use Bashi, not a higher score here.
+- The 200 cases are generated from templates. They vary amounts, dates and mixes of situations, not the kinds of situation. 200 of 200 on tidy templated cases is not a claim about real shops.
+
+What this test is not. I wrote the cases and I wrote Bashi, so I was not blind to how it behaves. I did not include reversed or refunded sales (Bashi cannot record a reversal yet). A bug in the matching code on sales with no amount showed up while running the first set; I fixed it and added a test, and the cases and the hash were not touched.
 
 ## Scorecard
 
