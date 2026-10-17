@@ -15,7 +15,7 @@ Any AI tool that speaks MCP (a standard way for AI tools to call other tools) ca
 curl -s -X POST https://bashi-vrfv.onrender.com/mcp -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"decide_credit","arguments":{"customer":"C001","amount":45000,"shop":"shop_a"}}}'
 ```
 
-You get back `NO`, the reason (a broken promise, PR001), the ids of the records used, a fingerprint, and a receipt link plus a verify link you can open. The call saves a decision in the practice shop, which is why it is safe to try. Setup lines for Claude Desktop and Cursor are in [AGENTS.md](AGENTS.md).
+You get back `NO`, the reason (a broken promise, PR001), the ids of the records used, a fingerprint, and a receipt link plus a verify link you can open. The call saves a decision in the practice shop, which is why it is safe to try. Setup lines for Claude Desktop are in [AGENTS.md](AGENTS.md).
 
 ## How Bashi differs
 
