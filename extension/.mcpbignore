@@ -1,0 +1,5 @@
+node_modules
+*.log
+INSTALL.md
+.mcpbignore
+Bashi.mcpb

@@ -1,0 +1,29 @@
+{
+  "manifest_version": "0.3",
+  "name": "bashi",
+  "display_name": "Bashi",
+  "version": "1.0.0",
+  "description": "Ask if a shop customer can take an amount on credit. Get YES, NO or CANNOT TRACE with a receipt you can re-check.",
+  "long_description": "Bashi answers one question for a shop: can this customer take this amount on credit? It says YES, NO or CANNOT TRACE, and gives a receipt that links the exact sales, payments and promises it used. The answer comes from two fixed rules, not an AI guess. This extension talks to the live Bashi site, so there is nothing to set up. The data is a demo shop with invented records.",
+  "author": { "name": "Sireadell", "url": "https://github.com/Sireadell/bashi" },
+  "repository": { "type": "git", "url": "https://github.com/Sireadell/bashi" },
+  "homepage": "https://bashi-vrfv.onrender.com",
+  "license": "MIT",
+  "keywords": ["credit", "shop", "receipt", "verify", "mcp"],
+  "server": {
+    "type": "node",
+    "entry_point": "server.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/server.js"]
+    }
+  },
+  "tools": [
+    { "name": "decide_credit", "description": "Can this customer take this amount on credit? YES, NO or CANNOT TRACE with reasons and a receipt." },
+    { "name": "get_receipt", "description": "Get the full receipt for a saved decision." },
+    { "name": "verify_decision", "description": "Re-check a saved decision against its records." },
+    { "name": "what_if_remove_evidence", "description": "See what the answer would be if one record had never existed." },
+    { "name": "list_customers", "description": "List the customer ids you can ask about." }
+  ],
+  "compatibility": { "runtimes": { "node": ">=18.0.0" } }
+}
