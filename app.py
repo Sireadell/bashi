@@ -13,6 +13,8 @@ from db import DEFAULT_GRAPH, OWN_GRAPH
 from own_shop import EXPLAINER as OWN_EXPLAINER
 from own_shop import LABEL_TEXT as OWN_LABEL
 from own_shop import TAG, find_demo_case, find_real_case
+from linking import biggest_gap_case
+from real_shop import REAL_GRAPH
 from rules import (CANNOT_TRACE, CANNOT_TRACE_TEXT, RULES, decide, evaluate,
                    fingerprint, naira, prune_decisions, read_state, snapshot_of)
 from verify import verify_decision
@@ -97,8 +99,16 @@ def slow_down():
 # The demo shop (synthetic) is the default. The visitor can switch to the
 # founder's own shop (names removed); the choice is kept in a cookie.
 SHOP_COOKIE = "bashi_shop"
-GRAPH_OF = {"demo": DEFAULT_GRAPH, "own": OWN_GRAPH}
+GRAPH_OF = {"demo": DEFAULT_GRAPH, "own": OWN_GRAPH, "real": REAL_GRAPH}
 _own_seen = {"at": 0.0, "ok": False}
+_real_seen = {"at": 0.0, "ok": False}
+REAL_LABEL = "Real shop, names removed. Payment-to-sale links are inferred by rule, not confirmed"
+REAL_EXPLAINER = ("The whole record of a real shop that sells on credit, with names, phones and notes removed: "
+                  "45 customers, 544 credit sales and 543 payments. The shop records each payment against the "
+                  "customer, never against a sale, so nothing says which sale a payment cleared. Bashi matches "
+                  "them by rule (a payment of the exact amount first, otherwise the oldest sale first, never a "
+                  "sale dated after the payment) and saves each match in the graph marked inferred. "
+                  "Credit limits are assumed.")
 
 
 def own_available():
@@ -115,11 +125,27 @@ def own_available():
     return _own_seen["ok"]
 
 
+def real_available():
+    """True when the real-shop graph is loaded. Checked at most every 30 seconds."""
+    now = time.time()
+    if now - _real_seen["at"] > 30:
+        _real_seen["at"] = now
+        try:
+            rows = get_graph(REAL_GRAPH).query(
+                "MATCH (c:Customer {own_shop:true}) RETURN count(c)").result_set
+            _real_seen["ok"] = bool(rows) and rows[0][0] > 0
+        except Exception:
+            _real_seen["ok"] = False
+    return _real_seen["ok"]
+
+
 def shop_key():
     """The own shop is the default whenever it is loaded. Anyone can pick the practice
     shop instead. If the own shop is missing or empty, everyone gets the practice shop."""
     if request.cookies.get(SHOP_COOKIE) == "demo":
         return "demo"
+    if request.cookies.get(SHOP_COOKIE) == "real" and real_available():
+        return "real"
     return "own" if own_available() else "demo"
 
 
@@ -130,7 +156,8 @@ def cur_graph():
 def graph_for_decision(decision_id):
     """The graph that holds this receipt: the chosen shop first, then the other one."""
     first = shop_key()
-    order = [first] + [k for k in ("demo", "own") if k != first and (k == "demo" or own_available())]
+    order = [first] + [k for k in ("demo", "own", "real") if k != first and (
+        k == "demo" or (k == "own" and own_available()) or (k == "real" and real_available()))]
     for k in order:
         try:
             g = get_graph(GRAPH_OF[k])
@@ -148,6 +175,8 @@ INVENTED_LABEL = "Invented customer, not real data"
 def banner_for(shop, source):
     """The banner for a page about one record. The real-audit banner is only for real customers;
     invented customers get their own label; a receipt from the practice shop gets the practice one."""
+    if shop == "real":
+        return REAL_LABEL
     if shop != "own":
         return PRACTICE_LABEL
     return INVENTED_LABEL if source == "invented" else OWN_LABEL
@@ -156,15 +185,19 @@ def banner_for(shop, source):
 @app.context_processor
 def shop_context():
     key = shop_key()
-    return {"shop": {"key": key, "own": key == "own", "own_available": own_available(),
-                     "label": OWN_LABEL if key == "own" else PRACTICE_LABEL,
-                     "explainer": OWN_EXPLAINER if key == "own" else None}}
+    return {"shop": {"key": key, "own": key == "own", "real": key == "real",
+                     "ownlike": key in ("own", "real"),
+                     "own_available": own_available(), "real_available": real_available(),
+                     "label": REAL_LABEL if key == "real" else OWN_LABEL if key == "own" else PRACTICE_LABEL,
+                     "explainer": REAL_EXPLAINER if key == "real" else OWN_EXPLAINER if key == "own" else None}}
 
 
 @app.route("/shop", methods=["POST"])
 def choose_shop():
     resp = make_response(redirect(url_for("home")))
-    want = "own" if request.form.get("shop") == "own" and own_available() else "demo"
+    pick = request.form.get("shop")
+    want = ("own" if pick == "own" and own_available()
+            else "real" if pick == "real" and real_available() else "demo")
     resp.set_cookie(SHOP_COOKIE, want, max_age=60 * 60 * 24 * 30, samesite="Lax")
     return resp
 
@@ -197,7 +230,8 @@ def health():
                 errors.append(type(e).__name__)
     if out.get("demo") is None and not out.get("own"):
         return jsonify(ok=False, error=(errors or ["EmptyGraph"])[0]), 503
-    return jsonify(ok=True, customers=out.get("demo", 0), own_customers=out.get("own", 0))
+    return jsonify(ok=True, customers=out.get("demo", 0), own_customers=out.get("own", 0),
+                   real_customers=out.get("real", 0))
 
 
 def ask_in_words(q):
@@ -277,7 +311,8 @@ def build_receipt(shop, g, decision_id):
     for key, amt in state["settles"].items():
         pid, tid = key.split(">")
         settled[tid] = settled.get(tid, 0) + amt
-        pays_for.setdefault(tid, []).append({"id": pid, "amount": amt})
+        pays_for.setdefault(tid, []).append({"id": pid, "amount": amt,
+                                             "method": state.get("inferred", {}).get(key)})
     for tid in sorted(state["trades"]):
         t = state["trades"][tid]
         s = settled.get(tid, 0)
@@ -294,9 +329,29 @@ def build_receipt(shop, g, decision_id):
         g, (dec["id"], dec["customer_id"], dec["request"], dec["verdict"],
             dec["fingerprint"], dec["snapshot"]), state=state)
     out["verify"] = {"ok": ok, "problems": problems}
+    out["inferred_count"] = len(state.get("inferred", {}))
+    out["unapplied"] = None
+    if out["inferred_count"]:
+        # Money this customer paid that no sale could use (paid before the sale, or more than
+        # was owed). It is shown, never used to clear a later sale.
+        try:
+            paid = g.query("MATCH (:Customer {id:$c})-[:PAID]->(p:Payment) RETURN sum(p.amount)",
+                           {"c": dec["customer_id"]}).result_set[0][0] or 0
+            out["unapplied"] = int(max(0, paid - sum(state["settles"].values())))
+        except Exception:
+            out["unapplied"] = None
     # Possible phantom debt: unlinked payment with the same amount as a still-open sale.
     open_amounts = {t["amount"]: t["id"] for t in out["trades"] if t["open"] > 0 and t["settled"] == 0}
-    if open_amounts:
+    if open_amounts and shop == "real":
+        rows = g.query(
+            "MATCH (:Customer {id:$c})-[:PAID]->(p:Payment) WHERE NOT (p)-[:SETTLES]->() "
+            "AND NOT (p)-[:INFERRED_SETTLES]->() RETURN p.id, p.amount, p.date",
+            {"c": dec["customer_id"]}).result_set
+        for pid, amt, date in rows:
+            if amt in open_amounts:
+                out["orphans"].append({"payment": pid, "amount": amt, "date": date,
+                                       "trade": open_amounts[amt]})
+    elif open_amounts:
         rows = g.query(
             "MATCH (p:Payment) WHERE NOT (p)-[:SETTLES]->(:Trade) RETURN p.id, p.amount, p.date").result_set
         for pid, amt, date in rows:
@@ -314,6 +369,8 @@ def demo():
     if too_many_writes():
         return slow_down()
     case = None
+    if shop_key() == "real":
+        return redirect(url_for("home"))
     if shop_key() == "own":
         try:
             case = find_demo_case(cur_graph(), only_source="invented")
@@ -339,13 +396,13 @@ def demo():
 @app.route("/demo/real", methods=["GET", "POST"])
 def demo_real():
     """Open the receipt for the real-audit customer with the most phantom debt. Own shop only."""
-    if request.method != "POST" or shop_key() != "own":
+    if request.method != "POST" or shop_key() not in ("own", "real"):
         return redirect(url_for("home"))
     if too_many_writes():
         return slow_down()
     g = cur_graph()
     try:
-        case = find_real_case(g)
+        case = biggest_gap_case(g) if shop_key() == "real" else find_real_case(g)
     except Exception:
         case = None
     if not case:

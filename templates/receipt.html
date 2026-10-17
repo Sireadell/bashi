@@ -65,13 +65,20 @@
     <tr>
       <td><a class="mono" href="{{ url_for('record', label='Payment', rid=p.id, d=dec.id) }}">{{ p.id }}</a></td>
       <td>{{ p.date }}</td><td class="n">{{ p.amount|naira }}</td>
-      <td>{% for t in trades %}{% for q in t.pays if q.id == p.id %}<a class="mono" href="{{ url_for('record', label='Trade', rid=t.id, d=dec.id) }}">{{ t.id }}</a> {{ q.amount|naira }} {% endfor %}{% endfor %}</td>
+      <td>{% for t in trades %}{% for q in t.pays if q.id == p.id %}<a class="mono" href="{{ url_for('record', label='Trade', rid=t.id, d=dec.id) }}">{{ t.id }}</a> {{ q.amount|naira }}{% if q.method %} <span class="tagi" title="Matched by rule, not confirmed by a person">inferred, {{ 'exact amount' if q.method == 'exact' else 'oldest sale first' }}</span>{% endif %} {% endfor %}{% endfor %}</td>
       <td><button class="mini" data-remove="{{ p.id }}">What if this evidence did not exist</button></td>
     </tr>
     {% endfor %}
   </table></div>
   {% else %}<p>No payments were read for this customer.</p>{% endif %}
 </section>
+{% if inferred_count %}
+<section class="card">
+  <h2>How payments were matched to sales</h2>
+  <p>This shop records each payment against the customer, not against a sale. So {{ inferred_count }} payment-to-sale link{{ '' if inferred_count == 1 else 's' }} below {{ 'was' if inferred_count == 1 else 'were' }} proposed by rule and saved in the graph marked <b>inferred</b>: a payment of the exact amount of a sale first, otherwise the oldest sale first, and never a sale dated after the payment. No person has confirmed them. They are part of the fingerprint, so changing one makes the check above fail.</p>
+  {% if unapplied %}<p><b>{{ unapplied|naira }}</b> of this customer's payments could not be used on any sale (they were recorded before the sale they would clear, or were more than was owed). It is shown here and never counted against a later sale.</p>{% endif %}
+</section>
+{% endif %}
 
 <section class="card">
   <h2>Promises to pay</h2>

@@ -37,9 +37,10 @@
   <p class="kicker">Ninety second proof</p>
   <div class="actions">
     {% if shop.own %}<form method="post" action="{{ url_for('demo_real') }}"><button class="btn" type="submit">See the real audit case</button></form>{% endif %}
-    <form method="post" action="{{ url_for('demo') }}"><button class="btn {{ 'alt' if shop.own else '' }}" type="submit">{{ 'Try the demo' if shop.own else 'Try the Tunde demo' }}</button></form>
+    {% if shop.real %}<form method="post" action="{{ url_for('demo_real') }}"><button class="btn" type="submit">See the account the plain balance gets most wrong</button></form>{% else %}
+    <form method="post" action="{{ url_for('demo') }}"><button class="btn {{ 'alt' if shop.own else '' }}" type="submit">{{ 'Try the demo' if shop.own else 'Try the Tunde demo' }}</button></form>{% endif %}
   </div>
-  <p class="hint">{% if shop.own %}The demo uses an invented customer: the answer is NO, and removing one record changes it. The real audit case opens the receipt of the real customer with the most money wrongly showing as owed.{% else %}Asks N45,000 for Tunde Adeyemi, then opens the receipt.{% endif %}</p>
+  <p class="hint">{% if shop.real %}This opens the receipt of the real account where the plain balance and Bashi's matched debt differ most. The receipt lists every matched payment and marks it inferred.{% elif shop.own %}The demo uses an invented customer: the answer is NO, and removing one record changes it. The real audit case opens the receipt of the real customer with the most money wrongly showing as owed.{% else %}Asks N45,000 for Tunde Adeyemi, then opens the receipt.{% endif %}</p>
 </section>
 {% endif %}
 
@@ -47,11 +48,11 @@
   <h2>Ask in plain words</h2>
   <form method="post" action="{{ url_for('home') }}">
     <label>Your question
-      <input name="q" value="{{ form.q or '' }}" placeholder="{{ 'Can ' ~ custs[0].id ~ ' take N45,000 on credit?' if shop.own and custs else 'Can Tunde take N45,000 on credit?' }}" autocomplete="off" maxlength="300">
+      <input name="q" value="{{ form.q or '' }}" placeholder="{{ 'Can ' ~ custs[0].id ~ ' take N45,000 on credit?' if shop.ownlike and custs else 'Can Tunde take N45,000 on credit?' }}" autocomplete="off" maxlength="300">
     </label>
     <button class="btn" type="submit">Ask</button>
   </form>
-  <p class="hint">You can also say: {{ custs[0].id if shop.own and custs else 'Tunde' }} promised to pay N10,000 on Friday.</p>
+  <p class="hint">You can also say: {{ custs[0].id if shop.ownlike and custs else 'Tunde' }} promised to pay N10,000 on Friday.</p>
 </section>
 
 {% if shop.explainer %}
@@ -74,15 +75,16 @@
     </label>
     <button class="btn" type="submit">Get the answer</button>
   </form>
-  {% if not result and not shop.own %}<p class="hint">Tunde Adeyemi is filled in with N45,000. Press the button, then open the receipt.</p>{% endif %}
+  {% if not result and not shop.ownlike %}<p class="hint">Tunde Adeyemi is filled in with N45,000. Press the button, then open the receipt.</p>{% endif %}
 </section>
-{% if shop.own_available %}
+{% if shop.own_available or shop.real_available %}
 <section class="ask shoppick">
   <form method="post" action="{{ url_for('choose_shop') }}">
     <label>Shop
       <select name="shop" onchange="this.form.submit()">
         <option value="demo" {{ 'selected' if not shop.own }}>Practice shop (invented data)</option>
-        <option value="own" {{ 'selected' if shop.own }}>My own shop (names removed)</option>
+        {% if shop.own_available %}<option value="own" {{ 'selected' if shop.own }}>My own shop (names removed)</option>{% endif %}
+        {% if shop.real_available %}<option value="real" {{ 'selected' if shop.real }}>My whole shop (real records, names removed)</option>{% endif %}
       </select>
     </label>
     <noscript><button class="btn" type="submit">Switch</button></noscript>
