@@ -1,0 +1,1448 @@
+[
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_within",
+  "correct": "YES",
+  "id": "Q01",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 20000,
+    "date": "2026-07-25",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 30000,
+  "sales": [
+   {
+    "amount": 20000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Paid in full, asks for less than the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_within",
+  "correct": "YES",
+  "id": "Q02",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 30000,
+  "sales": [
+   {
+    "amount": 50000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Owes 50,000, asks 30,000"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_within",
+  "correct": "YES",
+  "id": "Q03",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 30000,
+    "date": "2026-07-25",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 40000,
+  "sales": [
+   {
+    "amount": 30000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 25000,
+    "date": "2026-07-10",
+    "n": 2
+   }
+  ],
+  "story": "Two sales, one paid, asks 40,000"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_within",
+  "correct": "YES",
+  "id": "Q04",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 20000,
+    "date": "2026-07-25",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 100000,
+  "sales": [
+   {
+    "amount": 120000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Bigger limit, owes 100,000, asks 100,000"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_within",
+  "correct": "YES",
+  "id": "Q05",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 90000,
+  "sales": [],
+  "story": "New customer, nothing owed"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_within",
+  "correct": "YES",
+  "id": "Q06",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 10000,
+    "date": "2026-07-25",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 10000,
+    "date": "2026-07-25",
+    "linked": true,
+    "n": 2,
+    "paid_for": 2
+   }
+  ],
+  "promises": [],
+  "request": 60000,
+  "sales": [
+   {
+    "amount": 10000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 10000,
+    "date": "2026-07-10",
+    "n": 2
+   },
+   {
+    "amount": 10000,
+    "date": "2026-07-10",
+    "n": 3
+   }
+  ],
+  "story": "Three sales, two paid"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_over",
+  "correct": "NO",
+  "id": "Q07",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 40000,
+  "sales": [
+   {
+    "amount": 70000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Owes 70,000, asks 40,000"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_over",
+  "correct": "NO",
+  "id": "Q08",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 30000,
+    "date": "2026-07-25",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 60000,
+  "sales": [
+   {
+    "amount": 80000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Owes 50,000, asks 60,000"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_over",
+  "correct": "NO",
+  "id": "Q09",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 30000,
+  "sales": [
+   {
+    "amount": 40000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 40000,
+    "date": "2026-07-10",
+    "n": 2
+   }
+  ],
+  "story": "Two unpaid sales, asks 30,000"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_over",
+  "correct": "NO",
+  "id": "Q10",
+  "limit": 500000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 100000,
+    "date": "2026-07-25",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 200000,
+  "sales": [
+   {
+    "amount": 450000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Big limit, still too much"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "clean_over",
+  "correct": "NO",
+  "id": "Q11",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 130000,
+  "sales": [],
+  "story": "New customer asks above the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "boundary",
+  "correct": "YES",
+  "id": "Q12",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 40000,
+  "sales": [
+   {
+    "amount": 60000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Owes 60,000, asks exactly the room left"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "boundary",
+  "correct": "NO",
+  "id": "Q13",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 40001,
+  "sales": [
+   {
+    "amount": 60000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Owes 60,000, asks one naira too much"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "boundary",
+  "correct": "YES",
+  "id": "Q14",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 10000,
+    "date": "2026-07-25",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 50000,
+  "sales": [
+   {
+    "amount": 60000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Part paid, asks exactly the room left"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "boundary",
+  "correct": "NO",
+  "id": "Q15",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 10000,
+    "date": "2026-07-25",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 50001,
+  "sales": [
+   {
+    "amount": 60000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Part paid, asks one naira too much"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "Q16",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 10000,
+    "due": "2026-08-15",
+    "kept": false
+   }
+  ],
+  "request": 5000,
+  "sales": [],
+  "story": "Broken promise, no debt"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "Q17",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 10000,
+    "date": "2026-07-25",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [
+   {
+    "amount": 10000,
+    "due": "2026-08-15",
+    "kept": false
+   }
+  ],
+  "request": 20000,
+  "sales": [
+   {
+    "amount": 10000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Broken promise, sale paid"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "Q18",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 10000,
+    "due": "2026-08-15",
+    "kept": false
+   }
+  ],
+  "request": 10000,
+  "sales": [
+   {
+    "amount": 5000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Broken promise, small unpaid sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "Q19",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 10000,
+    "due": "2026-09-30",
+    "kept": false
+   }
+  ],
+  "request": 1000,
+  "sales": [],
+  "story": "Promise broken yesterday"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "Q20",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 5000,
+    "due": "2026-07-01",
+    "kept": true
+   },
+   {
+    "amount": 8000,
+    "due": "2026-09-01",
+    "kept": false
+   }
+  ],
+  "request": 15000,
+  "sales": [],
+  "story": "One kept promise, one broken"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "Q21",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 4000,
+    "due": "2026-01-10",
+    "kept": false
+   }
+  ],
+  "request": 2000,
+  "sales": [],
+  "story": "Very old broken promise"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "broken_promise",
+  "correct": "NO",
+  "id": "Q22",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 15000,
+    "date": "2026-07-25",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [
+   {
+    "amount": 10000,
+    "due": "2026-08-15",
+    "kept": false
+   }
+  ],
+  "request": 5000,
+  "sales": [
+   {
+    "amount": 20000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Part paid sale and a broken promise"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "kept_promise",
+  "correct": "YES",
+  "id": "Q23",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 10000,
+    "due": "2026-08-15",
+    "kept": true
+   }
+  ],
+  "request": 20000,
+  "sales": [],
+  "story": "Kept promise, no debt"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "kept_promise",
+  "correct": "YES",
+  "id": "Q24",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 10000,
+    "date": "2026-07-25",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [
+   {
+    "amount": 10000,
+    "due": "2026-07-15",
+    "kept": true
+   },
+   {
+    "amount": 6000,
+    "due": "2026-08-20",
+    "kept": true
+   }
+  ],
+  "request": 30000,
+  "sales": [
+   {
+    "amount": 10000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Two kept promises, sale paid"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "kept_promise",
+  "correct": "YES",
+  "id": "Q25",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 10000,
+    "due": "2026-08-15",
+    "kept": true
+   }
+  ],
+  "request": 30000,
+  "sales": [
+   {
+    "amount": 30000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Kept promise, unpaid sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "kept_promise",
+  "correct": "YES",
+  "id": "Q26",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 10000,
+    "date": "2026-07-25",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [
+   {
+    "amount": 5000,
+    "due": "2026-08-01",
+    "kept": true
+   }
+  ],
+  "request": 50000,
+  "sales": [
+   {
+    "amount": 10000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 10000,
+    "date": "2026-07-10",
+    "n": 2
+   }
+  ],
+  "story": "Kept promise, part paid"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "promise_not_due",
+  "correct": "YES",
+  "id": "Q27",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 10000,
+    "due": "2026-10-15",
+    "kept": false
+   }
+  ],
+  "request": 10000,
+  "sales": [],
+  "story": "Promise due in two weeks"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "promise_not_due",
+  "correct": "YES",
+  "id": "Q28",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 10000,
+    "due": "2026-10-20",
+    "kept": false
+   }
+  ],
+  "request": 20000,
+  "sales": [
+   {
+    "amount": 20000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Promise due later, unpaid sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "promise_not_due",
+  "correct": "YES",
+  "id": "Q29",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [
+   {
+    "amount": 5000,
+    "due": "2026-10-01",
+    "kept": false
+   }
+  ],
+  "request": 5000,
+  "sales": [],
+  "story": "Promise due on the check date itself"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "YES",
+  "id": "Q30",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 60000,
+    "date": "2026-07-25",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 50000,
+  "sales": [
+   {
+    "amount": 60000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Paid 60,000, never tied to the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "YES",
+  "id": "Q31",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 45000,
+    "date": "2026-07-25",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 90000,
+  "sales": [
+   {
+    "amount": 45000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Paid 45,000, never tied"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "YES",
+  "id": "Q32",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 30000,
+    "date": "2026-07-25",
+    "linked": false,
+    "n": 1,
+    "paid_for": 2
+   }
+  ],
+  "promises": [],
+  "request": 50000,
+  "sales": [
+   {
+    "amount": 30000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 30000,
+    "date": "2026-07-10",
+    "n": 2
+   }
+  ],
+  "story": "Two same-size sales, one paid, not tied"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "YES",
+  "id": "Q33",
+  "limit": 300000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 200000,
+    "date": "2026-07-25",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 250000,
+  "sales": [
+   {
+    "amount": 200000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Big limit, paid 200,000, not tied"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "YES",
+  "id": "Q34",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 12000,
+    "date": "2026-07-25",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 80000,
+  "sales": [
+   {
+    "amount": 12000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Small sale paid, not tied, small ask"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "NO",
+  "id": "Q35",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 60000,
+    "date": "2026-07-25",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 40000,
+  "sales": [
+   {
+    "amount": 60000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 70000,
+    "date": "2026-07-10",
+    "n": 2
+   }
+  ],
+  "story": "Paid one sale, still owes the other"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "NO",
+  "id": "Q36",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 50000,
+    "date": "2026-07-25",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [
+   {
+    "amount": 10000,
+    "due": "2026-08-15",
+    "kept": false
+   }
+  ],
+  "request": 5000,
+  "sales": [
+   {
+    "amount": 50000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Paid, not tied, but a broken promise"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "unlinked_payment",
+  "correct": "NO",
+  "id": "Q37",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 80000,
+    "date": "2026-07-25",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 120000,
+  "sales": [
+   {
+    "amount": 80000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Paid, not tied, ask above the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "deposit_first",
+  "correct": "YES",
+  "id": "Q38",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 50000,
+    "date": "2026-07-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 60000,
+  "sales": [
+   {
+    "amount": 50000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Deposit of 50,000 before the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "deposit_first",
+  "correct": "YES",
+  "id": "Q39",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 40000,
+    "date": "2026-07-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 80000,
+  "sales": [
+   {
+    "amount": 40000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Deposit of 40,000 before the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "deposit_first",
+  "correct": "YES",
+  "id": "Q40",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 30000,
+    "date": "2026-07-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 50000,
+  "sales": [
+   {
+    "amount": 70000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Deposit of 30,000 on a 70,000 sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "deposit_first",
+  "correct": "YES",
+  "id": "Q41",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 20000,
+    "date": "2026-07-01",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 90000,
+  "sales": [
+   {
+    "amount": 20000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Deposit of 20,000 before the sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "split_payment",
+  "correct": "YES",
+  "id": "Q42",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 20000,
+    "date": "2026-07-25",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 20000,
+    "date": "2026-07-25",
+    "linked": true,
+    "n": 2,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 70000,
+  "sales": [
+   {
+    "amount": 60000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "60,000 sale, two payments of 20,000"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "split_payment",
+  "correct": "NO",
+  "id": "Q43",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 20000,
+    "date": "2026-07-25",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 20000,
+    "date": "2026-07-25",
+    "linked": true,
+    "n": 2,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 85000,
+  "sales": [
+   {
+    "amount": 60000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Same, asks 85,000"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "split_payment",
+  "correct": "YES",
+  "id": "Q44",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 25000,
+    "date": "2026-07-25",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 25000,
+    "date": "2026-07-25",
+    "linked": true,
+    "n": 2,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 100000,
+  "sales": [
+   {
+    "amount": 50000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "50,000 sale paid in two halves, asks the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "split_payment",
+  "correct": "YES",
+  "id": "Q45",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 30000,
+    "date": "2026-07-25",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   },
+   {
+    "amount": 30000,
+    "date": "2026-07-25",
+    "linked": true,
+    "n": 2,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 50000,
+  "sales": [
+   {
+    "amount": 90000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "90,000 sale, 60,000 paid in two"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "overpayment",
+  "correct": "YES",
+  "id": "Q46",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 30000,
+    "date": "2026-07-25",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 90000,
+  "sales": [
+   {
+    "amount": 20000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Paid 30,000 on a 20,000 sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "overpayment",
+  "correct": "NO",
+  "id": "Q47",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 30000,
+    "date": "2026-07-25",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 100001,
+  "sales": [
+   {
+    "amount": 20000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Same, asks one naira over the limit"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "overpayment",
+  "correct": "NO",
+  "id": "Q48",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 30000,
+    "date": "2026-07-25",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 70000,
+  "sales": [
+   {
+    "amount": 20000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": 40000,
+    "date": "2026-07-10",
+    "n": 2
+   }
+  ],
+  "story": "Extra on one sale does not clear the other"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "missing_data",
+  "correct": "REFUSE",
+  "id": "Q49",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 10000,
+  "sales": [
+   {
+    "amount": null,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Only sale has no amount"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "missing_data",
+  "correct": "REFUSE",
+  "id": "Q50",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [],
+  "promises": [],
+  "request": 5000,
+  "sales": [
+   {
+    "amount": 30000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": null,
+    "date": "2026-07-10",
+    "n": 2
+   }
+  ],
+  "story": "One of two sales has no amount"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "missing_data",
+  "correct": "REFUSE",
+  "id": "Q51",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 10000,
+    "date": "2026-07-25",
+    "linked": false,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 5000,
+  "sales": [
+   {
+    "amount": null,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "No-amount sale and a payment"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "missing_data",
+  "correct": "REFUSE",
+  "id": "Q52",
+  "limit": 100000,
+  "other_payments": [],
+  "payments": [
+   {
+    "amount": 15000,
+    "date": "2026-07-25",
+    "linked": true,
+    "n": 1,
+    "paid_for": 1
+   }
+  ],
+  "promises": [],
+  "request": 5000,
+  "sales": [
+   {
+    "amount": 15000,
+    "date": "2026-07-10",
+    "n": 1
+   },
+   {
+    "amount": null,
+    "date": "2026-07-10",
+    "n": 2
+   }
+  ],
+  "story": "Paid sale plus a no-amount sale"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "others_payment",
+  "correct": "NO",
+  "id": "Q53",
+  "limit": 100000,
+  "other_payments": [
+   40000
+  ],
+  "payments": [],
+  "promises": [],
+  "request": 70000,
+  "sales": [
+   {
+    "amount": 40000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Another customer paid 40,000, ours owes 40,000"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "others_payment",
+  "correct": "YES",
+  "id": "Q54",
+  "limit": 100000,
+  "other_payments": [
+   30000
+  ],
+  "payments": [],
+  "promises": [],
+  "request": 50000,
+  "sales": [
+   {
+    "amount": 30000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Another customer paid 30,000, ours owes 30,000"
+ },
+ {
+  "as_of": "2026-10-01",
+  "class": "others_payment",
+  "correct": "NO",
+  "id": "Q55",
+  "limit": 100000,
+  "other_payments": [
+   60000
+  ],
+  "payments": [],
+  "promises": [],
+  "request": 45000,
+  "sales": [
+   {
+    "amount": 60000,
+    "date": "2026-07-10",
+    "n": 1
+   }
+  ],
+  "story": "Another customer paid 60,000, ours owes 60,000"
+ }
+]

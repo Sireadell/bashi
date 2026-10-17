@@ -1,0 +1,2 @@
+sha256 of the 55 cases and their correct answers, canonical JSON (sorted keys, no spaces):
+d1eefd0fdebf5bf97957be205d72adb0077444c43d3a9af99526808cb218bfcc
