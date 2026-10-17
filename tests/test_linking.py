@@ -32,11 +32,18 @@ def test_oldest_sale_is_settled_first_and_a_payment_can_split():
     assert unapplied == 0
 
 
-def test_a_payment_never_settles_a_later_sale():
+def test_money_paid_before_a_sale_is_applied_as_a_deposit():
     links, unapplied = linking.plan_customer(
         [("T1", 700, "2026-06-10")], [("P1", 700, "2026-06-01")])
-    assert links == []
-    assert unapplied == 700          # reported, never used on a later sale
+    assert links == [("P1", "T1", 700, "deposit")]
+    assert unapplied == 0
+
+
+def test_an_older_open_sale_is_cleared_before_a_deposit_is_used():
+    links, unapplied = linking.plan_customer(
+        [("T0", 300, "2026-05-01"), ("T1", 700, "2026-06-10")], [("P1", 800, "2026-06-01")])
+    assert links == [("P1", "T0", 300, "oldest_first"), ("P1", "T1", 500, "deposit")]
+    assert unapplied == 0
 
 
 def test_leftover_money_is_reported_as_unapplied():

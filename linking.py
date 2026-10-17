@@ -10,8 +10,12 @@ Rules, per customer, oldest first:
      settles that sale.
   2. oldest first: what is left of each payment goes to the oldest open sales dated on
      or before the payment, splitting a payment across sales when needed.
-A payment never settles a sale dated after it. Money left over is reported as unapplied
-credit and is never used to settle a later sale.
+  3. deposit: money still left after rules 1 and 2 was paid before the sales that are still
+     open, so it is treated as a deposit and applied to the oldest of them. Those links are
+     marked "deposit" so a receipt can say the money came in before the sale.
+Rules 1 and 2 never let a payment settle a sale dated after it. Only rule 3 does, and only
+with money nothing older could use. Money left after all three is reported as unapplied
+credit (the customer paid more than they were ever sold).
 
 Run: python linking.py [--graph shop_real] [--dry-run]
 """
@@ -48,6 +52,15 @@ def plan_customer(trades, payments):
                 links.append((pid, tid, amt, "oldest_first"))
                 open_left[tid] -= amt
                 pay_left[pid] -= amt
+    for pid in pay_order:                       # rule 3: deposit
+        for tid in order:
+            if pay_left[pid] <= 0:
+                break
+            if open_left[tid] > 0:
+                amt = min(open_left[tid], pay_left[pid])
+                links.append((pid, tid, amt, "deposit"))
+                open_left[tid] -= amt
+                pay_left[pid] -= amt
     unapplied = sum(v for v in pay_left.values() if v > 0)
     return links, unapplied
 
@@ -81,7 +94,8 @@ def infer_all(graph, dry_run=False, force=False):
         sold = sum(t[1] for t in trades)
         paid = sum(p[1] for p in pays)
         applied = sum(l[2] for l in links)
-        per_customer[cid] = {"sold": sold, "paid": paid, "applied": applied,
+        deposits = sum(l[2] for l in links if l[3] == "deposit")
+        per_customer[cid] = {"sold": sold, "paid": paid, "applied": applied, "deposits": deposits,
                              "open": sold - applied, "unapplied": unapplied,
                              "balance": sold - paid}
     if not dry_run:
@@ -95,6 +109,7 @@ def infer_all(graph, dry_run=False, force=False):
     return {"links": len(all_links),
             "exact": sum(1 for l in all_links if l[3] == "exact"),
             "oldest_first": sum(1 for l in all_links if l[3] == "oldest_first"),
+            "deposit": sum(1 for l in all_links if l[3] == "deposit"),
             "customers": per_customer}
 
 
@@ -104,17 +119,17 @@ CASE_KEEP_SECONDS = 600
 
 
 def biggest_gap_case(graph):
-    """The customer whose matched debt is furthest above the plain balance: the case the
-    plain balance gets most wrong. Cached, because it reads every customer."""
+    """The customer with the most money paid before the sales it was applied to (deposits):
+    the case a plain balance hides best. Cached, because it reads every customer."""
     import time
     if time.time() - _case_cache["at"] < CASE_KEEP_SECONDS and _case_cache["case"]:
         return _case_cache["case"]
     res = infer_all(graph, dry_run=True)
     best = None
     for cid, v in res["customers"].items():
-        gap = v["open"] - v["balance"]
-        if v["open"] > 0 and (best is None or (gap, v["open"]) > best[0]):
-            best = ((gap, v["open"]), cid)
+        key = (v["deposits"], v["open"])
+        if v["deposits"] > 0 and (best is None or key > best[0]):
+            best = (key, cid)
     case = {"customer": best[1], "amount": CASE_REQUEST} if best else None
     _case_cache.update(at=time.time(), case=case)
     return case
