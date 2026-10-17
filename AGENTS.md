@@ -111,3 +111,5 @@ curl -s -X POST $BASHI/mcp -H "Content-Type: application/json" \
 ## Honest limits
 
 The demo shop is invented. The own shop is a real audit with names removed, and some of its payments, dates and limits were rebuilt or assumed. Every receipt carries a `data_label` that says which it is.
+
+To run Bashi on your own shop's CSV files in your own FalkorDB (never the public demo), see "Use it on your own shop" in README.md: `python import_csv.py --dir FOLDER --graph NAME`, then `python ask_csv.py --graph NAME CUSTOMER AMOUNT`.

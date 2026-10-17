@@ -327,6 +327,25 @@ Bashi only does shop credit today. The pattern is not shop-specific: fixed rules
 | Supplier giving trade credit | Invoices, payments, delivery notes | Unpaid invoices over a limit |
 | School fees | Fees, payments, payment plans | Balance over a limit, or a missed plan date |
 
+## Use it on your own shop
+
+You can run Bashi on your own records without sending anything to the public demo. Put three CSV files in a folder (first line is the column headings, dates are `YYYY-MM-DD`, amounts are whole naira). A tiny invented example is in [examples/my_shop_csv](examples/my_shop_csv).
+
+| File | Columns |
+|---|---|
+| `customers.csv` | `id`, `name`, `credit_limit` |
+| `sales.csv` | `id`, `customer_id`, `amount`, `date`, `item` |
+| `payments.csv` | `id`, `customer_id`, `amount`, `date`, `sale_id` (leave `sale_id` empty if you do not know which sale it paid) |
+| `promises.csv` (optional) | `id`, `customer_id`, `amount`, `date`, `due`, `kept` (yes or no) |
+
+```powershell
+python import_csv.py --dir examples/my_shop_csv --graph my_shop
+python ask_csv.py --graph my_shop C001 45000
+python verify.py --graph my_shop
+```
+
+It loads into YOUR own FalkorDB, using the settings in your `.env`. It never writes to the public demo, and it refuses the graph names `shop_a`, `shop_own` and `shop_real`. The graph name must be new unless you add `--replace`. Every row is checked first: if any row is bad, it lists each problem with its row number and writes nothing. A payment with no `sale_id` is matched to that customer's sales by the same rule the real shop view uses, and shown as inferred. The decision is still the same two fixed rules (debt over the limit, or a broken promise), with a receipt you can re-check.
+
 ## Sealed test
 
 The scorecard below is small and runs on invented data, so I added a harder exam. I wrote 55 shop-credit cases built around the situations Bashi exists for: payments never tied to a sale, broken promises, deposits paid before a sale, sales with no amount, and one customer's payment that must not clear another customer's sale. Each case has the correct answer, worked out by plain arithmetic from the story of the case (not by Bashi's code). I locked the answers by hashing them and pushed the hash (commit `977f5bd`, [sealed/KEY_HASH.txt](sealed/KEY_HASH.txt)) before running anything on them. Re-run it with `python sealed/run_sealed.py`; it refuses to run if a single answer changed. Full reports: [sealed/RESULTS.md](sealed/RESULTS.md) (after the fix) and [sealed/RESULTS_run1.md](sealed/RESULTS_run1.md) (before it).
