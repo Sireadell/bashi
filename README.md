@@ -314,6 +314,8 @@ Another AI app can ask Bashi "can customer X take N naira on credit?" and get a 
 
 Tests: `python -m pytest tests/test_api_mcp.py -q`.
 
+One-click install for Claude Desktop: [extension/Bashi.mcpb](extension/Bashi.mcpb), steps in [extension/INSTALL.md](extension/INSTALL.md). It talks to the live site, so there is nothing to set up. Tested with a protocol-level MCP client over both the web address and stdio (all five tools, including error cases); not yet tried inside Claude Desktop or Cursor.
+
 ## Beyond shops
 
 Bashi only does shop credit today. The pattern is not shop-specific: fixed rules over linked records, a receipt that names the records, and a replay that catches edits. The same pattern would fit these, each with its own two or three rules (not built yet):

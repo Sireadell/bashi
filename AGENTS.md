@@ -63,15 +63,14 @@ curl -s $BASHI/api/customers
 
 Bashi has five MCP tools: `decide_credit`, `get_receipt`, `verify_decision`, `what_if_remove_evidence` and `list_customers`.
 
-Claude Desktop runs Bashi on your own computer (stdio). Add this to its config file, with the path to this folder. The folder needs a `.env` file with the database settings (see `.env.example`).
+Claude Desktop runs Bashi on your own computer (stdio). Add this to its config file, with the full path to `mcp_stdio.py`. The folder needs a `.env` file with the database settings (see `.env.example`).
 
 ```json
 {
   "mcpServers": {
     "bashi": {
       "command": "python",
-      "args": ["mcp_stdio.py"],
-      "cwd": "C:\\path\\to\\bashi"
+      "args": ["C:\\path\\to\\bashi\\mcp_stdio.py"]
     }
   }
 }
