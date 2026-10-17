@@ -337,4 +337,5 @@ def test_new_files_have_no_em_dashes_or_forbidden_words():
     for name in ("agent_api.py", "mcp_stdio.py", "AGENTS.md", "llms.txt"):
         text = open(os.path.join(root, name), encoding="utf-8").read()
         assert "—" not in text, name
-        assert "render" not in text.lower() or name.endswith(".py"), name
+        # the public site address (it ends in onrender.com) is allowed, as on README line 1
+        assert "render" not in text.lower().replace("onrender.com", "") or name.endswith(".py"), name
