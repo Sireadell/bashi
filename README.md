@@ -314,7 +314,7 @@ Another AI app can ask Bashi "can customer X take N naira on credit?" and get a 
 
 Tests: `python -m pytest tests/test_api_mcp.py -q`.
 
-One-click install for Claude Desktop: [extension/Bashi.mcpb](extension/Bashi.mcpb), steps in [extension/INSTALL.md](extension/INSTALL.md). It talks to the live site, so there is nothing to set up. Tested with a protocol-level MCP client over both the web address and stdio (all five tools, including error cases); also installed and tried inside Claude Desktop (C001 for N45,000 gave NO because of broken promise PR001); not yet tried in Cursor.
+One-click install for Claude Desktop: [extension/Bashi.mcpb](extension/Bashi.mcpb), steps in [extension/INSTALL.md](extension/INSTALL.md). It talks to the live site, so there is nothing to set up. Tested with a protocol-level MCP client over both the web address and stdio (all five tools, including error cases); also installed and tried inside Claude Desktop (C001 for N45,000 gave NO because of broken promise PR001).
 
 ## Beyond shops
 
