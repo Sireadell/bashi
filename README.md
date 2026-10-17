@@ -274,6 +274,7 @@ Honest limit: the amounts and sale dates come from my audit, but the payment rec
 | The yes or no contains no AI | Read `rules.py`; no model is called inside `decide` |
 | A model sentence that fails the check is replaced | Read `agent.py`; the reply says which mode answered |
 | Every record on the page is tagged real or invented | Look at the tags on the live pages and in `own_audit_seed.py` |
+| On 55 cases whose answers were locked first, Bashi never wrongly approves and a balance check wrongly approves 14 (N258,001) | `python sealed/run_sealed.py` (checks the hash first), then read `sealed/RESULTS.md` |
 | The tests pass | `python -m pytest` (about 16 minutes, it talks to a hosted database) |
 | The audit figures (N388,340, 494 sales, 46 accounts) are from my shop | A visitor cannot check these. They are my own read-only audit, names removed. |
 
@@ -290,6 +291,20 @@ Another AI app can ask Bashi "can customer X take N naira on credit?" and get a 
 | `POST /mcp` | MCP tools: `decide_credit`, `get_receipt`, `verify_decision`, `what_if_remove_evidence`, `list_customers`. `python mcp_stdio.py` gives the same tools for Claude Desktop. |
 
 Tests: `python -m pytest tests/test_api_mcp.py -q`.
+
+## Sealed test
+
+The scorecard below is small and runs on invented data, so I added a harder exam. I wrote 55 shop-credit cases built around the situations Bashi exists for: payments never tied to a sale, broken promises, deposits paid before a sale, sales with no amount, and one customer's payment that must not clear another customer's sale. Each case has the correct answer, worked out by plain arithmetic from the story of the case (not by Bashi's code). I locked the answers by hashing them and pushed the hash (commit `977f5bd`, [sealed/KEY_HASH.txt](sealed/KEY_HASH.txt)) before running anything on them. Re-run it with `python sealed/run_sealed.py`; it refuses to run if a single answer changed. Full report: [sealed/RESULTS.md](sealed/RESULTS.md).
+
+| Method | Right (of 55) | Wrongly approved | Naira wrongly approved | Wrongly refused |
+|---|---|---|---|---|
+| Plain balance check | 41 | 14 | N258,001 | 0 |
+| Bashi, confirmed links only | 47 | 0 | N0 | 8 |
+| Bashi with payment matching | 51 | 0 | N0 | 4 |
+
+Where Bashi wins: all 7 broken-promise cases and all 4 missing-amount cases (the balance check misses every one, and approves them). Where it loses: the 4 "deposit paid before the sale" cases. Bashi's matching rule will not let a payment clear a sale dated after it, so it refuses people who in fact had paid up front. The balance check gets those right. I kept that rule strict on purpose, because a refusal is the safer mistake for a lender, but it is a real cost and the table shows it.
+
+What this test is not. I wrote the cases and I wrote Bashi, so I was not blind to how it behaves. The cases are small and tidy. I did not include reversed or refunded sales (Bashi cannot record a reversal yet) and I did not run an AI-only answer for comparison. My first run crashed in the matching code on a sale with no amount; I fixed the code and added a test, and the cases and the hash were not touched.
 
 ## Scorecard
 
