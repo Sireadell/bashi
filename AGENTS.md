@@ -93,7 +93,7 @@ A raw MCP call, to see it work:
 
 ```
 curl -s -X POST $BASHI/mcp -H "Content-Type: application/json" \
-  -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"decide_credit","arguments":{"customer":"C001","amount":45000}}}'
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"decide_credit","arguments":{"customer":"C001","amount":45000,"shop":"shop_a"}}}'
 ```
 
 ## What Bashi will refuse

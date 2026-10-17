@@ -275,7 +275,7 @@ Honest limit: the amounts and sale dates come from my audit, but the payment rec
 | A model sentence that fails the check is replaced | Read `agent.py`; the reply says which mode answered |
 | Every record on the page is tagged real or invented | Look at the tags on the live pages and in `own_audit_seed.py` |
 | On 55 cases whose answers were locked first, Bashi never wrongly approves and a balance check wrongly approves 14 (N258,001) | `python sealed/run_sealed.py` (checks the hash first), then read `sealed/RESULTS.md` |
-| The tests pass | `python -m pytest` (about 16 minutes, it talks to a hosted database) |
+| The tests pass | `python -m pytest` (about 20 minutes, it talks to a hosted database) |
 | The audit figures (N388,340, 494 sales, 46 accounts) are from my shop | A visitor cannot check these. They are my own read-only audit, names removed. |
 
 ## Use it from other tools
@@ -284,7 +284,7 @@ Another AI app can ask Bashi "can customer X take N naira on credit?" and get a 
 
 | Address | What it does |
 |---|---|
-| `POST /api/decide` | Body `{"customer": "C001", "amount": 45000}`. Returns the answer, reasons, receipt link, verify link and the records used. |
+| `POST /api/decide` | Body `{"customer": "C001", "amount": 45000, "shop": "shop_a"}` (C001 is in the practice shop; leave `shop` out to use the default shop). Returns the answer, reasons, receipt link, verify link and the records used. |
 | `GET /api/receipt/<id>` | The full receipt as data. |
 | `GET /api/verify/<id>` | Re-checks one saved decision and returns `verified` true or false. |
 | `GET /api/whatif/<id>?remove=<record id>` | The answer if that record had never existed, run on a throwaway copy. |
@@ -332,7 +332,7 @@ The scorecard runs on the invented practice shop, and only 3 of 40 differ, so th
 python -m pytest
 ```
 
-There are 157 tests. The full run takes about 20 minutes because it talks to a hosted database. The tests run against a copy of the graph and delete it afterwards.
+There are 159 tests. The full run takes about 20 minutes because it talks to a hosted database. The tests run against a copy of the graph and delete it afterwards.
 
 ## AI tools used
 
