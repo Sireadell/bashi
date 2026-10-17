@@ -158,3 +158,12 @@ def test_graphs_without_inferred_links_snapshot_exactly_as_before(shop):
     st = read_state(shop, "CUST-001")
     assert st["inferred"] == {}
     assert not any("inferred" in v for v in snapshot_of(st).values())
+
+
+def test_a_sale_with_no_amount_is_left_alone_and_does_not_crash_the_matching(shop):
+    shop.query("MATCH (t:Trade {id:'T-0002'}) REMOVE t.amount")
+    res = linking.infer_all(shop, dry_run=True)
+    assert res["links"] >= 1                      # the other sales still match
+    st = read_state(shop, "CUST-001")
+    assert decide("CUST-001", 1000, graph=shop, save=False)["verdict"] == "CANNOT_TRACE"
+    assert st["trades"]["T-0002"]["amount"] is None

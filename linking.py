@@ -54,10 +54,10 @@ def plan_customer(trades, payments):
 
 def read_customer_rows(graph, cid):
     trades = graph.query(
-        "MATCH (:Customer {id:$cid})-[:MADE]->(t:Trade) WHERE NOT (:Payment)-[:SETTLES]->(t) "
+        "MATCH (:Customer {id:$cid})-[:MADE]->(t:Trade) WHERE NOT (:Payment)-[:SETTLES]->(t) AND t.amount IS NOT NULL "
         "RETURN t.id, t.amount, t.date", {"cid": cid}).result_set
     pays = graph.query(
-        "MATCH (:Customer {id:$cid})-[:PAID]->(p:Payment) WHERE NOT (p)-[:SETTLES]->() "
+        "MATCH (:Customer {id:$cid})-[:PAID]->(p:Payment) WHERE NOT (p)-[:SETTLES]->() AND p.amount IS NOT NULL "
         "RETURN p.id, p.amount, p.date", {"cid": cid}).result_set
     return trades, pays
 
