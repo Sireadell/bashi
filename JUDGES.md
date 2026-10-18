@@ -20,6 +20,8 @@ Live site: https://bashi-vrfv.onrender.com (no sign-up). The free host sleeps wh
 | 3:30 | Open `/mcp` or read AGENTS.md. | The agent routes and the MCP tools another AI tool can call. |
 | 4:00 | In a terminal, run the four tamper commands in "The 90-second path" in the README. | `verify.py` fails and names the changed record, then passes after the restore. |
 
+Checking CUST-17 alone, 1 link: YES, owes N0. Walking 7 links: NO, 5 linked accounts owe N100,000.
+
 The sealed tests: 55 cases, then 200 new ones whose answers were locked before running (`python sealed/run_sealed.py b`). Bashi never wrongly approves; a plain balance check wrongly approves 53. The 30 family-network cases (sets F and G, chains up to 22 links) are locked the same way: Bashi 30 of 30. See README, "Sealed test".
 
 ## What is real and what is not

@@ -12,6 +12,8 @@ More for judges: [JUDGES.md](JUDGES.md)
 
 *Invented example, drawn for this README (not a screenshot of the site): alone this customer owes N0, but 7 links away 5 linked accounts owe N100,000, so Bashi says NO.*
 
+Checking CUST-17 alone, 1 link: YES, owes N0. Walking 7 links: NO, 5 linked accounts owe N100,000.
+
 **My shop's ledger said customers owed N388,340 they had already paid.** In my audit of 17 July 2026, 8 credit sales were marked paid while the customer's ledger still showed the debt. Each screen looked right on its own, so nobody saw it. Bashi follows each sale to its payments in a graph, flags the gap, answers yes or no on credit, and gives a receipt anyone can check. Press "See the real audit case" on the live site to see those 8 sales.
 
 **Entered in Track 01, Agents That Act on Connected Data. This is the one track I want judged.**
@@ -54,6 +56,32 @@ ID=$(curl -s -X POST https://bashi-vrfv.onrender.com/api/decide -H "Content-Type
 ```
 
 Expected: `{"detail":"Every record matches what was saved, and running the rule again gives the same answer.","id":"D...","verified":true}`. Demo video: https://youtu.be/Xpq_LN4h9XA.
+
+## Track entered
+
+Track descriptions and focus areas are quoted from the [hackathon track page](https://wemakedevs.org/hackathons/falkordb). Each row says where Bashi does it and how to check it.
+
+**Track 01, Agents That Act on Connected Data (the judged track).** "Build an agent that uses the graph to decide and act."
+
+| Track 01 focus point | Bashi feature | One click or file to check it |
+|---|---|---|
+| "Multi-hop reasoning" | The answer walks customer, to sales, to payments, to promises in one query (`rules.py`, `read_state`). | Live site, "See the real audit case", read the receipt |
+| Multi-hop reasoning (family walk) | The family network rule walks up to 20 links from the asking account in one Cypher variable-length query. | Ask CUST-17 for N40,000 in the own shop view: NO, 7 links deep |
+| "Graph queries and algorithms as agent tools" | The agent calls the graph through named tools that run Cypher, and the what-if tool copies the graph with `GRAPH.COPY`. | `whatif.py`, or the five tools listed at `/mcp` |
+| "Graph queries and algorithms as agent tools" (algorithms) | FalkorDB's own algorithms run on the receipt: `algo.WCC` finds the linked group and `algo.SPpaths` finds the shortest link chain to the largest linked debt. | `linked_group.py`, `linked_chain.py` |
+| "Tool selection through MCP" | Five tools (`decide_credit`, `get_receipt`, `verify_decision`, `what_if_remove_evidence`, `list_customers`) at `/mcp`, and a one-click Claude Desktop extension. | The 30-second `curl` near the top, or [extension/INSTALL.md](extension/INSTALL.md) |
+| "Actions based on what the graph shows" | The yes or no comes from what the graph holds, and the decision is saved back as a Decision node linked to every record it read. | Live site, "Try the demo" asks N90,000 for CUST-02 and gets NO because of an unlinked payment |
+| "Vector search" (extra) | Each customer has a 5-number credit profile stored as a FalkorDB vector, and the receipt's "Customers most like this one" block finds the three nearest with FalkorDB's vector index. | `lookalike.py` |
+| "Explainable results" | Every answer has a receipt that names the exact sales, payments and promises behind it. | Open any receipt, then `/api/verify/<id>` or `python verify.py` |
+
+**Track 02, Agent Memory and Coordination (extra, not the judged track).** "Build agents that remember across sessions and share state with each other."
+
+| Track 02 focus point | Bashi feature | One click or file to check it |
+|---|---|---|
+| "Persistent conversation history" | Every decision is saved in the graph with a fingerprint and links to its evidence, so it can be re-checked later. A promise to pay written in plain words becomes a node the next decision reads. | `python verify.py`, or the four tamper commands in "The 90-second path" |
+| "Shared state and handoffs between agents" | Another agent can take a decision id over MCP and re-check it (`verify_decision`) or run a what-if on it (`what_if_remove_evidence`). | `POST /mcp` with `tools/call`, steps in [AGENTS.md](AGENTS.md) |
+
+Bashi is one agent with fixed rules, not several agents talking to each other.
 
 ## Connect your agent
 
@@ -158,26 +186,6 @@ python verify.py --graph shop_own     # FAIL, names Trade TR-2
 python tamper.py --restore --graph shop_own
 python verify.py --graph shop_own     # PASS
 ```
-
-## Track entered
-
-Track descriptions and focus areas are quoted from the [hackathon track page](https://wemakedevs.org/hackathons/falkordb). Each line below says where Bashi does it and how to check it.
-
-**Track 01, Agents That Act on Connected Data (the judged track).** "Build an agent that uses the graph to decide and act."
-
-- "Multi-hop reasoning": the answer walks customer, to sales, to payments, to promises in one query (`rules.py`, `read_state`). Check: open the live site, press "See the real audit case", and read the receipt.
-- "Graph queries and algorithms as agent tools": the agent calls the graph through named tools that run Cypher, and the what-if tool copies the graph with `GRAPH.COPY`. FalkorDB's own algorithms also run on the receipt: `algo.WCC` finds the linked group and `algo.SPpaths` finds the shortest link chain to the largest linked debt. Check: `whatif.py`, `linked_group.py`, `linked_chain.py`, or the five tools listed at `/mcp`.
-- "Tool selection through MCP": five tools (`decide_credit`, `get_receipt`, `verify_decision`, `what_if_remove_evidence`, `list_customers`) at `/mcp`, and a one-click Claude Desktop extension. Check: the 30-second `curl` near the top, or [extension/INSTALL.md](extension/INSTALL.md).
-- "Actions based on what the graph shows": the yes or no comes from what the graph holds, and the decision is saved back as a Decision node linked to every record it read. Check: live site, "Try the demo" asks N90,000 for CUST-02 and gets NO because of an unlinked payment.
-- "Vector search" (extra): each customer has a 5-number credit profile stored as a FalkorDB vector, and the receipt's "Customers most like this one" block finds the three nearest with FalkorDB's vector index. Check: `lookalike.py`.
-- "Explainable results": every answer has a receipt that names the exact sales, payments and promises behind it. Check: open any receipt, then `/api/verify/<id>` or `python verify.py`.
-
-**Track 02, Agent Memory and Coordination (extra, not the judged track).** "Build agents that remember across sessions and share state with each other."
-
-- "Persistent conversation history": every decision is saved in the graph with a fingerprint and links to its evidence, so it can be re-checked later. A promise to pay written in plain words becomes a node the next decision reads. Check: `python verify.py`, or the four tamper commands in "The 90-second path".
-- "Shared state and handoffs between agents": another agent can take a decision id over MCP and re-check it (`verify_decision`) or run a what-if on it (`what_if_remove_evidence`). Check: `POST /mcp` with `tools/call`, steps in [AGENTS.md](AGENTS.md).
-
-Bashi is one agent with fixed rules, not several agents talking to each other.
 
 ## How it works
 
