@@ -25,10 +25,11 @@
   </dl>
   <div class="actions">
     {% if shop.own %}<form method="post" action="{{ url_for('demo_real') }}" onsubmit="busy(this)"><button class="btn" type="submit">See the real audit case</button></form>{% endif %}
+    {% if shop.own %}<form method="post" action="{{ url_for('home') }}" onsubmit="busy(this)"><input type="hidden" name="customer" value="CUST-17"><input type="hidden" name="amount" value="40000"><button class="btn alt" type="submit">See the family network (7 links)</button></form>{% endif %}
     {% if shop.real %}<form method="post" action="{{ url_for('demo_real') }}" onsubmit="busy(this)"><button class="btn" type="submit">See the account with the most money paid before the sale</button></form>{% else %}
     <form method="post" action="{{ url_for('demo') }}" onsubmit="busy(this)"><button class="btn {{ 'alt' if shop.own else '' }}" type="submit">{{ 'Try the demo' if shop.own else 'Try the Tunde demo' }}</button></form>{% endif %}
   </div>
-  <p class="hint">{% if shop.real %}This opens the receipt of the real account with the most money paid before the sales it was applied to. The receipt lists every matched payment and marks it inferred.{% elif shop.own %}The real audit case opens the receipt of the real customer with the most money wrongly showing as owed. The demo uses an invented customer: the answer is NO, and removing one record changes it.{% else %}Asks N45,000 for Tunde Adeyemi, then opens the receipt.{% endif %}</p>
+  <p class="hint">{% if shop.real %}This opens the receipt of the real account with the most money paid before the sales it was applied to. The receipt lists every matched payment and marks it inferred.{% elif shop.own %}The real audit case opens the receipt of the real customer with the most money wrongly showing as owed. The demo uses an invented customer: the answer is NO, and removing one record changes it. For a deeper case (invented), ask CUST-17 for N40,000: it owes N0 itself, but accounts linked through 7 links of owners, collectors, payers and family owe N100,000.{% else %}Asks N45,000 for Tunde Adeyemi, then opens the receipt.{% endif %}</p>
   {% if shop.real_available %}
   <div class="realline"><p><b>Runs on a real shop's books.</b> My whole shop, names removed: 45 customers, 544 credit sales, 543 payments. Not a mock-up. {% if shop.real %}You are looking at it now.{% endif %}</p>
   {% if not shop.real %}<form method="post" action="{{ url_for('choose_shop') }}"><input type="hidden" name="shop" value="real"><button class="btn alt" type="submit">Open my real shop's books</button></form>{% endif %}</div>
@@ -44,7 +45,7 @@
     <li><b>Claude Desktop:</b> a one-click extension, <a href="https://github.com/Sireadell/bashi/blob/master/extension/Bashi.mcpb">Bashi.mcpb</a>.</li>
     <li><b>Web API:</b> <span class="mono">/api/decide</span>, <span class="mono">/api/receipt</span>, <span class="mono">/api/verify</span>, <span class="mono">/api/whatif</span>, <span class="mono">/api/customers</span>.</li>
     <li><b>Guides an AI can read:</b> <a href="/llms.txt">/llms.txt</a> and <a href="/AGENTS.md">/AGENTS.md</a>.</li>
-    <li><b>Your own shop:</b> put your sales and payments in three CSV files and load them into your own FalkorDB from the command line. It never touches this demo. Steps are in the <a href="https://github.com/Sireadell/bashi#use-it-on-your-own-shop">README</a>.</li>
+    <li><b>Your own shop:</b> put your sales and payments in three CSV files (or three Google Sheet tabs published to the web) and load them into your own FalkorDB from the command line. It never touches this demo. Steps are in the <a href="https://github.com/Sireadell/bashi#use-it-on-your-own-shop">README</a>.</li>
   </ul>
 </section>
 {% endif %}

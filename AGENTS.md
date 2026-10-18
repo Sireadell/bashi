@@ -2,10 +2,11 @@
 
 Bashi answers one question for a shop: can this customer take this amount on credit? It says YES, NO or CANNOT TRACE, and gives a receipt that links the exact sales, payments and promises it used. Anyone can re-check a receipt later.
 
-Any AI app or program can ask Bashi through plain web addresses or through MCP (a standard way for AI tools to plug into other tools). The answer comes from two fixed rules, not from an AI guess:
+Any AI app or program can ask Bashi through plain web addresses or through MCP (a standard way for AI tools to plug into other tools). The answer comes from three fixed rules, not from an AI guess:
 
 1. Say NO if open debt plus the new request is above the credit limit.
 2. Say NO if the customer has any broken promise to pay.
+3. When people link this account to others (its owner, the people who collect or pay for it, their family), say NO if the open debt across every linked account plus the new request is above this customer's credit limit. Accounts with no people links behave exactly as before.
 
 Everything below works on the demo shop (all invented data) and, when it is loaded, the founder's own shop (real audit, names removed). Pass `"shop": "shop_a"` for the demo shop or `"shop": "shop_own"` for the own shop. Leave it out to get the same shop the website shows.
 
@@ -106,7 +107,7 @@ curl -s -X POST $BASHI/mcp -H "Content-Type: application/json" \
 | An unknown or expired decision id | 404. Only the most recent 300 decisions are kept. |
 | Too many requests | 429. Asking for a decision or a what-if is limited to 20 per 10 minutes per visitor, and 200 per 10 minutes for the whole site. Reading is limited more lightly. |
 | Changing the shop's records | There is no way to add, edit or delete a sale, payment or promise through this door. |
-| Using an AI model to decide | The answer is the two fixed rules above, every time. |
+| Using an AI model to decide | The answer is the three fixed rules above, every time. |
 
 ## Honest limits
 

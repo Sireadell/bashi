@@ -8,6 +8,10 @@ More for judges: [JUDGES.md](JUDGES.md)
 
 *The real audit case on the live site: the same customer, NO with the 3 payments unlinked and YES once they are linked on a copy. The real data is never changed.* On the 70 sealed cases that depend on those links (unlinked payment, money paid before the sale, split payments, someone else paying), an AI with the same records but no graph got 46 right and Bashi got 70 (`sealed/RESULTS_LLM.md`).
 
+![Drawn example with invented data: CUST-17 owes N0, but 7 links away 5 linked accounts owe N100,000, so the answer is NO](static/family-network.png)
+
+*Invented example, drawn for this README (not a screenshot of the site): alone this customer owes N0, but 7 links away 5 linked accounts owe N100,000, so Bashi says NO.*
+
 **My shop's ledger said customers owed N388,340 they had already paid.** In my audit of 17 July 2026, 8 credit sales were marked paid while the customer's ledger still showed the debt. Each screen looked right on its own, so nobody saw it. Bashi follows each sale to its payments in a graph, flags the gap, answers yes or no on credit, and gives a receipt anyone can check. Press "See the real audit case" on the live site to see those 8 sales.
 
 **Entered in Track 01, Agents That Act on Connected Data. This is the one track I want judged.**
@@ -25,7 +29,15 @@ More for judges: [JUDGES.md](JUDGES.md)
 | Claude Desktop | One-click extension: [extension/Bashi.mcpb](extension/Bashi.mcpb), steps in [extension/INSTALL.md](extension/INSTALL.md). |
 | Web API | `/api/decide`, `/api/receipt`, `/api/verify`, `/api/whatif`, `/api/customers`. See [AGENTS.md](AGENTS.md). |
 | Guides an AI can read | `/llms.txt` and `/AGENTS.md` on the live site. |
-| Your own shop | Three CSV files (customers, sales, payments), loaded into your own FalkorDB from the command line. It never writes to the public demo. See "Use it on your own shop" below. |
+| Your own shop | Three CSV files, or three published Google Sheet tabs, loaded into your own FalkorDB from the command line. It never writes to the public demo. See "Use it on your own shop" below. |
+
+## Family network: 7 links deep
+
+All data in this section is invented. Ask the own shop view for **CUST-17**, N40,000. CUST-17 alone owes N0, so a plain balance check says YES. Bashi says **NO**, because it follows the people behind the account: CUST-17 is owned by Buyer 7, who collects goods for CUST-18 (owes N20,000). Buyer 8 pays for CUST-18 and owns CUST-19 (N10,000). Buyer 8 is family of Buyer 9 (link FAM-1). Buyer 9 owns CUST-20 (N15,000) and collects for CUST-21 (N25,000). Buyer 10 also collects for CUST-21 and owns CUST-22 (N30,000). This account and 5 linked accounts owe N100,000 in total, plus the request N40,000 is N140,000, above the limit N100,000.
+
+The third rule, in plain words: when people link this account to others (its owner, the people who collect or pay for it, their family), say NO if the open debt across every linked account plus the new request is above this customer's credit limit. Accounts with no people links behave exactly as before. It is one graph walk of up to 20 links, about 0.3 seconds.
+
+Press the what-if on family link FAM-1: on a throwaway copy of the graph it is removed, and the answer flips to YES (2 accounts, N30,000 plus N40,000 is N70,000, within N100,000). The real data is never touched.
 
 ## Judge in 60 seconds
 
@@ -34,7 +46,8 @@ More for judges: [JUDGES.md](JUDGES.md)
 | 1 | Open https://bashi-vrfv.onrender.com (a sleeping host can take about 25 seconds the first time). | The home page of my own shop view. |
 | 2 | Press "Try the demo". | A receipt for an invented customer (CUST-02, N90,000): NO, because sale TI-005 looks unpaid. Payment PY-005 for the same amount was never linked to it, and the receipt names both. |
 | 3 | On the receipt, press "What if this evidence did not exist" next to TI-005. | The answer flips to YES (owed N0), run on a copy of the graph. |
-| 4 | Check the receipt from a terminal (this saves one decision on the live site, then re-checks it): | The last line says `"verified":true`. |
+| 4 | Ask CUST-17 for N40,000 (invented), open the receipt, and press the what-if on family link FAM-1. | A plain balance says YES. Bashi says NO (N140,000 across 6 linked accounts, limit N100,000), then YES once FAM-1 is removed on a copy. |
+| 5 | Check the receipt from a terminal (this saves one decision on the live site, then re-checks it): | The last line says `"verified":true`. |
 
 ```bash
 ID=$(curl -s -X POST https://bashi-vrfv.onrender.com/api/decide -H "Content-Type: application/json" -d '{"customer":"CUST-01","amount":45000}' | python -c "import sys,json;print(json.load(sys.stdin)['decision_id'])"); curl -s https://bashi-vrfv.onrender.com/api/verify/$ID
@@ -74,7 +87,7 @@ You get back `NO`, the reason (a broken promise, PR001), the ids of the records 
 
 | What only Bashi does | So what | Try it |
 |---|---|---|
-| No model makes the yes or no. Two fixed rules do. | The same question always gets the same answer, and you can read the rules in two lines. | Read `rules.py`; "What this is not" below |
+| No model makes the yes or no. Three fixed rules do. | The same question always gets the same answer, and you can read the rules in a few lines. | Read `rules.py`; "What this is not" below |
 | Every answer comes with a receipt and a fingerprint. | You see the exact sales, payments and promises behind it, not just a number. | Live site, "See the real audit case" |
 | Anyone can re-check a receipt later. Edit one record and the check fails. | You do not have to trust me or the database. | The four tamper commands in "The 90-second path"; `python tamper_sweep.py` runs 11 edits (11 of 11 caught, [TAMPER_SWEEP.md](TAMPER_SWEEP.md)) |
 | What-if: remove one record and watch the answer flip. | You see which record decided it. It runs on a throwaway copy, so real data never changes. | Live site, "Try the demo", then "What if this evidence did not exist" |
@@ -208,7 +221,7 @@ graph LR
 | Trade | one credit sale | id, amount, date, item |
 | Payment | money received | id, amount, date |
 | Promise | a promise to pay | id, date, due, amount, kept |
-| Rule | one of the two rules | id, text |
+| Rule | one of the three rules | id, text |
 | Decision | one saved yes or no | id, customer_id, request, verdict, reason, created, as_of, open_debt, fingerprint, rule_ids, snapshot |
 | Counter | hands out the next D0001 or PR004 id | id, n |
 
@@ -288,7 +301,7 @@ CREATE (c)-[:PROMISED]->(:Promise {id:$pid, date:$d, due:$due, amount:$amt, kept
 ## What this is not
 
 - **Not tamper-proof.** The replay is tamper-evident. If something changes a sale, a payment or a decision, the replay shows it. But anyone who can write to the database can rewrite a decision and its fingerprint together, and the replay would pass.
-- **Not a smart credit score.** The yes or no comes from a fixed rule, two lines long, simple on purpose: say no if the debt plus the request is over the limit, or if there is a broken promise. No model decides it.
+- **Not a smart credit score.** The yes or no comes from three fixed rules, simple on purpose: say no if the debt plus the request is over the limit, say no if there is a broken promise, and say no if the debt across every linked account plus the request is over the limit. No model decides it.
 - **Not an AI that decides.** The AI only picks which lookups to run and words one sentence. Every number and name in that sentence is checked against the records, and if the check fails, a plain template answers instead.
 - **Not far more accurate than a balance check.** On the scorecard below, Bashi gives the same answer as a balance-only check on 37 of 40 questions and a different one on 3. The gain is the receipt and the trace, not a bigger accuracy number.
 - **Not a full set of real data.** Only 8 sales are real, and credit limits and payment dates for them are assumed. The rest is invented, so nothing here is advice about a real person or a real debt. Bashi does not repair that shop's data.
@@ -375,7 +388,7 @@ Honest limit: the amounts and sale dates come from my audit, but the payment rec
 
 ## Use it from other tools
 
-Another AI app can ask Bashi "can customer X take N naira on credit?" and get a YES or NO with a receipt link it can re-check later. There are plain web addresses and an MCP address (MCP is a standard way for AI tools to plug into other tools). The answer is still the same two fixed rules, with no AI in the decision. Full guide with one example per address: [AGENTS.md](AGENTS.md).
+Another AI app can ask Bashi "can customer X take N naira on credit?" and get a YES or NO with a receipt link it can re-check later. There are plain web addresses and an MCP address (MCP is a standard way for AI tools to plug into other tools). The answer is still the same three fixed rules, with no AI in the decision. Full guide with one example per address: [AGENTS.md](AGENTS.md).
 
 | Address | What it does |
 |---|---|
@@ -418,6 +431,25 @@ python verify.py --graph my_shop
 ```
 
 It loads into YOUR own FalkorDB, using the settings in your `.env`. It never writes to the public demo, and it refuses the graph names `shop_a`, `shop_own` and `shop_real`. The graph name must be new unless you add `--replace`. Every row is checked first: if any row is bad, it lists each problem with its row number and writes nothing. A payment with no `sale_id` is matched to that customer's sales by the same rule the real shop view uses, and shown as inferred. The decision is still the same two fixed rules (debt over the limit, or a broken promise), with a receipt you can re-check.
+
+### Or load it from a Google Sheet
+
+Keep your records in a Google Sheet with one tab each for customers, sales and payments (promises is optional), using the same column names as the CSV files above. For each tab: File, Share, **Publish to web**, pick that tab, choose **Comma-separated values (.csv)**, Publish, and copy the link. The sheet must be published to the web, because Bashi fetches the links without signing in. Anyone with those links can read the published tabs, so publish only data you are happy to share, and unpublish afterwards.
+
+Example layout (invented, column names only; the sample files in `examples/my_shop_csv` show the values):
+
+| Tab | Columns |
+|---|---|
+| customers | `id`, `name`, `credit_limit` |
+| sales | `id`, `customer_id`, `amount`, `date`, `item` |
+| payments | `id`, `customer_id`, `amount`, `date`, `sale_id` (empty if unknown) |
+| promises (optional) | `id`, `customer_id`, `amount`, `date`, `due`, `kept` |
+
+```powershell
+python import_csv.py --graph my_shop --sheet-customers "LINK1" --sheet-sales "LINK2" --sheet-payments "LINK3"
+```
+
+It fetches the tabs and loads them with the same checks and the same loader as the CSV path, into your own FalkorDB and your own graph name (never the public demo graphs). Only `https://docs.google.com/spreadsheets/...` links are accepted; a link to any other host, including look-alikes such as `docs.google.com.example.com`, is refused before anything is fetched, redirects are followed only inside docs.google.com, each tab is limited to 2 MB and 15 seconds. Code: [sheets.py](sheets.py), tests: [tests/test_sheets.py](tests/test_sheets.py) (Google is never called in the tests; I have not run it against a live Google Sheet).
 
 ## Sealed test
 
@@ -473,7 +505,7 @@ The scorecard runs on the invented practice shop, and only 3 of 40 differ, so th
 python -m pytest
 ```
 
-There are 270 tests (dates and counts of full runs in [TESTS.md](TESTS.md)). The full run takes about 25 minutes because it talks to a hosted database. The tests run against a copy of the graph and delete it afterwards.
+There are 296 tests (dates and counts of full runs in [TESTS.md](TESTS.md)). The full run takes about 25 minutes because it talks to a hosted database. The tests run against a copy of the graph and delete it afterwards.
 
 ## AI tools used
 

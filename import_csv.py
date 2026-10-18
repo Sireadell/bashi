@@ -272,12 +272,29 @@ def load_csv_dir(folder, graph_name, replace=False, db=None):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description="Load your shop's CSV files into your own FalkorDB graph.")
-    ap.add_argument("--dir", required=True, help="folder with customers.csv, sales.csv, payments.csv")
+    ap.add_argument("--dir", help="folder with customers.csv, sales.csv, payments.csv")
+    for k in ("customers", "sales", "payments", "promises"):
+        ap.add_argument("--sheet-" + k, help="link to the published Google Sheets CSV tab (instead of --dir)")
     ap.add_argument("--graph", required=True, help="name for your new graph, for example my_shop")
     ap.add_argument("--replace", action="store_true", help="rebuild a graph you made before")
     a = ap.parse_args(argv)
+    sheet_urls = {k: getattr(a, "sheet_" + k) for k in ("customers", "sales", "payments", "promises")}
     try:
-        c = load_csv_dir(a.dir, a.graph, replace=a.replace)
+        if a.dir and any(sheet_urls.values()):
+            print("Use either --dir or the --sheet-... links, not both.")
+            return 1
+        if a.dir:
+            c = load_csv_dir(a.dir, a.graph, replace=a.replace)
+        elif any(sheet_urls.values()):
+            import sheets
+            try:
+                c = sheets.load_sheets(sheet_urls, a.graph, replace=a.replace)
+            except sheets.SheetProblem as e:
+                print("Nothing was loaded. " + str(e))
+                return 1
+        else:
+            print("Give --dir FOLDER, or the --sheet-customers, --sheet-sales and --sheet-payments links.")
+            return 1
     except ImportProblems as e:
         print("Nothing was loaded. Fix these %d problem(s) and run it again:" % len(e.problems))
         for p in e.problems:

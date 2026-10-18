@@ -20,7 +20,7 @@ Every test runs against the hosted FalkorDB database, on a throwaway copy of the
 | 18 Oct 2026 | commit 911cea7 | Full suite, `python -m pytest tests -q` | 187 passed, 0 failed | 27 min 49 s |
 | 18 Oct 2026 | commit 9bae6c1 | `tests/test_bashi.py` and the new `tests/test_evidence_graph.py` (receipt graph picture, real-shop banner) | 20 passed, 0 failed | 3 min 12 s |
 
-270 tests are collected today (the full run at commit 8458c53 collected 237; later commits added more).
+[PLACEHOLDER for the family network session: set the final collected count after its tests are merged. Last count before it: 296] tests are collected today (the full run at commit 8458c53 collected 237; later commits added more).
 
 Run them yourself:
 
