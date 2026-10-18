@@ -6,7 +6,7 @@ Two test files run on invented data held in memory, with no database, no network
 python -m pytest tests/test_fast_rules.py tests/test_demo_cache.py -q
 ```
 
-Expected: `44 passed`. They cover the two credit rules (limit and broken promise), the CANNOT TRACE refusals, the fingerprint changing when any record changes, the what-if on a copy, the payment matching, and the demo-case cache (reuse, reset, expiry after ten minutes, fallback to the Tunde case). On 18 Oct 2026 this ran in a fresh clone with a new virtual environment and no `.env`: 44 passed in 1.85 s.
+Expected: `44 passed`. They cover the credit rules (limit and broken promise), the CANNOT TRACE refusals, the fingerprint changing when any record changes, the what-if on a copy, the payment matching, and the demo-case cache (reuse, reset, expiry after ten minutes, fallback to the Tunde case). On 18 Oct 2026 this ran in a fresh clone with a new virtual environment and no `.env`: 44 passed in 1.85 s.
 
 The same command runs on every push in `.github/workflows/fast-tests.yml`.
 
@@ -20,7 +20,7 @@ Every test runs against the hosted FalkorDB database, on a throwaway copy of the
 | 18 Oct 2026 | commit 911cea7 | Full suite, `python -m pytest tests -q` | 187 passed, 0 failed | 27 min 49 s |
 | 18 Oct 2026 | commit 9bae6c1 | `tests/test_bashi.py` and the new `tests/test_evidence_graph.py` (receipt graph picture, real-shop banner) | 20 passed, 0 failed | 3 min 12 s |
 
-[PLACEHOLDER for the family network session: set the final collected count after its tests are merged. Last count before it: 296] tests are collected today (the full run at commit 8458c53 collected 237; later commits added more).
+279 tests are collected today (the full run at commit 8458c53 collected 237; later commits added more). The locked family-network sets pass in full: set F 20 of 20 and set G 10 of 10, with 0 wrong approvals (`sealed/RESULTS_FAMILY.md`, `sealed/RESULTS_FAMILY_G.md`).
 
 Run them yourself:
 
