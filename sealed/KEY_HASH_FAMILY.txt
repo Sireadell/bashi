@@ -1,0 +1,2 @@
+sha256 of the 20 set-F family-network cases and their correct answers, canonical JSON (sorted keys, no spaces), seed 20261018:
+ea09986c9d23f1870608bfbf556e9142e2a67e3249324a30af87e7a4e68a10d9
