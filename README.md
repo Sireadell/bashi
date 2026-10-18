@@ -16,7 +16,7 @@ More for judges: [JUDGES.md](JUDGES.md)
 
 **Entered in Track 01, Agents That Act on Connected Data. This is the one track I want judged.**
 
-**What the graph does here that a balance check cannot.** A balance check adds up what a customer owes and stops. It cannot see that a payment cleared a particular sale, or that the same customer broke a promise to pay. Bashi walks those links in FalkorDB: customer, to sales, to payments, to promises. On 255 test cases whose answers I locked before running anything (55, then 200 new), Bashi wrongly approved 0 and a balance check wrongly approved 53 (14 of the first 55, 39 of the next 200). The files are `sealed/RESULTS.md` and `sealed/RESULTS_B.md`. I wrote those cases myself, so it shows the situations Bashi was built for, not accuracy on every shop. Take FalkorDB away and Bashi answers nothing.
+**What the graph does here that a balance check cannot.** A balance check adds up what a customer owes and stops. It cannot see that a payment cleared a particular sale, or that the same customer broke a promise to pay. Bashi walks those links in FalkorDB: customer, to sales, to payments, to promises. On 255 test cases whose answers I locked before running anything (55, then 200 new), Bashi wrongly approved 0 and a balance check wrongly approved 53 (14 of the first 55, 39 of the next 200). The files are `sealed/RESULTS.md` and `sealed/RESULTS_B.md`. Plus 30 locked family-network cases with chains up to 22 links: Bashi 30 of 30; checking the asking account alone wrongly approves 11 (`sealed/RESULTS_FAMILY.md` for set F, 20 cases, and `sealed/RESULTS_FAMILY_G.md` for set G, 10 cases). I wrote those cases myself, so it shows the situations Bashi was built for, not accuracy on every shop. Take FalkorDB away and Bashi answers nothing.
 
 **Against an AI with no graph.** I gave an AI model (Gemini Flash Lite, temperature 0) the same 200 locked cases as a flat list of sales, payments and promises with the same rules, just no links. It got 152 right and wrongly approved 23, worth N3,685,003 of credit. Bashi got 200 right with 0 wrong approvals. The AI did spot every broken promise; its misses were reading and arithmetic slips, which is the point: the same records, read without the links, give answers you can't rely on. Every answer is saved in `sealed/RESULTS_LLM.md` and the JSON files beside it.
 
@@ -166,9 +166,10 @@ Track descriptions and focus areas are quoted from the [hackathon track page](ht
 **Track 01, Agents That Act on Connected Data (the judged track).** "Build an agent that uses the graph to decide and act."
 
 - "Multi-hop reasoning": the answer walks customer, to sales, to payments, to promises in one query (`rules.py`, `read_state`). Check: open the live site, press "See the real audit case", and read the receipt.
-- "Graph queries and algorithms as agent tools": the agent calls the graph through named tools that run Cypher, and the what-if tool copies the graph with `GRAPH.COPY`. Check: `whatif.py`, or the five tools listed at `/mcp`.
+- "Graph queries and algorithms as agent tools": the agent calls the graph through named tools that run Cypher, and the what-if tool copies the graph with `GRAPH.COPY`. FalkorDB's own algorithms also run on the receipt: `algo.WCC` finds the linked group and `algo.SPpaths` finds the shortest link chain to the largest linked debt. Check: `whatif.py`, `linked_group.py`, `linked_chain.py`, or the five tools listed at `/mcp`.
 - "Tool selection through MCP": five tools (`decide_credit`, `get_receipt`, `verify_decision`, `what_if_remove_evidence`, `list_customers`) at `/mcp`, and a one-click Claude Desktop extension. Check: the 30-second `curl` near the top, or [extension/INSTALL.md](extension/INSTALL.md).
 - "Actions based on what the graph shows": the yes or no comes from what the graph holds, and the decision is saved back as a Decision node linked to every record it read. Check: live site, "Try the demo" asks N90,000 for CUST-02 and gets NO because of an unlinked payment.
+- "Vector search" (extra): each customer has a 5-number credit profile stored as a FalkorDB vector, and the receipt's "Customers most like this one" block finds the three nearest with FalkorDB's vector index. Check: `lookalike.py`.
 - "Explainable results": every answer has a receipt that names the exact sales, payments and promises behind it. Check: open any receipt, then `/api/verify/<id>` or `python verify.py`.
 
 **Track 02, Agent Memory and Coordination (extra, not the judged track).** "Build agents that remember across sessions and share state with each other."
@@ -182,7 +183,7 @@ Bashi is one agent with fixed rules, not several agents talking to each other.
 
 - Customers, sales, payments and promises to pay live as a graph in FalkorDB.
 - A payment is linked to the sale it settles, so a sale that was already paid is never counted twice.
-- The rule: say no if what the customer owes plus the new request is over their limit, or if they broke a promise to pay.
+- The rules: say no if what the customer owes plus the new request is over their limit; say no if they broke a promise to pay; and if people link this account to others (owner, who collects or pays, family), say no when what every linked account owes plus the request is over this account's limit.
 
 A promise to pay that is still unkept after its due date counts as broken the next time Bashi checks that customer. The check runs before every decision and never touches a promise marked kept. A saved decision remembers the day it was made, so replaying it later does not change just because time passed.
 
@@ -195,6 +196,9 @@ The answer is a walk over links, so the graph is the product:
 - Every decision is saved as a node with `USED_EVIDENCE` links to the exact sales, payments and promises it read. The receipt page reads those links back and shows those records, nothing else.
 - The what-if button uses FalkorDB's `GRAPH.COPY` to copy the whole graph, delete one record on the copy, ask again, and delete the copy.
 - The receipt reads one customer's records in a single combined query (it used to be four).
+- The family network rule walks up to 20 links from the asking account in one Cypher variable-length query, so debt hidden several links away is found.
+- Every receipt can also show two lines from FalkorDB built-in algorithms: the linked group (`algo.WCC`, `linked_group.py`) and the shortest link chain to the largest linked debt (`algo.SPpaths`, `linked_chain.py`). Shown only when the account has linked accounts. Information only.
+- Each customer carries a 5-number credit profile (debt against limit, broken promises, unlinked payments, linked accounts, share of sales fully paid) stored as a FalkorDB vector; the receipt's "Customers most like this one" block uses FalkorDB's vector index to find the three nearest. No AI model, no outside service, information only.
 
 Stop FalkorDB and Bashi answers nothing. There is no local copy of the data to fall back on.
 
@@ -378,10 +382,13 @@ Honest limit: the amounts and sale dates come from my audit, but the payment rec
 | The real data is never changed by the what-if | The what-if runs on a copy of the graph; read `whatif.py`, or ask twice and compare receipts |
 | A tampered record is caught on replay | Run the four tamper commands in "The 90-second path" |
 | Bashi gives the same answer as a balance check on 37 of 40 questions | `python scorecard.py`, then read `scorecard_results.json` |
+| The family rule works: CUST-17 asking N40,000 (invented, own shop view) is NO, and the what-if that removes FAM-1 flips it to YES | Live site, own shop view, open the receipt, press the what-if on FAM-1 |
+| The linked-group and shortest-chain lines come from FalkorDB's own algorithms | Read `linked_group.py` (`algo.WCC`) and `linked_chain.py` (`algo.SPpaths`) |
+| "Customers most like this one" uses FalkorDB's vector index, not an AI model | Read `lookalike.py` (`db.idx.vector.queryNodes`) |
 | The yes or no contains no AI | Read `rules.py`; no model is called inside `decide` |
 | A model sentence that fails the check is replaced | Read `agent.py`; the reply says which mode answered |
 | Every record on the page is tagged real or invented | Look at the tags on the live pages and in `own_audit_seed.py` |
-| On 255 cases whose answers were locked first (55, then 200 new), Bashi never wrongly approves; a balance check wrongly approves 53 | `python sealed/run_sealed.py` and `python sealed/run_sealed.py b` (each checks its hash first), then read `sealed/RESULTS.md` and `sealed/RESULTS_B.md` |
+| On 255 cases whose answers were locked first (55, then 200 new), Bashi never wrongly approves; a balance check wrongly approves 53. Plus 30 locked family-network cases (chains up to 22 links): Bashi 30 of 30, checking the asking account alone wrongly approves 11 | `python sealed/run_sealed.py` and `python sealed/run_sealed.py b` (each checks its hash first), then read `sealed/RESULTS.md` and `sealed/RESULTS_B.md`; family sets: `sealed/RESULTS_FAMILY.md` and `sealed/RESULTS_FAMILY_G.md` |
 | 11 different edits to a saved decision's records are all caught, and each passes again once undone | `python tamper_sweep.py` (runs on a throwaway copy of the practice shop), then read `TAMPER_SWEEP.md` |
 | The tests pass | `python -m pytest` (about 20 minutes, it talks to a hosted database) |
 | The audit figures (N388,340, 494 sales, 46 accounts) are from my shop | A visitor cannot check these. They are my own read-only audit, names removed. |
@@ -430,7 +437,7 @@ python ask_csv.py --graph my_shop C001 45000
 python verify.py --graph my_shop
 ```
 
-It loads into YOUR own FalkorDB, using the settings in your `.env`. It never writes to the public demo, and it refuses the graph names `shop_a`, `shop_own` and `shop_real`. The graph name must be new unless you add `--replace`. Every row is checked first: if any row is bad, it lists each problem with its row number and writes nothing. A payment with no `sale_id` is matched to that customer's sales by the same rule the real shop view uses, and shown as inferred. The decision is still the same two fixed rules (debt over the limit, or a broken promise), with a receipt you can re-check.
+It loads into YOUR own FalkorDB, using the settings in your `.env`. It never writes to the public demo, and it refuses the graph names `shop_a`, `shop_own` and `shop_real`. The graph name must be new unless you add `--replace`. Every row is checked first: if any row is bad, it lists each problem with its row number and writes nothing. A payment with no `sale_id` is matched to that customer's sales by the same rule the real shop view uses, and shown as inferred. The decision is still the same fixed rules (debt over the limit, or a broken promise), with a receipt you can re-check. These imports carry no people links, so the family network rule never fires on them.
 
 ### Or load it from a Google Sheet
 
@@ -505,7 +512,7 @@ The scorecard runs on the invented practice shop, and only 3 of 40 differ, so th
 python -m pytest
 ```
 
-There are 296 tests (dates and counts of full runs in [TESTS.md](TESTS.md)). The full run takes about 25 minutes because it talks to a hosted database. The tests run against a copy of the graph and delete it afterwards.
+There are 279 tests (dates and counts of full runs in [TESTS.md](TESTS.md)). The full run takes about 25 minutes because it talks to a hosted database. The tests run against a copy of the graph and delete it afterwards.
 
 ## AI tools used
 

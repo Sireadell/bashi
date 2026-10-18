@@ -30,7 +30,7 @@ curl -s -X POST $BASHI/api/decide -H "Content-Type: application/json" \
   -d '{"customer": "C001", "amount": 45000, "shop": "shop_a"}'
 ```
 
-You get back `answer`, `reasons` (in plain words), `decision_id`, `receipt_url`, `verify_url`, `fingerprint` (a code that changes if any record or the answer changes) and `evidence_ids` (the records used).
+You get back `answer`, `reasons` (in plain words), `decision_id`, `receipt_url`, `verify_url`, `fingerprint` (a code that changes if any record or the answer changes) and `evidence_ids` (the records used). `decide_credit` also returns `family_network_debt` (what every linked account owes) and `family_network` (the accounts and links the third rule used). `get_receipt` returns `family_network` and lists the family link (for example `FAM-1`) in `evidence_ids`, so `what_if_remove_evidence` accepts it.
 
 ### Read the receipt
 
