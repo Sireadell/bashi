@@ -121,3 +121,20 @@ h2{font-size:21px;letter-spacing:-.01em}
 .realbooks-head{font-size:clamp(22px,4vw,30px);font-weight:700;line-height:1.15;margin:0 0 6px;letter-spacing:-.01em}
 .realbooks-body{margin:0 0 10px}
 .realbooks form{margin:4px 0 0}
+
+/* start here */
+.hero{padding:18px 4px 0}
+.hero .sub{max-width:36em}
+.start{border:2px solid var(--ink);background:var(--card);padding:20px 24px;margin:18px 0;box-shadow:var(--shadow)}
+.startlist{display:grid;grid-template-columns:1fr 1fr;gap:14px 28px;margin:0 0 18px}
+.startlist dt{font:700 13px system-ui,sans-serif;text-transform:uppercase;letter-spacing:.06em;color:var(--mute);margin:0 0 3px}
+.startlist dd{margin:0;font-size:16px;line-height:1.45}
+.start .actions{margin:0 0 10px}
+.start .hint{margin:0 0 14px}
+.realline{border-top:1px solid var(--line);padding-top:14px;margin-top:6px}
+.realline p{margin:0 0 10px;font-size:16px}
+.realline form{margin:0}
+.realline .btn{font-size:16px;padding:10px 18px;min-height:44px}
+.gloss{border-top:1px solid var(--line);padding-top:12px;margin:14px 0 0;font-size:15px;color:var(--mute)}
+.gloss b{color:var(--ink)}
+@media (max-width:700px){.startlist{grid-template-columns:1fr}.start{padding:16px}.realline .btn{width:100%}}
