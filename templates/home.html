@@ -12,7 +12,7 @@
     <div><dt>What it is</dt><dd>A yes, no or cannot trace answer to one question: can this customer take this amount on credit? It comes with a receipt that links the exact sales, payments and promises it used.</dd></div>
     <div><dt>Who it is for</dt><dd>A small shop that sells on credit and keeps its books in a notebook or a spreadsheet.</dd></div>
     <div><dt>Why a graph</dt><dd>Each sale, payment and promise is a record linked to its customer in FalkorDB, the graph database. The answer is a walk along those links, so the receipt can list the exact ones.</dd></div>
-    <div><dt>What to click</dt><dd>Press a button below. It opens a receipt in about 10 to 20 seconds. On the receipt, try the what-if on a record to see if the answer changes.</dd></div>
+    <div><dt>What to click</dt><dd>Press a button below. It opens a receipt in a few seconds. On the receipt, try the what-if on a record to see if the answer changes.</dd></div>
   </dl>
   <div class="actions">
     {% if shop.own %}<form method="post" action="{{ url_for('demo_real') }}" onsubmit="busy(this)"><button class="btn" type="submit">See the real audit case</button></form>{% endif %}
@@ -24,6 +24,7 @@
   <div class="realline"><p><b>Runs on a real shop's books.</b> My whole shop, names removed: 45 customers, 544 credit sales, 543 payments. Not a mock-up. {% if shop.real %}You are looking at it now.{% endif %}</p>
   {% if not shop.real %}<form method="post" action="{{ url_for('choose_shop') }}"><input type="hidden" name="shop" value="real"><button class="btn alt" type="submit">Open my real shop's books</button></form>{% endif %}</div>
   {% endif %}
+  <p class="realline"><b>Tested before it was built for show:</b> on 255 cases whose answers were locked first, Bashi wrongly approved 0 and a balance check wrongly approved 53. <a href="{{ url_for('proof') }}">Try to tamper with a receipt yourself</a> and watch the check fail.</p>
   <p class="gloss"><b>Phantom debt:</b> the books still say a customer owes for a sale, but a payment of the same amount came in and was never linked to it. <b>Inferred:</b> a payment-to-sale link that a rule proposed, not one a person recorded. Every inferred link says so on the receipt.</p>
 </section>
 {% endif %}
