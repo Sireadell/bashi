@@ -1,8 +1,39 @@
 Live demo: https://bashi-vrfv.onrender.com (no sign-up)
 Demo video: https://youtu.be/Xpq_LN4h9XA
-Judging? Start here: [JUDGES.md](JUDGES.md)
+More for judges: [JUDGES.md](JUDGES.md)
 
 # Bashi
+
+**Entered in Track 01, Agents That Act on Connected Data. This is the one track I want judged.**
+
+**What the graph does here that a balance check cannot.** A balance check adds up what a customer owes and stops. It cannot see that a payment cleared a particular sale, or that the same customer broke a promise to pay. Bashi walks those links in FalkorDB: customer, to sales, to payments, to promises. On 255 test cases whose answers I locked before running anything (55, then 200 new), Bashi wrongly approved 0 and a balance check wrongly approved 53 (14 of the first 55, 39 of the next 200). The files are `sealed/RESULTS.md` and `sealed/RESULTS_B.md`. I wrote those cases myself, so it shows the situations Bashi was built for, not accuracy on every shop. Take FalkorDB away and Bashi answers nothing.
+
+## Judge in 60 seconds
+
+| Step | Do this | You should see |
+|---|---|---|
+| 1 | Open https://bashi-vrfv.onrender.com (a sleeping host can take about 25 seconds the first time). | The home page of my own shop view. |
+| 2 | Press "Try the demo". | A receipt: N45,000 for CUST-01 is NO because of broken promise PR001, and it lists the sales and payments used. |
+| 3 | On the receipt, press "What if this evidence did not exist" next to the broken promise. | The answer flips to YES, run on a copy of the graph. |
+| 4 | Check the receipt from a terminal (this saves one decision on the live site, then re-checks it): | The last line says `"verified":true`. |
+
+```bash
+ID=$(curl -s -X POST https://bashi-vrfv.onrender.com/api/decide -H "Content-Type: application/json" -d '{"customer":"CUST-01","amount":45000}' | python -c "import sys,json;print(json.load(sys.stdin)['decision_id'])"); curl -s https://bashi-vrfv.onrender.com/api/verify/$ID
+```
+
+Expected: `{"detail":"Every record matches what was saved, and running the rule again gives the same answer.","id":"D...","verified":true}`. Demo video: https://youtu.be/Xpq_LN4h9XA.
+
+## Connect your agent
+
+MCP address: `https://bashi-vrfv.onrender.com/mcp` (open it in a browser to see the five tools). Tools: `decide_credit`, `get_receipt`, `verify_decision`, `what_if_remove_evidence`, `list_customers`.
+
+For Cursor, put this in `.cursor/mcp.json`:
+
+```json
+{ "mcpServers": { "bashi": { "url": "https://bashi-vrfv.onrender.com/mcp" } } }
+```
+
+For Claude Desktop, install [extension/Bashi.mcpb](extension/Bashi.mcpb) (steps in [extension/INSTALL.md](extension/INSTALL.md)), or use the stdio config in [AGENTS.md](AGENTS.md).
 
 **Runs on a real shop's books.** My whole shop is loaded on the live site, names removed: 45 customers, 544 credit sales, 543 payments. Press "Open my real shop's books" on the home page.
 
@@ -76,7 +107,7 @@ The live site opens on my own shop view (graph `shop_own`). Every record is tagg
 | Assumed | Credit limits for all customers, and the payment dates of the 8 real sales (set equal to the sale dates). The audit log does not hold them. The page says so. |
 | Removed | Names, phone numbers, addresses, notes and item names. The data files hold only codes, amounts and dates, and the loader refuses anything else. |
 
-This is my own shop's data, used under the hackathon rule that data may be public, synthetic or your own. A picker on the page also keeps the "Practice shop (invented data)" (graph `shop_a`: Tunde Adeyemi and 24 other invented customers), which you can also pass to the command-line tools with `--graph shop_a`.
+This is my own shop's data, used under the hackathon rule that data may be public, synthetic or your own. A picker on the page also keeps the "Practice shop (invented data)" (graph `shop_a`: Tunde Adeyemi, who is customer C001 and has the broken-promise case, and 24 other invented customers; on that shop the button reads "Try the Tunde demo"), which you can also pass to the command-line tools with `--graph shop_a`.
 
 ## The 90-second path (no sign-up, nothing to install)
 
@@ -92,11 +123,11 @@ python tamper.py --restore --graph shop_own
 python verify.py --graph shop_own     # PASS
 ```
 
-## Tracks entered
+## Track entered
 
 Track descriptions and focus areas are quoted from the [hackathon track page](https://wemakedevs.org/hackathons/falkordb). Each line below says where Bashi does it and how to check it.
 
-**Track 01, Agents That Act on Connected Data (lead).** "Build an agent that uses the graph to decide and act."
+**Track 01, Agents That Act on Connected Data (the judged track).** "Build an agent that uses the graph to decide and act."
 
 - "Multi-hop reasoning": the answer walks customer, to sales, to payments, to promises in one query (`rules.py`, `read_state`). Check: open the live site, press "See the real audit case", and read the receipt.
 - "Graph queries and algorithms as agent tools": the agent calls the graph through named tools that run Cypher, and the what-if tool copies the graph with `GRAPH.COPY`. Check: `whatif.py`, or the five tools listed at `/mcp`.
@@ -104,7 +135,7 @@ Track descriptions and focus areas are quoted from the [hackathon track page](ht
 - "Actions based on what the graph shows": the yes or no comes from what the graph holds, and the decision is saved back as a Decision node linked to every record it read. Check: live site, "Try the demo" asks N45,000 for CUST-01 and gets NO because of a broken promise.
 - "Explainable results": every answer has a receipt that names the exact sales, payments and promises behind it. Check: open any receipt, then `/api/verify/<id>` or `python verify.py`.
 
-**Track 02, Agent Memory and Coordination.** "Build agents that remember across sessions and share state with each other."
+**Track 02, Agent Memory and Coordination (extra, not the judged track).** "Build agents that remember across sessions and share state with each other."
 
 - "Persistent conversation history": every decision is saved in the graph with a fingerprint and links to its evidence, so it can be re-checked later. A promise to pay written in plain words becomes a node the next decision reads. Check: `python verify.py`, or the four tamper commands in "The 90-second path".
 - "Shared state and handoffs between agents": another agent can take a decision id over MCP and re-check it (`verify_decision`) or run a what-if on it (`what_if_remove_evidence`). Check: `POST /mcp` with `tools/call`, steps in [AGENTS.md](AGENTS.md).

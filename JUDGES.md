@@ -1,5 +1,9 @@
 # Five-minute path for judges
 
+**Judged track: Track 01, Agents That Act on Connected Data.** The graph work a balance check cannot do: it follows customer, sales, payments and promises. Wrongly approved on the 255 sealed cases: Bashi 0, balance check 53.
+
+The practice shop (invented) has the Tunde case: pick it in the shop list and the button reads "Try the Tunde demo" (customer C001).
+
 **Bashi runs on a real shop's books:** my whole shop, names removed, 45 customers, 544 credit sales, 543 payments. Press "Open my real shop's books" on the home page.
 
 Live site: https://bashi-vrfv.onrender.com (no sign-up). The free host sleeps when idle, so the first visit can show a "waking up" screen for about 25 seconds.
@@ -9,7 +13,7 @@ Live site: https://bashi-vrfv.onrender.com (no sign-up). The free host sleeps wh
 | 0:00 | Open the live site. | It opens on my own shop view. The page says Bashi answers yes or no for credit and shows the records behind it. FalkorDB is named in the footer. |
 | 0:30 | Press "See the real audit case". | A receipt for a real customer. The 8 real audit sales are flagged as possible phantom debts (N388,340 in total). The fingerprint shows "Verified". |
 | 1:30 | In the shop list at the bottom, pick "My whole shop (real records, names removed)". Press "See the account with the most money paid before the sale". | The receipt of one real account. Every payment matched to a sale is marked "inferred" with the rule that made it. A note shows N111,500 that was paid before the sales it was applied to, treated as deposits. |
-| 2:30 | Go back, pick "Practice shop", press "Try the Tunde demo", open the receipt, then press "What if this evidence did not exist" next to the broken promise. | The answer flips from NO to YES on a copy of the graph. The real data is never touched. |
+| 2:30 | Go back and press "Try the demo" (N45,000 for invented customer CUST-01), open the receipt, then press "What if this evidence did not exist" next to the broken promise. | The answer is NO because of broken promise PR001, then flips to YES on a copy of the graph. The real data is never touched. |
 | 3:30 | Open `/mcp` or read AGENTS.md. | The agent routes and the MCP tools another AI tool can call. |
 | 4:00 | In a terminal, run the four tamper commands in "The 90-second path" in the README. | `verify.py` fails and names the changed record, then passes after the restore. |
 
@@ -29,4 +33,4 @@ The sealed tests: 55 cases, then 200 new ones whose answers were locked before r
 - The what-if button copies the graph (`GRAPH.COPY`), removes one record on the copy, and re-asks.
 - Every decision is saved back into the graph with a fingerprint, and replay shows if anything changed later.
 
-The README lists each claim with the click or command that checks it. Its "Tracks entered" section quotes each track's focus areas from the [track page](https://wemakedevs.org/hackathons/falkordb) and says where Bashi does each one.
+The README lists each claim with the click or command that checks it. Its "Track entered" section quotes each track's focus areas from the [track page](https://wemakedevs.org/hackathons/falkordb) and says where Bashi does each one.
