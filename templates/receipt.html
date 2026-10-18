@@ -31,6 +31,40 @@
 </section>
 {% endif %}
 
+{% if orphans %}
+<section class="card" id="phantom-whatif">
+  <h2>What if the unlinked payments had been linked?</h2>
+  <p>{{ orphans|length }} payment{{ '' if orphans|length == 1 else 's' }} here match{{ 'es' if orphans|length == 1 else '' }} a sale that still shows as owed. Try linking {{ 'it' if orphans|length == 1 else 'them' }} on a copy and ask again.</p>
+  <button class="mini" id="pw-go" type="button">What if these payments are linked to their sales?</button>
+  <div id="pw-out" aria-live="polite" hidden></div>
+</section>
+<script>
+(function () {
+  var btn = document.getElementById('pw-go'), out = document.getElementById('pw-out');
+  function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; }
+  function money(n) { return n == null ? 'cannot trace' : '₦' + Number(n).toLocaleString('en-US'); }
+  function word(a) { return a === 'CANNOT_TRACE' ? 'CANNOT TRACE' : a; }
+  btn.addEventListener('click', function () {
+    btn.disabled = true; out.hidden = false;
+    out.innerHTML = '<p>Copying the graph and adding the links. The real data is not touched.</p>';
+    fetch('/phantom-whatif/' + encodeURIComponent({{ dec.id|tojson }}), {method: 'POST'})
+      .then(function (r) { return r.json(); }).then(function (j) {
+        btn.disabled = false;
+        if (j.error) { out.innerHTML = '<p class="err">' + esc(j.error) + '</p>'; return; }
+        function box(h, x) {
+          return '<div class="sd-box"><p class="sd-h">' + h + '</p><p class="sd-v ' + esc(x.answer.toLowerCase()) + '">' + esc(word(x.answer)) +
+            '</p><p class="small">Shown as owed: ' + esc(money(x.owed)) + '</p></div>';
+        }
+        out.innerHTML = '<div class="sd-grid">' + box('As the records stand', j.before) + box('With the payments linked', j.after) + '</div>' +
+          '<p>' + (j.changed ? 'Linking ' + j.links.length + ' payment' + (j.links.length === 1 ? '' : 's') + ' changes what is owed' +
+            (j.before.answer !== j.after.answer ? ' and the answer' : '') + '.' : 'Linking them changes nothing here.') + '</p>' +
+          '<p class="small">Links tried: ' + j.links.map(function (l) { return esc(l.payment) + ' to ' + esc(l.trade); }).join(', ') +
+          '. The copy was deleted straight away. The real data is unchanged.</p>';
+      }).catch(function () { btn.disabled = false; out.innerHTML = '<p class="err">The what-if could not run. Try again.</p>'; });
+  });
+})();
+</script>
+{% endif %}
 
 <section class="card">
   <h2>Does this receipt still check out?</h2>
