@@ -181,16 +181,22 @@ def possible_phantoms(graph, state):
                    and isinstance(t["amount"], int)}
     if not open_trades:
         return []
-    if graph.query("MATCH ()-[r:PAID]->() RETURN count(r)").result_set[0][0]:
-        # Payments are tied to customers here, so only this customer's own payments
-        # can be a phantom, and a payment already matched by rule is not an orphan.
-        orphans = graph.query(
-            "MATCH (:Customer {id:$cid})-[:PAID]->(p:Payment) "
-            "WHERE NOT (p)-[:SETTLES]->() AND NOT (p)-[:INFERRED_SETTLES]->() "
-            "RETURN p.id, p.amount, p.date", {"cid": state["customer"]["id"]}).result_set
-    else:
-        orphans = graph.query(
-            "MATCH (p:Payment) WHERE NOT (p)-[:SETTLES]->() RETURN p.id, p.amount, p.date").result_set
+    # One round trip: whether payments are tied to customers, this customer's
+    # unlinked payments, and (for older graphs) every unlinked payment.
+    rows = graph.query(
+        "MATCH ()-[r:PAID]->() RETURN 'N' AS k, count(r) AS a, null AS b, null AS c "
+        "UNION ALL "
+        "MATCH (:Customer {id:$cid})-[:PAID]->(p:Payment) "
+        "WHERE NOT (p)-[:SETTLES]->() AND NOT (p)-[:INFERRED_SETTLES]->() "
+        "RETURN 'O' AS k, p.id AS a, p.amount AS b, p.date AS c "
+        "UNION ALL "
+        "MATCH (p:Payment) WHERE NOT (p)-[:SETTLES]->() "
+        "RETURN 'A' AS k, p.id AS a, p.amount AS b, p.date AS c",
+        {"cid": state["customer"]["id"]}).result_set
+    tied = any(r[0] == "N" and r[1] for r in rows)
+    # Payments are tied to customers here, so only this customer's own payments
+    # can be a phantom, and a payment already matched by rule is not an orphan.
+    orphans = [tuple(r[1:]) for r in rows if r[0] == ("O" if tied else "A")]
     found = []
     for tid, t in sorted(open_trades.items()):
         left = t["amount"] - open_by_trade.get(tid, 0)
@@ -297,32 +303,32 @@ def prune_decisions(graph, keep=MAX_DECISIONS):
 
 def _save(graph, customer_id, request_amount, state, result, fp, snap, as_of):
     did = _next_decision_id(graph)
-    for rid, text in RULES.items():
-        graph.query("MERGE (r:Rule {id:$id}) ON CREATE SET r.text=$text",
-                    {"id": rid, "text": text})
-    graph.query(
-        "MATCH (c:Customer {id:$cid}) "
-        "CREATE (d:Decision {id:$did, customer_id:$cid, request:$req, verdict:$v, "
-        "reason:$reason, created:$created, fingerprint:$fp, rule_ids:$rids, "
-        "snapshot:$snap, open_debt:$debt, as_of:$as_of}) "
-        "CREATE (d)-[:ABOUT]->(c)",
-        {"cid": customer_id, "did": did, "req": request_amount, "v": result["verdict"],
-         "reason": result["reason"],
-         "created": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-         "fp": fp, "rids": json.dumps(sorted(RULES)),
-         "snap": json.dumps(snap, sort_keys=True), "debt": result["open_debt"],
-         "as_of": as_of})
     by_label = {}
     for ev in evidence_list(state):
         by_label.setdefault(ev["label"], []).append(ev["id"])
-    for label, ids in by_label.items():       # one call per record type, not one per record
-        graph.query(
-            "UNWIND $ids AS eid MATCH (d:Decision {id:$did}), (e:%s {id:eid}) "
-            "CREATE (d)-[:USED_EVIDENCE]->(e)" % label,
-            {"did": did, "ids": ids})
-    for rid in RULES:
-        graph.query("MATCH (d:Decision {id:$did}), (r:Rule {id:$rid}) "
-                    "CREATE (d)-[:APPLIED_RULE]->(r)", {"did": did, "rid": rid})
+    # One round trip for the whole decision: the rules, the decision, its links to
+    # the customer, the rules and every record it used. Same nodes and links as
+    # before, written in one query because each trip to the database costs time.
+    q = ("UNWIND $rules AS r MERGE (x:Rule {id:r.id}) ON CREATE SET x.text=r.text "
+         "WITH collect(x) AS rs "
+         "MATCH (c:Customer {id:$cid}) "
+         "CREATE (d:Decision {id:$did, customer_id:$cid, request:$req, verdict:$v, "
+         "reason:$reason, created:$created, fingerprint:$fp, rule_ids:$rids, "
+         "snapshot:$snap, open_debt:$debt, as_of:$as_of}) "
+         "CREATE (d)-[:ABOUT]->(c) "
+         "WITH d, rs UNWIND rs AS x CREATE (d)-[:APPLIED_RULE]->(x) WITH DISTINCT d")
+    params = {"rules": [{"id": rid, "text": text} for rid, text in RULES.items()],
+              "cid": customer_id, "did": did, "req": request_amount, "v": result["verdict"],
+              "reason": result["reason"],
+              "created": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+              "fp": fp, "rids": json.dumps(sorted(RULES)),
+              "snap": json.dumps(snap, sort_keys=True), "debt": result["open_debt"],
+              "as_of": as_of}
+    for n, (label, ids) in enumerate(by_label.items()):
+        q += (" UNWIND $ids%d AS eid%d MATCH (e%d:%s {id:eid%d}) "
+              "CREATE (d)-[:USED_EVIDENCE]->(e%d) WITH DISTINCT d" % (n, n, n, label, n, n))
+        params["ids%d" % n] = ids
+    graph.query(q + " RETURN d.id", params)
     return did
 
 
