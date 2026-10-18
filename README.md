@@ -99,6 +99,10 @@ What it found, on my real records:
 
 Honest limits. The matching is a rule, not a fact: nobody has confirmed these links with the customers. Rule 3 is a choice. I first made the matching stricter and refused to count money paid before a sale; the sealed test below showed that wrongly refused customers who had paid a deposit, so I changed it. Credit limits are assumed (N100,000, N300,000 or N500,000 depending on the customer's biggest sale). On a spread of questions across the 45 real accounts, Bashi's yes or no stays very close to the plain balance's, so on this shop the gain is the per-sale picture and the receipt, not a big change in answers. Where it does change answers is shown in the sealed test.
 
+## One shop, several buyers
+
+In a real shop, one person can collect the goods and another can pay for them. Checked person by person, the first looks like a debtor and the second looks overpaid, and a plain balance says NO. Bashi links each person to the shop (`(:Buyer)-[:BUYS_FOR]->(:Customer)`), each sale to who collected it (`COLLECTED`) and each payment to who paid it (`PAID`). The credit decision is still made for the shop, and a payment from any buyer can settle a sale another buyer collected. The receipt shows who collected and who paid, how many payments came from a different person, and the wrong answer a per-person check would have given. The example in the demo shop (`CUST-13`, "Buyer 1" and "Buyer 2") is invented. Buyer links are not part of the fingerprint, so older receipts still verify. Code: [buyers.py](buyers.py), tests: [tests/test_shop_buyers.py](tests/test_shop_buyers.py).
+
 ## Real vs invented
 
 The live site opens on my own shop view (graph `shop_own`). Every record is tagged real or invented, on the page and in the data.

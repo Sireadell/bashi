@@ -399,6 +399,23 @@ def build_receipt(shop, g, decision_id):
         out["shallow"] = shallow_vs_deep(g, state, ev, dec, out["trace_ok"])
     except Exception:
         out["shallow"] = None
+    out["exposure"] = []
+    try:
+        from buyers import read_exposure
+        out["exposure"] = read_exposure(g, dec["customer_id"])
+    except Exception:
+        out["exposure"] = []
+    out["buyers"] = None
+    try:
+        from buyers import buyer_view, read_buyers
+        out["buyers"] = buyer_view(read_buyers(g, dec["customer_id"]), state, dec["request"], ev["verdict"])
+    except Exception:
+        out["buyers"] = None
+    if out["buyers"]:
+        for t in out["trades"]:
+            t["buyer"] = out["buyers"]["names"].get(out["buyers"]["collected_by"].get(t["id"]))
+        for p in out["payments"]:
+            p["buyer"] = out["buyers"]["names"].get(out["buyers"]["paid_by"].get(p["id"]))
     out["inferred_count"] = len(state.get("inferred", {}))
     out["deposits"] = sum(state["settles"][k] for k, m in state.get("inferred", {}).items() if m == "deposit")
     out["unapplied"] = None

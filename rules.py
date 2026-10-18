@@ -184,7 +184,7 @@ def possible_phantoms(graph, state):
     # One round trip: whether payments are tied to customers, this customer's
     # unlinked payments, and (for older graphs) every unlinked payment.
     rows = graph.query(
-        "MATCH ()-[r:PAID]->() RETURN 'N' AS k, count(r) AS a, null AS b, null AS c "
+        "MATCH (:Customer)-[r:PAID]->() RETURN 'N' AS k, count(r) AS a, null AS b, null AS c "
         "UNION ALL "
         "MATCH (:Customer {id:$cid})-[:PAID]->(p:Payment) "
         "WHERE NOT (p)-[:SETTLES]->() AND NOT (p)-[:INFERRED_SETTLES]->() "
