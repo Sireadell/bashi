@@ -1,5 +1,7 @@
 # Five-minute path for judges
 
+**Bashi runs on a real shop's books:** my whole shop, names removed, 45 customers, 544 credit sales, 543 payments. Press "Open my real shop's books" on the home page.
+
 Live site: https://bashi-vrfv.onrender.com (no sign-up). The free host sleeps when idle, so the first visit can show a "waking up" screen for about 25 seconds.
 
 | Minutes | What to do | What you should see |

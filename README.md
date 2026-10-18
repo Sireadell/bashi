@@ -4,6 +4,8 @@ Judging? Start here: [JUDGES.md](JUDGES.md)
 
 # Bashi
 
+**Runs on a real shop's books.** My whole shop is loaded on the live site, names removed: 45 customers, 544 credit sales, 543 payments. Press "Open my real shop's books" on the home page.
+
 I built Bashi for small shops that sell on credit. When a customer asks to buy on credit, Bashi answers yes or no, and it hands back a receipt that links the exact records it used: which sales, which payments, which broken promise. The answer comes from a fixed rule check over a FalkorDB graph, not from a guess, so anyone can look at the receipt and see why.
 
 **Part of the demo data is real and part is invented.** The real part is my own shop: the 8 sales from my audit, and a separate view of my whole shop's records (45 customers, 544 sales, 543 payments), all with names removed. Everything else is invented. See "Real vs invented" below.

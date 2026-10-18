@@ -5,6 +5,14 @@
   <h1 class="lead">Should the shop sell on credit? Bashi answers yes or no, and shows the records behind it.</h1>
   <p class="sub">Every answer can be checked. Take away one record and see if the answer changes.</p>
   <p class="sub sub2">Built on FalkorDB, the graph database: every answer is a query over linked records.</p>
+  {% if shop.real_available %}
+  <div class="realbooks">
+    <p class="realbooks-head">Runs on a real shop's books.</p>
+    <p class="realbooks-body">My whole shop, names removed: 45 customers, 544 credit sales, 543 payments. Not a mock-up.</p>
+    {% if shop.real %}<p class="realbooks-body">You are looking at it now.</p>
+    {% else %}<form method="post" action="{{ url_for('choose_shop') }}"><input type="hidden" name="shop" value="real"><button class="btn" type="submit">Open my real shop's books</button></form>{% endif %}
+  </div>
+  {% endif %}
 </section>
 {% endif %}
 {% if result %}
