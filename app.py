@@ -749,5 +749,24 @@ def proof_route():
         return jsonify(error="proof check failed: " + type(e).__name__), 500
 
 
+# ---------------------------------------------------------------- phantom what-if
+# On a throwaway copy, link the unlinked payments to their sales and ask again.
+
+@app.route("/phantom-whatif/<decision_id>", methods=["POST"])
+def phantom_whatif_route(decision_id):
+    if too_many_writes():
+        return slow_down()
+    from phantom_whatif import phantom_whatif
+    key, g = graph_for_decision(decision_id)
+    try:
+        return jsonify(phantom_whatif(decision_id, GRAPH_OF[key]))
+    except LookupError:
+        return jsonify(error="unknown receipt"), 404
+    except ValueError as e:
+        return jsonify(error=str(e)), 400
+    except Exception as e:
+        return jsonify(error="what-if failed: " + type(e).__name__), 500
+
+
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=int(os.environ.get("PORT", "5000")), debug=False)
