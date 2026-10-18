@@ -58,6 +58,14 @@
 </section>
 {% endif %}
 
+{% if lookalike %}
+<section class="card" id="lookalike">
+  <h2>Customers most like this one</h2>
+  <p>FalkorDB vector search over a 5-number credit profile, no AI model: {% for l in lookalike %}<b>{{ l.id }}</b> (owes {{ l.owed|naira }}{% if l.answer %}, last answer {{ l.answer|replace('_', ' ') }}{% endif %}){{ ', ' if not loop.last else '.' }}{% endfor %}</p>
+  <p class="small">The five numbers are debt against limit, broken promises, unlinked payments, linked accounts and share of sales fully paid. This is for information only and never changes the answer above.</p>
+</section>
+{% endif %}
+
 {% if orphans %}
 <section class="card" id="phantom-whatif">
   <h2>What if the unlinked payments had been linked?</h2>
