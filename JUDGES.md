@@ -1,6 +1,6 @@
 # Five-minute path for judges
 
-**Judged track: Track 01, Agents That Act on Connected Data.** The graph work a balance check cannot do: it follows customer, sales, payments and promises. Wrongly approved on the 255 sealed cases: Bashi 0, balance check 53. Plus 30 locked family-network cases with chains up to 22 links: Bashi 30 of 30; checking the asking account alone wrongly approves 11, and an AI given the same records without the graph gets 19 of 30, mostly by refusing customers who should get credit (`sealed/RESULTS_LLM_FAMILY.md`) (`sealed/RESULTS_FAMILY.md`, `sealed/RESULTS_FAMILY_G.md`).
+**Judged track: Track 01, Agents That Act on Connected Data.** The graph work a balance check cannot do: it follows customer, sales, payments and promises. Wrongly approved on the 255 sealed cases: Bashi 0, balance check 53. Plus 30 locked family-network cases with chains up to 22 links, two of them testing the 20-link limit: Bashi 30 of 30; checking the asking account alone wrongly approves 11, and an AI given the same records without the graph gets 19 of 30, mostly by refusing customers who should get credit (`sealed/RESULTS_LLM_FAMILY.md`) (`sealed/RESULTS_FAMILY.md`, `sealed/RESULTS_FAMILY_G.md`).
 
 The practice shop (invented) also has an older broken-promise case, Tunde (customer C001): pick it in the shop list and the button reads "Try the Tunde demo". It is optional.
 
@@ -22,7 +22,7 @@ Live site: https://bashi-vrfv.onrender.com (no sign-up). The free host sleeps wh
 
 Checking CUST-17 alone, 1 link: YES, owes N0. Walking 7 links: NO, 5 linked accounts owe N100,000.
 
-The sealed tests: 55 cases, then 200 new ones whose answers were locked before running (`python sealed/run_sealed.py b`). Bashi never wrongly approves; a plain balance check wrongly approves 53. The 30 family-network cases (sets F and G, chains up to 22 links) are locked the same way: Bashi 30 of 30. See README, "Sealed test".
+The sealed tests: 55 cases, then 200 new ones whose answers were locked before running (`python sealed/run_sealed.py b`). Bashi never wrongly approves; a plain balance check wrongly approves 53. The 30 family-network cases (sets F and G, chains up to 22 links, two of them testing the 20-link limit) are locked the same way: Bashi 30 of 30. See README, "Sealed test".
 
 ## What is real and what is not
 
