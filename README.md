@@ -10,7 +10,7 @@ More for judges: [JUDGES.md](JUDGES.md)
 
 ![Drawn example with invented data: CUST-17 owes N0, but 7 links away 5 linked accounts owe N100,000, so the answer is NO](static/family-network.png)
 
-*Invented example, drawn for this README. Check CUST-17 alone and it owes N0, so the answer is YES. Walk 7 links through the people behind it and 5 linked accounts owe N100,000, so Bashi says NO. Press "See the family network (7 links)" on the live site to run it.*
+*Invented example, drawn for this README. Check CUST-17 alone and it owes N0, so the answer is YES. Walk 7 links through the people behind it and 5 linked accounts owe N100,000, so Bashi says NO. Press "See the family network (7 links)" on the live site to run it (about 8 seconds).*
 
 **My shop's ledger said customers owed N388,340 they had already paid.** In my audit of 17 July 2026, 8 credit sales were marked paid while the customer's ledger still showed the debt. Each screen looked right on its own, so nobody saw it. Bashi follows each sale to its payments in a graph, flags the gap, answers yes or no on credit, and gives a receipt anyone can check. Press "See the real audit case" on the live site to see those 8 sales.
 
@@ -66,7 +66,7 @@ Track descriptions and focus areas are quoted from the [hackathon track page](ht
 | "Multi-hop reasoning" | The answer walks customer, to sales, to payments, to promises in one query (`rules.py`, `read_state`). | Live site, "See the real audit case", read the receipt |
 | Multi-hop reasoning (family walk) | The family network rule walks up to 20 links from the asking account in one Cypher variable-length query. | Ask CUST-17 for N40,000 in the own shop view: NO, 7 links deep |
 | "Graph queries and algorithms as agent tools" | The agent calls the graph through named tools that run Cypher, and the what-if tool copies the graph with `GRAPH.COPY`. | `whatif.py`, or the five tools listed at `/mcp` |
-| "Graph queries and algorithms as agent tools" (algorithms) | FalkorDB's own algorithms run on the receipt: `algo.WCC` finds the linked group and `algo.SPpaths` finds the shortest link chain to the largest linked debt, and `algo.betweenness` names the key go-between. | `linked_group.py`, `linked_chain.py`, `go_between.py` |
+| "Graph queries and algorithms as agent tools" (algorithms) | FalkorDB's own algorithms run on the receipt: `algo.WCC` finds the linked group and `algo.SPpaths` finds the shortest link chain to the largest linked debt, and `algo.betweenness` names the key go-between. These explain the answer to a person; the yes or no itself comes from the 7-link walk in `rules.py`. | `linked_group.py`, `linked_chain.py`, `go_between.py` |
 | "Tool selection through MCP" | Five tools (`decide_credit`, `get_receipt`, `verify_decision`, `what_if_remove_evidence`, `list_customers`) at `/mcp`, and a one-click Claude Desktop extension. | The 30-second `curl` near the top, or [extension/INSTALL.md](extension/INSTALL.md) |
 | "Actions based on what the graph shows" | The yes or no comes from what the graph holds, and the decision is saved back as a Decision node linked to every record it read. | Live site, "Try the demo" asks N90,000 for CUST-02 and gets NO because of an unlinked payment |
 | "Vector search" (extra) | Each customer has a 5-number credit profile stored as a FalkorDB vector, and the receipt's "Customers most like this one" block finds the three nearest with FalkorDB's vector index. | `lookalike.py` |
