@@ -25,7 +25,7 @@ More for judges: [JUDGES.md](JUDGES.md)
 | Claude Desktop | One-click extension: [extension/Bashi.mcpb](extension/Bashi.mcpb), steps in [extension/INSTALL.md](extension/INSTALL.md). |
 | Web API | `/api/decide`, `/api/receipt`, `/api/verify`, `/api/whatif`, `/api/customers`. See [AGENTS.md](AGENTS.md). |
 | Guides an AI can read | `/llms.txt` and `/AGENTS.md` on the live site. |
-| Your own shop | Three CSV files (customers, sales, payments), loaded into your own FalkorDB from the command line. It never writes to the public demo. See "Use it on your own shop" below. |
+| Your own shop | Three CSV files, or three published Google Sheet tabs, loaded into your own FalkorDB from the command line. It never writes to the public demo. See "Use it on your own shop" below. |
 
 ## Judge in 60 seconds
 
@@ -419,6 +419,25 @@ python verify.py --graph my_shop
 
 It loads into YOUR own FalkorDB, using the settings in your `.env`. It never writes to the public demo, and it refuses the graph names `shop_a`, `shop_own` and `shop_real`. The graph name must be new unless you add `--replace`. Every row is checked first: if any row is bad, it lists each problem with its row number and writes nothing. A payment with no `sale_id` is matched to that customer's sales by the same rule the real shop view uses, and shown as inferred. The decision is still the same two fixed rules (debt over the limit, or a broken promise), with a receipt you can re-check.
 
+### Or load it from a Google Sheet
+
+Keep your records in a Google Sheet with one tab each for customers, sales and payments (promises is optional), using the same column names as the CSV files above. For each tab: File, Share, **Publish to web**, pick that tab, choose **Comma-separated values (.csv)**, Publish, and copy the link. The sheet must be published to the web, because Bashi fetches the links without signing in. Anyone with those links can read the published tabs, so publish only data you are happy to share, and unpublish afterwards.
+
+Example layout (invented, column names only; the sample files in `examples/my_shop_csv` show the values):
+
+| Tab | Columns |
+|---|---|
+| customers | `id`, `name`, `credit_limit` |
+| sales | `id`, `customer_id`, `amount`, `date`, `item` |
+| payments | `id`, `customer_id`, `amount`, `date`, `sale_id` (empty if unknown) |
+| promises (optional) | `id`, `customer_id`, `amount`, `date`, `due`, `kept` |
+
+```powershell
+python import_csv.py --graph my_shop --sheet-customers "LINK1" --sheet-sales "LINK2" --sheet-payments "LINK3"
+```
+
+It fetches the tabs and loads them with the same checks and the same loader as the CSV path, into your own FalkorDB and your own graph name (never the public demo graphs). Only `https://docs.google.com/spreadsheets/...` links are accepted; a link to any other host, including look-alikes such as `docs.google.com.example.com`, is refused before anything is fetched, redirects are followed only inside docs.google.com, each tab is limited to 2 MB and 15 seconds. Code: [sheets.py](sheets.py), tests: [tests/test_sheets.py](tests/test_sheets.py) (Google is never called in the tests; I have not run it against a live Google Sheet).
+
 ## Sealed test
 
 The scorecard below is small and runs on invented data, so I added a harder exam. I wrote 55 shop-credit cases built around the situations Bashi exists for: payments never tied to a sale, broken promises, deposits paid before a sale, sales with no amount, and one customer's payment that must not clear another customer's sale. Each case has the correct answer, worked out by plain arithmetic from the story of the case (not by Bashi's code). I locked the answers by hashing them and pushed the hash (commit `977f5bd`, [sealed/KEY_HASH.txt](sealed/KEY_HASH.txt)) before running anything on them. Re-run it with `python sealed/run_sealed.py`; it refuses to run if a single answer changed. Full reports: [sealed/RESULTS.md](sealed/RESULTS.md) (after the fix) and [sealed/RESULTS_run1.md](sealed/RESULTS_run1.md) (before it).
@@ -473,7 +492,7 @@ The scorecard runs on the invented practice shop, and only 3 of 40 differ, so th
 python -m pytest
 ```
 
-There are 270 tests (dates and counts of full runs in [TESTS.md](TESTS.md)). The full run takes about 25 minutes because it talks to a hosted database. The tests run against a copy of the graph and delete it afterwards.
+There are 296 tests (dates and counts of full runs in [TESTS.md](TESTS.md)). The full run takes about 25 minutes because it talks to a hosted database. The tests run against a copy of the graph and delete it afterwards.
 
 ## AI tools used
 
