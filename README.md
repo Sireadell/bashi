@@ -4,6 +4,8 @@ More for judges: [JUDGES.md](JUDGES.md)
 
 # Bashi
 
+**My shop's ledger said customers owed N388,340 they had already paid.** In my audit of 17 July 2026, 8 credit sales were marked paid while the customer's ledger still showed the debt. Each screen looked right on its own, so nobody saw it. Bashi follows each sale to its payments in a graph, flags the gap, answers yes or no on credit, and gives a receipt anyone can check. Press "See the real audit case" on the live site to see those 8 sales.
+
 **Entered in Track 01, Agents That Act on Connected Data. This is the one track I want judged.**
 
 **What the graph does here that a balance check cannot.** A balance check adds up what a customer owes and stops. It cannot see that a payment cleared a particular sale, or that the same customer broke a promise to pay. Bashi walks those links in FalkorDB: customer, to sales, to payments, to promises. On 255 test cases whose answers I locked before running anything (55, then 200 new), Bashi wrongly approved 0 and a balance check wrongly approved 53 (14 of the first 55, 39 of the next 200). The files are `sealed/RESULTS.md` and `sealed/RESULTS_B.md`. I wrote those cases myself, so it shows the situations Bashi was built for, not accuracy on every shop. Take FalkorDB away and Bashi answers nothing.
