@@ -1,0 +1,17 @@
+name: fast-tests
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  fast:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Fast tests (no database, no keys)
+        run: python -m pytest tests/test_fast_rules.py tests/test_demo_cache.py -q
