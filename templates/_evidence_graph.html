@@ -1,0 +1,96 @@
+{# A small picture of the evidence behind this decision, drawn from the same data as the tables below. Plain SVG, no library. #}
+{% set MAX = 8 %}
+{% set shown_trades = trades[:MAX] %}
+{% set shown_promises = promises[:MAX] %}
+{% set orphan_ids = orphans|map(attribute='payment')|list %}
+{% set tix = {} %}
+{% for t in shown_trades %}{% set _ = tix.update({t.id: loop.index0}) %}{% endfor %}
+
+{# One row per payment: linked ones first (ordered by the sale they settle), then the unlinked ones. #}
+{% set prow = [] %}
+{% for p in payments if p.id not in orphan_ids %}
+  {% set first = {'k': 98} %}
+  {% for t in shown_trades %}{% for q in t.pays if q.id == p.id and first.k == 98 %}{% set _ = first.update({'k': loop.index0 + tix[t.id] * 10}) %}{% endfor %}{% endfor %}
+  {% set _ = prow.append({'id': p.id, 'date': p.date, 'amount': p.amount, 'k': first.k, 'orphan': false}) %}
+{% endfor %}
+{% for o in orphans %}
+  {% set _ = prow.append({'id': o.payment, 'date': o.date, 'amount': o.amount, 'k': 500 + loop.index0, 'orphan': true, 'trade': o.trade}) %}
+{% endfor %}
+{% set prow = prow|sort(attribute='k') %}
+{% set shown_pay = prow[:MAX] %}
+{% set pix = {} %}
+{% for p in shown_pay %}{% set _ = pix.update({p.id: loop.index0}) %}{% endfor %}
+
+{% set rows = [shown_trades|length, shown_pay|length, shown_promises|length, 1]|max %}
+{% set Y0 = 160 %}
+{% set STEP = 54 %}
+{% set H = Y0 + rows * STEP + 2 %}
+{% set hidden = (trades|length - shown_trades|length) + (promises|length - shown_promises|length) + (prow|length - shown_pay|length) %}
+{% set has_rule = [] %}
+{% for t in shown_trades %}{% for q in t.pays if q.method %}{% set _ = has_rule.append(1) %}{% endfor %}{% endfor %}
+{% set has_broken = [] %}
+{% for p in shown_promises if p.broke %}{% set _ = has_broken.append(1) %}{% endfor %}
+
+{% macro node(cx, y, w, l1, l2, cls, tip, href='', cut=10) %}
+  {% if href %}<a class="eg-node {{ cls }}" href="{{ href }}" aria-label="{{ tip }}">{% else %}<g class="eg-node {{ cls }}">{% endif %}
+    <title>{{ tip }}</title>
+    <rect x="{{ cx - w // 2 }}" y="{{ y }}" width="{{ w }}" height="40" rx="3"/>
+    <text class="eg-id" x="{{ cx }}" y="{{ y + 17 }}">{{ l1|truncate(cut, True, '…', 0) }}</text>
+    <text class="eg-sub" x="{{ cx }}" y="{{ y + 32 }}">{{ l2 }}</text>
+  {% if href %}</a>{% else %}</g>{% endif %}
+{% endmacro %}
+
+<section class="card eg" id="evidence-graph">
+  <link rel="stylesheet" href="{{ url_for('static', filename='evidence_graph.css') }}">
+  <h2>The evidence as a graph</h2>
+  <p class="small">The decision, the customer and every record the answer used. Tap a record to open it.</p>
+  <svg class="eg-svg" viewBox="0 0 360 {{ H }}" role="img" aria-labelledby="eg-title eg-desc" preserveAspectRatio="xMidYMin meet">
+    <title id="eg-title">Evidence graph for decision {{ dec.id }}</title>
+    <desc id="eg-desc">Decision {{ dec.id }} for customer {{ dec.customer_name }}, with {{ trades|length }} credit sale{{ '' if trades|length == 1 else 's' }}, {{ payments|length + orphans|length }} payment{{ '' if payments|length + orphans|length == 1 else 's' }} and {{ promises|length }} promise{{ '' if promises|length == 1 else 's' }}.{% if orphans %} {{ orphans|length }} payment{{ '' if orphans|length == 1 else 's' }} flagged as possible phantom debt.{% endif %}</desc>
+
+    {# lines first, so the boxes sit on top #}
+    <line class="eg-edge" x1="180" y1="54" x2="180" y2="78"/>
+    {% if shown_trades %}<line class="eg-edge" x1="180" y1="118" x2="180" y2="{{ Y0 + (shown_trades|length - 1) * STEP + 20 }}"/>{% endif %}
+    {% if shown_promises %}<polyline class="eg-edge" points="250,98 314,98 314,{{ Y0 + (shown_promises|length - 1) * STEP + 20 }}"/>{% endif %}
+
+    {% for t in shown_trades %}{% for q in t.pays if q.id in pix %}
+      {% set py = Y0 + pix[q.id] * STEP + 20 %}{% set ty = Y0 + tix[t.id] * STEP + 20 %}
+      <line class="eg-edge settles" x1="90" y1="{{ py }}" x2="138" y2="{{ ty }}"/>
+      <text class="eg-lbl" x="{{ 90 + (138 - 90) * 0.45 }}" y="{{ py + (ty - py) * 0.45 - 4 }}">{{ '{:,}'.format(q.amount) }}{{ '*' if q.method else '' }}</text>
+    {% endfor %}{% endfor %}
+    {% for p in shown_pay if p.orphan and p.trade in tix %}
+      {% set py = Y0 + pix[p.id] * STEP + 20 %}{% set ty = Y0 + tix[p.trade] * STEP + 20 %}
+      <line class="eg-edge orphan" x1="90" y1="{{ py }}" x2="138" y2="{{ ty }}"/>
+      <text class="eg-lbl orphan" x="{{ 90 + (138 - 90) * 0.45 }}" y="{{ py + (ty - py) * 0.45 - 4 }}">{{ '{:,}'.format(p.amount) }}</text>
+    {% endfor %}
+
+    {# decision and customer #}
+    {{ node(180, 10, 170, 'Decision ' ~ dec.id, dec.verdict ~ ', asked ' ~ '{:,}'.format(dec.request), 'decision ' ~ ('no' if dec.verdict == 'NO' else 'yes'), 'Decision ' ~ dec.id ~ ': ' ~ dec.verdict, '', 22) }}
+    {{ node(180, 78, 150, dec.customer_name or dec.customer_id, 'customer ' ~ dec.customer_id, 'customer', 'Customer ' ~ dec.customer_id, '', 18) }}
+
+    <text class="eg-head" x="49" y="{{ Y0 - 12 }}">PAYMENTS</text>
+    <text class="eg-head" x="180" y="{{ Y0 - 12 }}">CREDIT SALES</text>
+    <text class="eg-head" x="314" y="{{ Y0 - 12 }}">PROMISES</text>
+
+    {% for p in shown_pay %}
+      {% if p.orphan %}
+        {{ node(49, Y0 + loop.index0 * STEP, 82, p.id, 'unlinked', 'payment orphan', 'Payment ' ~ p.id ~ ', ' ~ p.amount|naira ~ ' on ' ~ p.date ~ ', not linked to any sale: possible phantom debt', url_for('record', label='Payment', rid=p.id, d=dec.id)) }}
+      {% else %}
+        {{ node(49, Y0 + loop.index0 * STEP, 82, p.id, p.date, 'payment', 'Payment ' ~ p.id ~ ', ' ~ p.amount|naira ~ ' on ' ~ p.date, url_for('record', label='Payment', rid=p.id, d=dec.id)) }}
+      {% endif %}
+    {% endfor %}
+    {% for t in shown_trades %}
+      {{ node(180, Y0 + loop.index0 * STEP, 84, t.id, ('owes ' ~ '{:,}'.format(t.open)) if t.open > 0 else 'paid up', 'trade', 'Credit sale ' ~ t.id ~ ', ' ~ t.amount|naira ~ ' on ' ~ t.date ~ ', still owed ' ~ t.open|naira, url_for('record', label='Trade', rid=t.id, d=dec.id)) }}
+    {% endfor %}
+    {% for p in shown_promises %}
+      {{ node(314, Y0 + loop.index0 * STEP, 80, p.id, 'BROKEN' if p.broke else ('kept' if p.kept else 'not due yet'), 'promise broken' if p.broke else 'promise', 'Promise ' ~ p.id ~ ', ' ~ p.amount|naira ~ ' due ' ~ p.due ~ (', broken' if p.broke else ', kept' if p.kept else ', not due yet'), url_for('record', label='Promise', rid=p.id, d=dec.id)) }}
+    {% endfor %}
+  </svg>
+  <ul class="eg-key small">
+    <li>Numbers on the lines are the amount of that payment applied to that sale.</li>
+    {% if has_rule %}<li>* matched by rule, not confirmed by a person.</li>{% endif %}
+    {% if has_broken %}<li>A promise marked BROKEN has a red border.</li>{% endif %}
+    {% if orphans %}<li>A dashed box and dashed line mean a payment of the same amount as an unpaid sale was never linked to it: a possible phantom debt. Flagged, not changed.</li>{% endif %}
+    {% if hidden > 0 %}<li>{{ hidden }} more record{{ '' if hidden == 1 else 's' }} not drawn here. They are all in the tables below.</li>{% endif %}
+  </ul>
+</section>

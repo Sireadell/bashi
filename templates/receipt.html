@@ -16,6 +16,7 @@
 
 {% if hint %}<p class="hint">Try it: press "What if this evidence did not exist" next to <b class="mono">{{ hint }}</b> below and watch the answer change.</p>{% endif %}
 <section id="whatif-panel" class="whatif" hidden aria-live="polite"></section>
+{% include "_evidence_graph.html" %}
 
 <section class="card">
   <h2>Does this receipt still check out?</h2>
