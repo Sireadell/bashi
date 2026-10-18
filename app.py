@@ -455,10 +455,13 @@ def demo():
         g = get_graph(DEFAULT_GRAPH)
         res = decide("C001", 45000, graph=g)
         hint = "PR001"
-    try:
-        prune_decisions(g)
-    except Exception:
-        pass
+    def prune():
+        try:
+            prune_decisions(g)
+        except Exception:
+            pass
+    # Trimming old decisions is housekeeping: do it after the visitor has their answer.
+    threading.Thread(target=prune, daemon=True).start()
     if not res.get("decision_id"):
         return render_template("gone.html", decision_id=None), 503
     return redirect(url_for("receipt", decision_id=res["decision_id"], **{"try": hint}))

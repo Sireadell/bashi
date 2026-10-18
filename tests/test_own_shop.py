@@ -113,7 +113,8 @@ def test_seed_loads_and_every_real_trade_raises_the_phantom_flag():
 def test_seed_demo_and_real_cases():
     g = load_temp(SEED)
     case = own_shop.find_demo_case(g, only_source=I)
-    assert case == {"customer": "CUST-01", "amount": 45000, "remove": "PR001", "kind": "promise"}
+    assert case == {"customer": "CUST-02", "amount": 90000, "remove": "TI-005", "kind": "sale",
+                    "payment": "PY-005"}
     assert own_shop.find_real_case(g) == {"customer": "CUST-B", "amount": 10000}
 
 

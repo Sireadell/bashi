@@ -165,8 +165,9 @@ def find_demo_case(graph, only_source=None):
     Reads the graph at run time, so it adapts to whatever data was loaded.
     only_source limits the search to customers with that source tag (the invented ones for
     the demo button). Returns {"customer", "amount", "remove", "kind"}, or None."""
-    from rules import evaluate, mark_overdue_promises, read_state
+    from rules import evaluate, mark_overdue_promises, possible_phantoms, read_state
     mark_overdue_promises(graph)
+    phantoms = {}
     ids = [r[0] for r in graph.query(
         "MATCH (c:Customer) WHERE $s IS NULL OR c.source = $s RETURN c.id ORDER BY c.id",
         {"s": only_source}).result_set]
@@ -184,9 +185,19 @@ def find_demo_case(graph, only_source=None):
             for rank, kind, rid in removals:
                 if evaluate(_without(state, rid), amount)["verdict"] != "YES":
                     continue
+                case = {"customer": cid, "amount": amount, "remove": rid, "kind": kind}
+                if kind == "sale":
+                    # A sale that an unlinked payment of the same size probably paid: the NO
+                    # rests on a payment nobody linked, a case one step deeper than a broken promise.
+                    if cid not in phantoms:
+                        phantoms[cid] = {p["trade"]: p["payment"]
+                                         for p in possible_phantoms(graph, state)}
+                    if rid in phantoms[cid]:
+                        rank = -1
+                        case["payment"] = phantoms[cid][rid]
                 key = (rank, size, cid, DEMO_AMOUNTS.index(amount))
                 if best is None or key < best[0]:
-                    best = (key, {"customer": cid, "amount": amount, "remove": rid, "kind": kind})
+                    best = (key, case)
                 break
             else:
                 continue
