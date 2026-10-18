@@ -170,7 +170,7 @@ The practice seed (`seed.py`) builds 25 customers and 120 credit sales, 30 of th
 
 ## Key Cypher queries
 
-These are copied from the code. In plain words, "open debt" is all of a customer's sales minus the payment amounts linked to them.
+All 132 queries in the app, each with what it does and whether it reads or writes, are listed in [CYPHER.md](CYPHER.md) (made by `python list_cypher.py`). The key ones are below, copied from the code. In plain words, "open debt" is all of a customer's sales minus the payment amounts linked to them.
 
 **1. Open debt walk** (`rules.py`, `read_state`). One round trip gets the customer, their sales with the payments settling each (if any), their promises and their broken promises. The code then adds it up: open debt = sum of sale amounts minus sum of `SETTLES.amount` (`evaluate`, same file). The sales-and-payments part:
 
