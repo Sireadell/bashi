@@ -8,6 +8,10 @@ More for judges: [JUDGES.md](JUDGES.md)
 
 *The real audit case on the live site: the same customer, NO with the 3 payments unlinked and YES once they are linked on a copy. The real data is never changed.* On the 70 sealed cases that depend on those links (unlinked payment, money paid before the sale, split payments, someone else paying), an AI with the same records but no graph got 46 right and Bashi got 70 (`sealed/RESULTS_LLM.md`).
 
+![Drawn example with invented data: CUST-17 owes N0, but 7 links away 5 linked accounts owe N100,000, so the answer is NO](static/family-network.png)
+
+*Invented example, drawn for this README (not a screenshot of the site): alone this customer owes N0, but 7 links away 5 linked accounts owe N100,000, so Bashi says NO.*
+
 **My shop's ledger said customers owed N388,340 they had already paid.** In my audit of 17 July 2026, 8 credit sales were marked paid while the customer's ledger still showed the debt. Each screen looked right on its own, so nobody saw it. Bashi follows each sale to its payments in a graph, flags the gap, answers yes or no on credit, and gives a receipt anyone can check. Press "See the real audit case" on the live site to see those 8 sales.
 
 **Entered in Track 01, Agents That Act on Connected Data. This is the one track I want judged.**

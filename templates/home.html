@@ -25,6 +25,7 @@
   </dl>
   <div class="actions">
     {% if shop.own %}<form method="post" action="{{ url_for('demo_real') }}" onsubmit="busy(this)"><button class="btn" type="submit">See the real audit case</button></form>{% endif %}
+    {% if shop.own %}<form method="post" action="{{ url_for('home') }}" onsubmit="busy(this)"><input type="hidden" name="customer" value="CUST-17"><input type="hidden" name="amount" value="40000"><button class="btn alt" type="submit">See the family network (7 links)</button></form>{% endif %}
     {% if shop.real %}<form method="post" action="{{ url_for('demo_real') }}" onsubmit="busy(this)"><button class="btn" type="submit">See the account with the most money paid before the sale</button></form>{% else %}
     <form method="post" action="{{ url_for('demo') }}" onsubmit="busy(this)"><button class="btn {{ 'alt' if shop.own else '' }}" type="submit">{{ 'Try the demo' if shop.own else 'Try the Tunde demo' }}</button></form>{% endif %}
   </div>
