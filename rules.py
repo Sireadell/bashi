@@ -12,7 +12,11 @@ from datetime import date, datetime, timezone
 RULES = {
     "R_LIMIT": "Say NO if open debt plus the new request is above the credit limit.",
     "R_BROKEN_PROMISE": "Say NO if the customer has any broken promise to pay.",
+    "R_FAMILY": ("When people link this account to others (its owner, the people who collect or pay "
+                 "for it, their family), say NO if the open debt across every linked account plus the "
+                 "new request is above this customer's credit limit."),
 }
+MAX_HOPS = 20
 
 COUNTERS = {"decision": ("Decision", "D", 4), "promise": ("Promise", "PR", 3)}
 MAX_DECISIONS = 300
@@ -31,7 +35,71 @@ def _is_money(v):
 
 # ---------------------------------------------------------------- reading
 
-def read_state(graph, customer_id, as_of=None):
+# The family network walk: from the account, follow owner, buyer and family links, up to
+# MAX_HOPS links, to every other account reached. Each account is kept once, with its shortest
+# path, its sales total and what was paid on them. A family link is two steps in the graph (person,
+# family link, person) but one link in words, so the graph walk may go twice as far and any account
+# more than MAX_HOPS links away is dropped afterwards.
+NETWORK_QUERY = (
+    "MATCH p=(c:Customer {id:$cid})-[:OWNS|BUYS_FOR|FAMILY*1..%d]-(o:Customer) WHERE o.id <> $cid "
+    "WITH o, p ORDER BY length(p) WITH o, collect(p)[0] AS p "
+    "WITH o, [n IN nodes(p) | n.id] AS ids, [n IN nodes(p) | labels(n)[0]] AS labs, "
+    "[n IN nodes(p) | coalesce(n.name, n.id)] AS names, "
+    "[r IN relationships(p) | coalesce(r.role, type(r))] AS rels "
+    "OPTIONAL MATCH (o)-[:MADE]->(t:Trade) "
+    "WITH o, ids, labs, names, rels, sum(t.amount) AS made, count(t) - count(t.amount) AS bad "
+    "OPTIONAL MATCH (o)-[:MADE]->(:Trade)<-[s:SETTLES|INFERRED_SETTLES]-(:Payment) "
+    "RETURN o.id, made, sum(s.amount), bad, ids, labs, names, rels" % (2 * MAX_HOPS))
+
+
+def _steps(ids, labs, names, rels):
+    """The path in plain words, one line per link. A family link counts as one step."""
+    out, i = [], 0
+    while i < len(rels):
+        a, b, rel = i, i + 1, rels[i]
+        link = None
+        if labs[b] == "Family":
+            link, b, rel = ids[b], i + 2, "family"
+        if rel == "family":
+            text = "%s is family of %s" % (names[a], names[b])
+        elif rel == "OWNS":
+            text = ("%s owns %s" % (names[a], names[b]) if labs[a] == "Buyer"
+                    else "%s is owned by %s" % (names[a], names[b]))
+        else:
+            verb = "buys for" if rel == "BUYS_FOR" else rel
+            text = ("%s %s %s" % (names[a], verb, names[b]) if labs[a] == "Buyer"
+                    else "%s %s %s" % (names[b], verb, names[a]))
+        out.append({"from": ids[a], "to": ids[b], "from_name": names[a], "to_name": names[b],
+                    "text": text, "link": link})
+        i = b
+    return out
+
+
+def _whole(v):
+    return int(v) if isinstance(v, float) and v.is_integer() else v
+
+
+def read_network(graph, customer_id):
+    """Every other account linked to this one through people. ({}, {}) when there is none.
+
+    network = {account: {debt, hops, via, steps}}, family = {link id: {}} for the
+    family links on those paths (they become evidence)."""
+    rows = graph.query(NETWORK_QUERY, {"cid": customer_id}).result_set
+    network, family = {}, {}
+    for acct, made, paid, bad, ids, labs, names, rels in rows:
+        steps = _steps(ids, labs, names, rels)
+        if len(steps) > MAX_HOPS:
+            continue
+        made, paid = _whole(made or 0), _whole(paid or 0)    # sum() comes back as a decimal
+        debt = None if bad or not _is_money(made) or not _is_money(paid) else made - paid
+        network[acct] = {"debt": debt, "hops": len(steps), "via": ">".join(ids), "steps": steps}
+        for i, lab in zip(ids, labs):
+            if lab == "Family":
+                family[i] = {}
+    return network, family
+
+
+def read_state(graph, customer_id, as_of=None, network=True):
     """Read everything the rule needs. Returns None if the customer is missing.
 
     as_of (an ISO date) hides broken-promise links that were only added after
@@ -67,7 +135,11 @@ def read_state(graph, customer_id, as_of=None):
         "UNION ALL "
         "MATCH (c:Customer {id:$cid})-[b:BROKE]->(pr:Promise) "
         "RETURN 'B' AS k, pr.id AS a, pr.amount AS b, pr.due AS c, pr.kept AS d, "
-        "b.since AS e, null AS f, null AS g, null AS h", p
+        "b.since AS e, null AS f, null AS g, null AS h "
+        "UNION ALL "
+        "MATCH (c:Customer {id:$cid}) OPTIONAL MATCH (c)<-[:OWNS|BUYS_FOR]-(x:Buyer) "
+        "RETURN 'L' AS k, count(x) AS a, null AS b, null AS c, null AS d, "
+        "null AS e, null AS f, null AS g, null AS h", p
     ).result_set
     cust = [r for r in rows if r[0] == "C"]
     if not cust:
@@ -103,6 +175,12 @@ def read_state(graph, customer_id, as_of=None):
         rec = state["promises"].setdefault(
             prid, {"amount": amt, "due": due, "kept": kept, "broke": True})
         rec["broke"] = True
+    # People link this account to others: walk the family network (one more round trip,
+    # only for accounts that have such links, so every other account reads as before).
+    if network and any(r[0] == "L" and r[1] for r in rows):
+        net, fam = read_network(graph, customer_id)
+        if net:
+            state["network"], state["family"] = net, fam
     return state
 
 
@@ -139,6 +217,12 @@ def evaluate(state, request_amount):
     open_debt = total - sum(state["settles"].values())
     broken = sorted(k for k, v in state["promises"].items() if v["broke"])
     over = open_debt + request_amount > limit
+    net = state.get("network") or {}
+    for acct in sorted(net):
+        if not _is_money(net[acct]["debt"]):
+            return _untraceable("account %s in the family network has a sale with no valid amount" % acct)
+    network_debt = open_debt + sum(v["debt"] for v in net.values()) if net else None
+    over_net = bool(net) and network_debt + request_amount > limit
     reasons = []
     if over:
         reasons.append(
@@ -147,6 +231,12 @@ def evaluate(state, request_amount):
                naira(open_debt + request_amount), naira(limit)))
     if broken:
         reasons.append("broken promise%s: %s" % ("s" if len(broken) > 1 else "", ", ".join(broken)))
+    if over_net:
+        reasons.append(
+            "family network rule: this account and %d linked account%s owe %s in total, "
+            "plus request %s is %s, above the limit %s"
+            % (len(net), "" if len(net) == 1 else "s", naira(network_debt), naira(request_amount),
+               naira(network_debt + request_amount), naira(limit)))
     if reasons:
         verdict, reason = "NO", "; ".join(reasons)
     else:
@@ -155,10 +245,16 @@ def evaluate(state, request_amount):
                   "and no broken promises"
                   % (naira(open_debt), naira(request_amount),
                      naira(open_debt + request_amount), naira(limit)))
+        if net:
+            reason += ("; this account and %d linked account%s owe %s in total, plus the request "
+                       "is %s, within the limit" % (len(net), "" if len(net) == 1 else "s",
+                                                    naira(network_debt), naira(network_debt + request_amount)))
     return {
         "verdict": verdict, "reason": reason, "open_debt": open_debt,
         "limit": limit, "broken_promises": broken,
-        "rules_failed": (["R_LIMIT"] if over else []) + (["R_BROKEN_PROMISE"] if broken else []),
+        "rules_failed": ((["R_LIMIT"] if over else []) + (["R_BROKEN_PROMISE"] if broken else [])
+                         + (["R_FAMILY"] if over_net else [])),
+        "network_debt": network_debt,
     }
 
 
@@ -212,6 +308,7 @@ def evidence_list(state):
     out = [{"label": "Trade", "id": i} for i in sorted(state["trades"])]
     out += [{"label": "Payment", "id": i} for i in sorted(state["payments"])]
     out += [{"label": "Promise", "id": i} for i in sorted(state["promises"])]
+    out += [{"label": "Family", "id": i} for i in sorted(state.get("family", {}))]
     return out
 
 
@@ -229,6 +326,12 @@ def snapshot_of(state):
         if k in state.get("inferred", {}):
             rec["inferred"] = state["inferred"][k]    # tampering with the method is caught too
         snap["Settles:" + k] = rec
+    # The family network: every account reached, what it owed and the path to it, so a change
+    # anywhere along the way makes the check fail. Graphs without people links add nothing.
+    for acct, v in state.get("network", {}).items():
+        snap["Network:" + acct] = {"debt": v["debt"], "hops": v["hops"], "via": v["via"]}
+    for i in state.get("family", {}):
+        snap["Family:" + i] = {}
     return snap
 
 
@@ -356,6 +459,9 @@ def decide(customer_id, request_amount, graph=None, save=True, today=None, as_of
         "broken_promises": result["broken_promises"],
         "evidence": evidence_list(state), "decision_id": None, "fingerprint": None,
         "possible_phantoms": [],
+        "network": {a: {"debt": v["debt"], "hops": v["hops"], "steps": v["steps"]}
+                    for a, v in state.get("network", {}).items()},
+        "network_debt": result.get("network_debt"),
     }
     if result["verdict"] == CANNOT_TRACE:
         return out  # never saved, never given a number

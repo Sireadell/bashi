@@ -91,7 +91,49 @@ def read_exposure(graph, customer_id):
         "RETURN b.name AS who, o.id AS acct, count(t) AS n", {"cid": customer_id}).result_set
     out = []
     for who, acct, n in sorted(rows, key=lambda r: (r[1], r[0])):
-        st = read_state(graph, acct)
+        st = read_state(graph, acct, network=False)
         debt = evaluate(st, 1)["open_debt"] if st else None
         out.append({"who": who, "account": acct, "sales": n, "debt": debt})
     return out
+
+
+def family_view(state, result, request):
+    """The family network for the receipt: each account reached, how, what it owes, the total,
+    and a small tree to draw (one box per person or account, one line per link). None if none."""
+    net = state.get("network")
+    if not net:
+        return None
+    rows = sorted(({"account": a, "debt": v["debt"], "hops": v["hops"], "steps": v["steps"]}
+                   for a, v in net.items()), key=lambda r: (r["hops"], r["account"]))
+    own = state["customer"]["id"]
+    parent, names, text, kind = {}, {own: own}, {}, {own: "Customer"}
+    for r in rows:
+        for st in r["steps"]:
+            names[st["from"]], names[st["to"]] = st["from_name"], st["to_name"]
+            if st["to"] not in parent and st["to"] != own:
+                parent[st["to"]], text[st["to"]] = st["from"], ("family" if st["link"] else "")
+    debts = {r["account"]: r["debt"] for r in rows}
+    kids = {}
+    for child, par in parent.items():
+        kids.setdefault(par, []).append(child)
+    nodes, col = [], [0]
+
+    def place(n, depth):
+        ks = sorted(kids.get(n, []), key=lambda k: (k not in debts, k))
+        x0 = col[0]
+        for k in ks:
+            place(k, depth + 1)
+        if not ks:
+            col[0] += 1
+        nodes.append({"id": n, "name": names[n], "depth": depth, "col": (x0 + col[0] - 1) / 2.0,
+                      "account": n in debts or n == own, "debt": debts.get(n),
+                      "parent": parent.get(n), "family": text.get(n) == "family"})
+    place(own, 0)
+    cols = max(col[0], 1)
+    links = [x for r in rows for x in r["steps"] if x["link"]]
+    total = result.get("network_debt")
+    return {"rows": rows, "total": total, "own": result.get("open_debt"),
+            "hops": max(r["hops"] for r in rows), "accounts": len(rows),
+            "nodes": nodes, "cols": cols, "depth": max(n["depth"] for n in nodes),
+            "links": sorted({x["link"] for x in links}),
+            "over": isinstance(total, int) and total + request > (result.get("limit") or 0)}

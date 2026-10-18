@@ -1,0 +1,1821 @@
+[
+ {
+  "accounts": [
+   {
+    "id": "G01-A1",
+    "owed": 5000
+   },
+   {
+    "id": "G01-A2",
+    "owed": 20000
+   },
+   {
+    "id": "G01-A3",
+    "owed": 40000
+   },
+   {
+    "id": "G01-A4",
+    "owed": 5000
+   },
+   {
+    "id": "G01-A5",
+    "owed": 15000
+   },
+   {
+    "id": "G01-A6",
+    "owed": 5000
+   },
+   {
+    "id": "G01-A7",
+    "owed": 30000
+   },
+   {
+    "id": "G01-A8",
+    "owed": 0
+   },
+   {
+    "id": "G01-A9",
+    "owed": 20000
+   },
+   {
+    "id": "G01-A10",
+    "owed": 90000
+   },
+   {
+    "id": "G01-A11",
+    "owed": 60000
+   }
+  ],
+  "alone_says": "YES",
+  "as_of": "2026-10-01",
+  "ask": "G01-A1",
+  "correct": "NO",
+  "depth": 10,
+  "family": [
+   [
+    "G01-B1",
+    "G01-B2"
+   ],
+   [
+    "G01-B3",
+    "G01-B4"
+   ],
+   [
+    "G01-B5",
+    "G01-B6"
+   ],
+   [
+    "G01-B6",
+    "G01-B7"
+   ]
+  ],
+  "id": "G01",
+  "limit": 200000,
+  "network_owed": 140000,
+  "people": [
+   {
+    "buys_for": "G01-A1",
+    "id": "G01-B1",
+    "owns": [],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G01-A5",
+    "id": "G01-B2",
+    "owns": [
+     "G01-A2"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G01-A6",
+    "id": "G01-B3",
+    "owns": [
+     "G01-A2"
+    ],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G01-A7",
+    "id": "G01-B4",
+    "owns": [
+     "G01-A3"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G01-A8",
+    "id": "G01-B5",
+    "owns": [
+     "G01-A3"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G01-A9",
+    "id": "G01-B6",
+    "owns": [],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G01-A4",
+    "id": "G01-B7",
+    "owns": [],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G01-A10",
+    "id": "G01-B8",
+    "owns": [
+     "G01-A11"
+    ],
+    "role": "collects"
+   }
+  ],
+  "reached": [
+   "G01-A2",
+   "G01-A3",
+   "G01-A4",
+   "G01-A5",
+   "G01-A6",
+   "G01-A7",
+   "G01-A8",
+   "G01-A9"
+  ],
+  "request": 84000
+ },
+ {
+  "accounts": [
+   {
+    "id": "G02-A1",
+    "owed": 5000
+   },
+   {
+    "id": "G02-A2",
+    "owed": 20000
+   },
+   {
+    "id": "G02-A3",
+    "owed": 10000
+   },
+   {
+    "id": "G02-A4",
+    "owed": 40000
+   },
+   {
+    "id": "G02-A5",
+    "owed": 0
+   },
+   {
+    "id": "G02-A6",
+    "owed": 5000
+   },
+   {
+    "id": "G02-A7",
+    "owed": 25000
+   },
+   {
+    "id": "G02-A8",
+    "owed": 0
+   },
+   {
+    "id": "G02-A9",
+    "owed": 25000
+   },
+   {
+    "id": "G02-A10",
+    "owed": 5000
+   },
+   {
+    "id": "G02-A11",
+    "owed": 90000
+   },
+   {
+    "id": "G02-A12",
+    "owed": 60000
+   }
+  ],
+  "alone_says": "YES",
+  "as_of": "2026-10-01",
+  "ask": "G02-A1",
+  "correct": "YES",
+  "depth": 11,
+  "family": [
+   [
+    "G02-B1",
+    "G02-B2"
+   ],
+   [
+    "G02-B2",
+    "G02-B3"
+   ],
+   [
+    "G02-B3",
+    "G02-B4"
+   ],
+   [
+    "G02-B4",
+    "G02-B5"
+   ],
+   [
+    "G02-B5",
+    "G02-B6"
+   ]
+  ],
+  "id": "G02",
+  "limit": 200000,
+  "network_owed": 135000,
+  "people": [
+   {
+    "buys_for": "G02-A5",
+    "id": "G02-B1",
+    "owns": [
+     "G02-A1"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G02-A6",
+    "id": "G02-B2",
+    "owns": [],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G02-A7",
+    "id": "G02-B3",
+    "owns": [],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G02-A8",
+    "id": "G02-B4",
+    "owns": [],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G02-A9",
+    "id": "G02-B5",
+    "owns": [],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G02-A2",
+    "id": "G02-B6",
+    "owns": [],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G02-A2",
+    "id": "G02-B7",
+    "owns": [
+     "G02-A3"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G02-A10",
+    "id": "G02-B8",
+    "owns": [
+     "G02-A3",
+     "G02-A4"
+    ],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G02-A11",
+    "id": "G02-B9",
+    "owns": [
+     "G02-A12"
+    ],
+    "role": "collects"
+   }
+  ],
+  "reached": [
+   "G02-A10",
+   "G02-A2",
+   "G02-A3",
+   "G02-A4",
+   "G02-A5",
+   "G02-A6",
+   "G02-A7",
+   "G02-A8",
+   "G02-A9"
+  ],
+  "request": 15000
+ },
+ {
+  "accounts": [
+   {
+    "id": "G03-A1",
+    "owed": 0
+   },
+   {
+    "id": "G03-A2",
+    "owed": 0
+   },
+   {
+    "id": "G03-A3",
+    "owed": 5000
+   },
+   {
+    "id": "G03-A4",
+    "owed": 10000
+   },
+   {
+    "id": "G03-A5",
+    "owed": 40000
+   },
+   {
+    "id": "G03-A6",
+    "owed": 15000
+   },
+   {
+    "id": "G03-A7",
+    "owed": 25000
+   },
+   {
+    "id": "G03-A8",
+    "owed": 25000
+   },
+   {
+    "id": "G03-A9",
+    "owed": 90000
+   },
+   {
+    "id": "G03-A10",
+    "owed": 60000
+   }
+  ],
+  "alone_says": "YES",
+  "as_of": "2026-10-01",
+  "ask": "G03-A1",
+  "correct": "NO",
+  "depth": 12,
+  "family": [],
+  "id": "G03",
+  "limit": 150000,
+  "network_owed": 120000,
+  "people": [
+   {
+    "buys_for": "G03-A1",
+    "id": "G03-B1",
+    "owns": [
+     "G03-A2"
+    ],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G03-A3",
+    "id": "G03-B2",
+    "owns": [
+     "G03-A2"
+    ],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G03-A3",
+    "id": "G03-B3",
+    "owns": [
+     "G03-A4"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G03-A8",
+    "id": "G03-B4",
+    "owns": [
+     "G03-A4",
+     "G03-A5"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G03-A6",
+    "id": "G03-B5",
+    "owns": [
+     "G03-A5"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G03-A7",
+    "id": "G03-B6",
+    "owns": [
+     "G03-A6"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G03-A9",
+    "id": "G03-B7",
+    "owns": [
+     "G03-A10"
+    ],
+    "role": "collects"
+   }
+  ],
+  "reached": [
+   "G03-A2",
+   "G03-A3",
+   "G03-A4",
+   "G03-A5",
+   "G03-A6",
+   "G03-A7",
+   "G03-A8"
+  ],
+  "request": 41000
+ },
+ {
+  "accounts": [
+   {
+    "id": "G04-A1",
+    "owed": 10000
+   },
+   {
+    "id": "G04-A2",
+    "owed": 5000
+   },
+   {
+    "id": "G04-A3",
+    "owed": 30000
+   },
+   {
+    "id": "G04-A4",
+    "owed": 15000
+   },
+   {
+    "id": "G04-A5",
+    "owed": 30000
+   },
+   {
+    "id": "G04-A6",
+    "owed": 40000
+   },
+   {
+    "id": "G04-A7",
+    "owed": 20000
+   },
+   {
+    "id": "G04-A8",
+    "owed": 10000
+   },
+   {
+    "id": "G04-A9",
+    "owed": 20000
+   },
+   {
+    "id": "G04-A10",
+    "owed": 15000
+   },
+   {
+    "id": "G04-A11",
+    "owed": 90000
+   },
+   {
+    "id": "G04-A12",
+    "owed": 60000
+   }
+  ],
+  "alone_says": "YES",
+  "as_of": "2026-10-01",
+  "ask": "G04-A1",
+  "correct": "YES",
+  "depth": 14,
+  "family": [
+   [
+    "G04-B2",
+    "G04-B3"
+   ],
+   [
+    "G04-B3",
+    "G04-B4"
+   ],
+   [
+    "G04-B6",
+    "G04-B7"
+   ],
+   [
+    "G04-B8",
+    "G04-B9"
+   ]
+  ],
+  "id": "G04",
+  "limit": 200000,
+  "network_owed": 195000,
+  "people": [
+   {
+    "buys_for": "G04-A1",
+    "id": "G04-B1",
+    "owns": [
+     "G04-A2"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G04-A7",
+    "id": "G04-B2",
+    "owns": [
+     "G04-A2"
+    ],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G04-A8",
+    "id": "G04-B3",
+    "owns": [],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G04-A9",
+    "id": "G04-B4",
+    "owns": [
+     "G04-A3"
+    ],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G04-A3",
+    "id": "G04-B5",
+    "owns": [
+     "G04-A4"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G04-A4",
+    "id": "G04-B6",
+    "owns": [],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G04-A5",
+    "id": "G04-B7",
+    "owns": [],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G04-A5",
+    "id": "G04-B8",
+    "owns": [],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G04-A10",
+    "id": "G04-B9",
+    "owns": [
+     "G04-A6"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G04-A11",
+    "id": "G04-B10",
+    "owns": [
+     "G04-A12"
+    ],
+    "role": "collects"
+   }
+  ],
+  "reached": [
+   "G04-A10",
+   "G04-A2",
+   "G04-A3",
+   "G04-A4",
+   "G04-A5",
+   "G04-A6",
+   "G04-A7",
+   "G04-A8",
+   "G04-A9"
+  ],
+  "request": 2000
+ },
+ {
+  "accounts": [
+   {
+    "id": "G05-A1",
+    "owed": 10000
+   },
+   {
+    "id": "G05-A2",
+    "owed": 30000
+   },
+   {
+    "id": "G05-A3",
+    "owed": 10000
+   },
+   {
+    "id": "G05-A4",
+    "owed": 10000
+   },
+   {
+    "id": "G05-A5",
+    "owed": 30000
+   },
+   {
+    "id": "G05-A6",
+    "owed": 40000
+   },
+   {
+    "id": "G05-A7",
+    "owed": 40000
+   },
+   {
+    "id": "G05-A8",
+    "owed": 40000
+   },
+   {
+    "id": "G05-A9",
+    "owed": 5000
+   },
+   {
+    "id": "G05-A10",
+    "owed": 0
+   },
+   {
+    "id": "G05-A11",
+    "owed": 90000
+   },
+   {
+    "id": "G05-A12",
+    "owed": 60000
+   }
+  ],
+  "alone_says": "YES",
+  "as_of": "2026-10-01",
+  "ask": "G05-A1",
+  "correct": "NO",
+  "depth": 15,
+  "family": [
+   [
+    "G05-B4",
+    "G05-B5"
+   ],
+   [
+    "G05-B5",
+    "G05-B6"
+   ],
+   [
+    "G05-B8",
+    "G05-B9"
+   ]
+  ],
+  "id": "G05",
+  "limit": 200000,
+  "network_owed": 215000,
+  "people": [
+   {
+    "buys_for": "G05-A2",
+    "id": "G05-B1",
+    "owns": [
+     "G05-A1"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G05-A2",
+    "id": "G05-B2",
+    "owns": [
+     "G05-A3"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G05-A4",
+    "id": "G05-B3",
+    "owns": [
+     "G05-A3"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G05-A4",
+    "id": "G05-B4",
+    "owns": [],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G05-A8",
+    "id": "G05-B5",
+    "owns": [],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G05-A5",
+    "id": "G05-B6",
+    "owns": [],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G05-A9",
+    "id": "G05-B7",
+    "owns": [
+     "G05-A5",
+     "G05-A6"
+    ],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G05-A6",
+    "id": "G05-B8",
+    "owns": [],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G05-A10",
+    "id": "G05-B9",
+    "owns": [
+     "G05-A7"
+    ],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G05-A11",
+    "id": "G05-B10",
+    "owns": [
+     "G05-A12"
+    ],
+    "role": "collects"
+   }
+  ],
+  "reached": [
+   "G05-A10",
+   "G05-A2",
+   "G05-A3",
+   "G05-A4",
+   "G05-A5",
+   "G05-A6",
+   "G05-A7",
+   "G05-A8",
+   "G05-A9"
+  ],
+  "request": 1000
+ },
+ {
+  "accounts": [
+   {
+    "id": "G06-A1",
+    "owed": 0
+   },
+   {
+    "id": "G06-A2",
+    "owed": 15000
+   },
+   {
+    "id": "G06-A3",
+    "owed": 20000
+   },
+   {
+    "id": "G06-A4",
+    "owed": 25000
+   },
+   {
+    "id": "G06-A5",
+    "owed": 30000
+   },
+   {
+    "id": "G06-A6",
+    "owed": 30000
+   },
+   {
+    "id": "G06-A7",
+    "owed": 40000
+   },
+   {
+    "id": "G06-A8",
+    "owed": 5000
+   },
+   {
+    "id": "G06-A9",
+    "owed": 20000
+   },
+   {
+    "id": "G06-A10",
+    "owed": 5000
+   },
+   {
+    "id": "G06-A11",
+    "owed": 10000
+   },
+   {
+    "id": "G06-A12",
+    "owed": 15000
+   },
+   {
+    "id": "G06-A13",
+    "owed": 90000
+   },
+   {
+    "id": "G06-A14",
+    "owed": 60000
+   }
+  ],
+  "alone_says": "YES",
+  "as_of": "2026-10-01",
+  "ask": "G06-A1",
+  "correct": "NO",
+  "depth": 17,
+  "family": [
+   [
+    "G06-B2",
+    "G06-B3"
+   ],
+   [
+    "G06-B8",
+    "G06-B9"
+   ],
+   [
+    "G06-B9",
+    "G06-B10"
+   ]
+  ],
+  "id": "G06",
+  "limit": 150000,
+  "network_owed": 215000,
+  "people": [
+   {
+    "buys_for": "G06-A1",
+    "id": "G06-B1",
+    "owns": [
+     "G06-A2"
+    ],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G06-A2",
+    "id": "G06-B2",
+    "owns": [],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G06-A9",
+    "id": "G06-B3",
+    "owns": [
+     "G06-A3"
+    ],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G06-A3",
+    "id": "G06-B4",
+    "owns": [
+     "G06-A4"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G06-A10",
+    "id": "G06-B5",
+    "owns": [
+     "G06-A4",
+     "G06-A5"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G06-A5",
+    "id": "G06-B6",
+    "owns": [
+     "G06-A6"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G06-A7",
+    "id": "G06-B7",
+    "owns": [
+     "G06-A6"
+    ],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G06-A11",
+    "id": "G06-B8",
+    "owns": [
+     "G06-A7"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G06-A12",
+    "id": "G06-B9",
+    "owns": [],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G06-A8",
+    "id": "G06-B10",
+    "owns": [],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G06-A13",
+    "id": "G06-B11",
+    "owns": [
+     "G06-A14"
+    ],
+    "role": "collects"
+   }
+  ],
+  "reached": [
+   "G06-A10",
+   "G06-A11",
+   "G06-A12",
+   "G06-A2",
+   "G06-A3",
+   "G06-A4",
+   "G06-A5",
+   "G06-A6",
+   "G06-A7",
+   "G06-A8",
+   "G06-A9"
+  ],
+  "request": 1000
+ },
+ {
+  "accounts": [
+   {
+    "id": "G07-A1",
+    "owed": 0
+   },
+   {
+    "id": "G07-A2",
+    "owed": 25000
+   },
+   {
+    "id": "G07-A3",
+    "owed": 5000
+   },
+   {
+    "id": "G07-A4",
+    "owed": 5000
+   },
+   {
+    "id": "G07-A5",
+    "owed": 10000
+   },
+   {
+    "id": "G07-A6",
+    "owed": 20000
+   },
+   {
+    "id": "G07-A7",
+    "owed": 30000
+   },
+   {
+    "id": "G07-A8",
+    "owed": 5000
+   },
+   {
+    "id": "G07-A9",
+    "owed": 5000
+   },
+   {
+    "id": "G07-A10",
+    "owed": 0
+   },
+   {
+    "id": "G07-A11",
+    "owed": 15000
+   },
+   {
+    "id": "G07-A12",
+    "owed": 30000
+   },
+   {
+    "id": "G07-A13",
+    "owed": 90000
+   },
+   {
+    "id": "G07-A14",
+    "owed": 60000
+   }
+  ],
+  "alone_says": "YES",
+  "as_of": "2026-10-01",
+  "ask": "G07-A1",
+  "correct": "YES",
+  "depth": 19,
+  "family": [
+   [
+    "G07-B1",
+    "G07-B2"
+   ],
+   [
+    "G07-B2",
+    "G07-B3"
+   ],
+   [
+    "G07-B8",
+    "G07-B9"
+   ],
+   [
+    "G07-B10",
+    "G07-B11"
+   ],
+   [
+    "G07-B11",
+    "G07-B12"
+   ]
+  ],
+  "id": "G07",
+  "limit": 200000,
+  "network_owed": 150000,
+  "people": [
+   {
+    "buys_for": "G07-A1",
+    "id": "G07-B1",
+    "owns": [],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G07-A9",
+    "id": "G07-B2",
+    "owns": [],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G07-A2",
+    "id": "G07-B3",
+    "owns": [],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G07-A2",
+    "id": "G07-B4",
+    "owns": [
+     "G07-A3"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G07-A10",
+    "id": "G07-B5",
+    "owns": [
+     "G07-A3",
+     "G07-A4"
+    ],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G07-A11",
+    "id": "G07-B6",
+    "owns": [
+     "G07-A4",
+     "G07-A5"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G07-A6",
+    "id": "G07-B7",
+    "owns": [
+     "G07-A5"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G07-A6",
+    "id": "G07-B8",
+    "owns": [],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G07-A7",
+    "id": "G07-B9",
+    "owns": [],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G07-A7",
+    "id": "G07-B10",
+    "owns": [],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G07-A12",
+    "id": "G07-B11",
+    "owns": [],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G07-A8",
+    "id": "G07-B12",
+    "owns": [],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G07-A13",
+    "id": "G07-B13",
+    "owns": [
+     "G07-A14"
+    ],
+    "role": "collects"
+   }
+  ],
+  "reached": [
+   "G07-A10",
+   "G07-A11",
+   "G07-A12",
+   "G07-A2",
+   "G07-A3",
+   "G07-A4",
+   "G07-A5",
+   "G07-A6",
+   "G07-A7",
+   "G07-A8",
+   "G07-A9"
+  ],
+  "request": 10000
+ },
+ {
+  "accounts": [
+   {
+    "id": "G08-A1",
+    "owed": 0
+   },
+   {
+    "id": "G08-A2",
+    "owed": 40000
+   },
+   {
+    "id": "G08-A3",
+    "owed": 5000
+   },
+   {
+    "id": "G08-A4",
+    "owed": 10000
+   },
+   {
+    "id": "G08-A5",
+    "owed": 0
+   },
+   {
+    "id": "G08-A6",
+    "owed": 25000
+   },
+   {
+    "id": "G08-A7",
+    "owed": 15000
+   },
+   {
+    "id": "G08-A8",
+    "owed": 0
+   },
+   {
+    "id": "G08-A9",
+    "owed": 40000
+   },
+   {
+    "id": "G08-A10",
+    "owed": 30000
+   },
+   {
+    "id": "G08-A11",
+    "owed": 25000
+   },
+   {
+    "id": "G08-A12",
+    "owed": 0
+   },
+   {
+    "id": "G08-A13",
+    "owed": 40000
+   },
+   {
+    "id": "G08-A14",
+    "owed": 5000
+   },
+   {
+    "id": "G08-A15",
+    "owed": 90000
+   },
+   {
+    "id": "G08-A16",
+    "owed": 60000
+   }
+  ],
+  "alone_says": "YES",
+  "as_of": "2026-10-01",
+  "ask": "G08-A1",
+  "correct": "NO",
+  "depth": 20,
+  "family": [
+   [
+    "G08-B1",
+    "G08-B2"
+   ],
+   [
+    "G08-B2",
+    "G08-B3"
+   ],
+   [
+    "G08-B4",
+    "G08-B5"
+   ],
+   [
+    "G08-B6",
+    "G08-B7"
+   ],
+   [
+    "G08-B8",
+    "G08-B9"
+   ],
+   [
+    "G08-B12",
+    "G08-B13"
+   ]
+  ],
+  "id": "G08",
+  "limit": 200000,
+  "network_owed": 235000,
+  "people": [
+   {
+    "buys_for": "G08-A9",
+    "id": "G08-B1",
+    "owns": [
+     "G08-A1"
+    ],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G08-A10",
+    "id": "G08-B2",
+    "owns": [],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G08-A11",
+    "id": "G08-B3",
+    "owns": [
+     "G08-A2"
+    ],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G08-A2",
+    "id": "G08-B4",
+    "owns": [],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G08-A3",
+    "id": "G08-B5",
+    "owns": [],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G08-A3",
+    "id": "G08-B6",
+    "owns": [],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G08-A12",
+    "id": "G08-B7",
+    "owns": [
+     "G08-A4"
+    ],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G08-A13",
+    "id": "G08-B8",
+    "owns": [
+     "G08-A4"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G08-A5",
+    "id": "G08-B9",
+    "owns": [],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G08-A5",
+    "id": "G08-B10",
+    "owns": [
+     "G08-A6"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G08-A6",
+    "id": "G08-B11",
+    "owns": [
+     "G08-A7"
+    ],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G08-A14",
+    "id": "G08-B12",
+    "owns": [
+     "G08-A7"
+    ],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G08-A8",
+    "id": "G08-B13",
+    "owns": [],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G08-A15",
+    "id": "G08-B14",
+    "owns": [
+     "G08-A16"
+    ],
+    "role": "collects"
+   }
+  ],
+  "reached": [
+   "G08-A10",
+   "G08-A11",
+   "G08-A12",
+   "G08-A13",
+   "G08-A14",
+   "G08-A2",
+   "G08-A3",
+   "G08-A4",
+   "G08-A5",
+   "G08-A6",
+   "G08-A7",
+   "G08-A8",
+   "G08-A9"
+  ],
+  "request": 1000
+ },
+ {
+  "accounts": [
+   {
+    "id": "G09-A1",
+    "owed": 5000
+   },
+   {
+    "id": "G09-A2",
+    "owed": 5000
+   },
+   {
+    "id": "G09-A3",
+    "owed": 10000
+   },
+   {
+    "id": "G09-A4",
+    "owed": 40000
+   },
+   {
+    "id": "G09-A5",
+    "owed": 25000
+   },
+   {
+    "id": "G09-A6",
+    "owed": 20000
+   },
+   {
+    "id": "G09-A7",
+    "owed": 20000
+   },
+   {
+    "id": "G09-A8",
+    "owed": 10000
+   },
+   {
+    "id": "G09-A9",
+    "owed": 20000
+   },
+   {
+    "id": "G09-A10",
+    "owed": 15000
+   },
+   {
+    "id": "G09-A11",
+    "owed": 15000
+   },
+   {
+    "id": "G09-A12",
+    "owed": 0
+   },
+   {
+    "id": "G09-A13",
+    "owed": 10000
+   },
+   {
+    "id": "G09-A14",
+    "owed": 0
+   },
+   {
+    "id": "G09-A15",
+    "owed": 0
+   },
+   {
+    "id": "G09-A16",
+    "owed": 20000
+   },
+   {
+    "id": "G09-A17",
+    "owed": 90000
+   },
+   {
+    "id": "G09-A18",
+    "owed": 60000
+   }
+  ],
+  "alone_says": "YES",
+  "as_of": "2026-10-01",
+  "ask": "G09-A1",
+  "correct": "YES",
+  "depth": 21,
+  "family": [
+   [
+    "G09-B2",
+    "G09-B3"
+   ],
+   [
+    "G09-B4",
+    "G09-B5"
+   ],
+   [
+    "G09-B5",
+    "G09-B6"
+   ],
+   [
+    "G09-B6",
+    "G09-B7"
+   ],
+   [
+    "G09-B8",
+    "G09-B9"
+   ],
+   [
+    "G09-B9",
+    "G09-B10"
+   ],
+   [
+    "G09-B13",
+    "G09-B14"
+   ]
+  ],
+  "id": "G09",
+  "limit": 200000,
+  "network_owed": 185000,
+  "people": [
+   {
+    "buys_for": "G09-A9",
+    "id": "G09-B1",
+    "owns": [
+     "G09-A1",
+     "G09-A2"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G09-A10",
+    "id": "G09-B2",
+    "owns": [
+     "G09-A2"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G09-A3",
+    "id": "G09-B3",
+    "owns": [],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G09-A11",
+    "id": "G09-B4",
+    "owns": [
+     "G09-A3"
+    ],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G09-A12",
+    "id": "G09-B5",
+    "owns": [],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G09-A13",
+    "id": "G09-B6",
+    "owns": [],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G09-A4",
+    "id": "G09-B7",
+    "owns": [],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G09-A14",
+    "id": "G09-B8",
+    "owns": [
+     "G09-A4"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G09-A15",
+    "id": "G09-B9",
+    "owns": [],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G09-A5",
+    "id": "G09-B10",
+    "owns": [],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G09-A5",
+    "id": "G09-B11",
+    "owns": [
+     "G09-A6"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G09-A6",
+    "id": "G09-B12",
+    "owns": [
+     "G09-A7"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G09-A7",
+    "id": "G09-B13",
+    "owns": [],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G09-A16",
+    "id": "G09-B14",
+    "owns": [
+     "G09-A8"
+    ],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G09-A17",
+    "id": "G09-B15",
+    "owns": [
+     "G09-A18"
+    ],
+    "role": "collects"
+   }
+  ],
+  "reached": [
+   "G09-A10",
+   "G09-A11",
+   "G09-A12",
+   "G09-A13",
+   "G09-A14",
+   "G09-A15",
+   "G09-A2",
+   "G09-A3",
+   "G09-A4",
+   "G09-A5",
+   "G09-A6",
+   "G09-A7",
+   "G09-A9"
+  ],
+  "request": 13000
+ },
+ {
+  "accounts": [
+   {
+    "id": "G10-A1",
+    "owed": 0
+   },
+   {
+    "id": "G10-A2",
+    "owed": 25000
+   },
+   {
+    "id": "G10-A3",
+    "owed": 10000
+   },
+   {
+    "id": "G10-A4",
+    "owed": 0
+   },
+   {
+    "id": "G10-A5",
+    "owed": 30000
+   },
+   {
+    "id": "G10-A6",
+    "owed": 5000
+   },
+   {
+    "id": "G10-A7",
+    "owed": 25000
+   },
+   {
+    "id": "G10-A8",
+    "owed": 30000
+   },
+   {
+    "id": "G10-A9",
+    "owed": 0
+   },
+   {
+    "id": "G10-A10",
+    "owed": 0
+   },
+   {
+    "id": "G10-A11",
+    "owed": 20000
+   },
+   {
+    "id": "G10-A12",
+    "owed": 0
+   },
+   {
+    "id": "G10-A13",
+    "owed": 5000
+   },
+   {
+    "id": "G10-A14",
+    "owed": 15000
+   },
+   {
+    "id": "G10-A15",
+    "owed": 5000
+   },
+   {
+    "id": "G10-A16",
+    "owed": 10000
+   },
+   {
+    "id": "G10-A17",
+    "owed": 15000
+   },
+   {
+    "id": "G10-A18",
+    "owed": 90000
+   },
+   {
+    "id": "G10-A19",
+    "owed": 60000
+   }
+  ],
+  "alone_says": "YES",
+  "as_of": "2026-10-01",
+  "ask": "G10-A1",
+  "correct": "YES",
+  "depth": 22,
+  "family": [
+   [
+    "G10-B1",
+    "G10-B2"
+   ],
+   [
+    "G10-B2",
+    "G10-B3"
+   ],
+   [
+    "G10-B3",
+    "G10-B4"
+   ],
+   [
+    "G10-B6",
+    "G10-B7"
+   ]
+  ],
+  "id": "G10",
+  "limit": 200000,
+  "network_owed": 180000,
+  "people": [
+   {
+    "buys_for": "G10-A1",
+    "id": "G10-B1",
+    "owns": [],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G10-A11",
+    "id": "G10-B2",
+    "owns": [],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G10-A12",
+    "id": "G10-B3",
+    "owns": [],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G10-A2",
+    "id": "G10-B4",
+    "owns": [],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G10-A3",
+    "id": "G10-B5",
+    "owns": [
+     "G10-A2"
+    ],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G10-A13",
+    "id": "G10-B6",
+    "owns": [
+     "G10-A3"
+    ],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G10-A14",
+    "id": "G10-B7",
+    "owns": [
+     "G10-A4"
+    ],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G10-A5",
+    "id": "G10-B8",
+    "owns": [
+     "G10-A4"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G10-A5",
+    "id": "G10-B9",
+    "owns": [
+     "G10-A6"
+    ],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G10-A15",
+    "id": "G10-B10",
+    "owns": [
+     "G10-A6",
+     "G10-A7"
+    ],
+    "role": "collects"
+   },
+   {
+    "buys_for": "G10-A7",
+    "id": "G10-B11",
+    "owns": [
+     "G10-A8"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G10-A16",
+    "id": "G10-B12",
+    "owns": [
+     "G10-A8",
+     "G10-A9"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G10-A17",
+    "id": "G10-B13",
+    "owns": [
+     "G10-A9",
+     "G10-A10"
+    ],
+    "role": "pays"
+   },
+   {
+    "buys_for": "G10-A18",
+    "id": "G10-B14",
+    "owns": [
+     "G10-A19"
+    ],
+    "role": "collects"
+   }
+  ],
+  "reached": [
+   "G10-A11",
+   "G10-A12",
+   "G10-A13",
+   "G10-A14",
+   "G10-A15",
+   "G10-A16",
+   "G10-A2",
+   "G10-A3",
+   "G10-A4",
+   "G10-A5",
+   "G10-A6",
+   "G10-A7",
+   "G10-A8",
+   "G10-A9"
+  ],
+  "request": 9000
+ }
+]

@@ -17,6 +17,7 @@
 {% if hint %}<p class="hint">Try it: press "What if this evidence did not exist" next to <b class="mono">{{ hint }}</b> below and watch the answer change.</p>{% endif %}
 <section id="whatif-panel" class="whatif" hidden aria-live="polite"></section>
 {% include "_evidence_graph.html" %}
+{% include "_family_network.html" %}
 
 {% if shallow %}
 <section class="card sd" id="shallow-deep">
@@ -36,7 +37,7 @@
 <section class="card warn" id="other-accounts">
   <h2>Same person, another account</h2>
   {% for x in exposure %}<p>Also collects goods for another account that owes {{ x.debt|naira if x.debt is not none else 'an amount that cannot be traced' }}. {{ x.who }} collected {{ x.sales }} sale{{ '' if x.sales == 1 else 's' }} on account <span class="mono">{{ x.account }}</span>.</p>{% endfor %}
-  <p class="small">Shown so you can see the link. It does not change the answer above, which still follows the two fixed rules for this account only.{% if tag == 'invented' %} These accounts and people are invented.{% endif %}</p>
+  <p class="small">Shown so you can see the link.{% if family %} The family network below counts these accounts in the answer.{% else %} It does not change the answer above.{% endif %}{% if tag == 'invented' %} These accounts and people are invented.{% endif %}</p>
 </section>
 {% endif %}
 {% if buyers %}

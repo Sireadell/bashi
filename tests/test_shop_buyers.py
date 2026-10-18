@@ -56,7 +56,7 @@ def client(own, monkeypatch):
 
 
 def test_seed_has_two_invented_buyers_with_generic_labels():
-    assert [b["label"] for b in SEED["buyers"]] == ["Buyer %d" % i for i in range(1, 7)]
+    assert [b["label"] for b in SEED["buyers"]] == ["Buyer %d" % i for i in range(1, 11)]
     assert {c["source"] for c in SEED["customers"] if c["id"] == SHOP} == {"invented"}
     assert own_shop.find_leaks(SEED) == []
 
@@ -65,7 +65,7 @@ def test_graph_links_buyers_to_the_shop_sales_and_payments(own):
     q = lambda c: own.query(c).result_set[0][0]
     assert q("MATCH (:Buyer)-[:BUYS_FOR]->(:Customer {id:'CUST-13'}) RETURN count(*)") == 2
     assert q("MATCH (:Buyer {id:'BUY-1'})-[:COLLECTED]->(:Trade) RETURN count(*)") == 3
-    assert q("MATCH (:Buyer)-[:PAID]->(:Payment) RETURN count(*)") == 3
+    assert q("MATCH (b:Buyer)-[:PAID]->(:Payment) WHERE b.id IN ['BUY-1', 'BUY-2'] RETURN count(*)") == 3
 
 
 def test_shop_says_yes_where_one_person_check_says_no(own):
@@ -87,7 +87,7 @@ def test_payment_by_another_buyer_settles_the_sale(own):
 
 def test_buyer_links_do_not_change_fingerprint_or_answer(own):
     plain = copy.deepcopy(SEED)
-    plain["buyers"] = []
+    plain["buyers"], plain["family"] = [], []
     for row in plain["sales"] + plain["payments"]:
         row.pop("buyer", None)
     g2 = load(plain)
@@ -155,14 +155,17 @@ def test_personal_account_shows_the_other_account_and_its_debt(own, client):
     assert "invented" in html.split('id="other-accounts"')[1].split("</section>")[0]
 
 
-def test_exposure_never_changes_the_answer(own):
+def test_owner_link_counts_the_other_account_through_the_family_network(own):
+    """CUST-15 owes nothing, but its owner collects for CUST-14 (N43,360 owed). The family
+    network rule counts it; without the owner link the answer is the old one."""
     plain = copy.deepcopy(SEED)
     for b in plain["buyers"]:
         b.pop("owns", None)
     g2 = load(plain)
-    for amount in (10000, 90000):
-        a, b = decide("CUST-15", amount, graph=own, save=False), decide("CUST-15", amount, graph=g2, save=False)
-        assert (a["verdict"], a["fingerprint"]) == (b["verdict"], b["fingerprint"])
+    assert decide("CUST-15", 10000, graph=own, save=False)["verdict"] == "YES"
+    linked, alone = decide("CUST-15", 90000, graph=own, save=False), decide("CUST-15", 90000, graph=g2, save=False)
+    assert (linked["verdict"], alone["verdict"]) == ("NO", "YES")
+    assert "family network rule" in linked["reason"] and "N133,360" in linked["reason"]
 
 
 def test_account_without_owner_has_no_exposure(own):

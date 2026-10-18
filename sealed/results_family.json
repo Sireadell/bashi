@@ -1,0 +1,65 @@
+{
+ "answers": {
+  "Bashi": {
+   "F01": "YES",
+   "F02": "NO",
+   "F03": "YES",
+   "F04": "YES",
+   "F05": "NO",
+   "F06": "NO",
+   "F07": "YES",
+   "F08": "NO",
+   "F09": "YES",
+   "F10": "NO",
+   "F11": "YES",
+   "F12": "NO",
+   "F13": "YES",
+   "F14": "NO",
+   "F15": "NO",
+   "F16": "YES",
+   "F17": "NO",
+   "F18": "YES",
+   "F19": "NO",
+   "F20": "NO"
+  },
+  "This account only": {
+   "F01": "YES",
+   "F02": "NO",
+   "F03": "YES",
+   "F04": "YES",
+   "F05": "NO",
+   "F06": "NO",
+   "F07": "YES",
+   "F08": "NO",
+   "F09": "YES",
+   "F10": "YES",
+   "F11": "YES",
+   "F12": "YES",
+   "F13": "YES",
+   "F14": "YES",
+   "F15": "YES",
+   "F16": "YES",
+   "F17": "NO",
+   "F18": "YES",
+   "F19": "YES",
+   "F20": "YES"
+  }
+ },
+ "hash": "ea09986c9d23f1870608bfbf556e9142e2a67e3249324a30af87e7a4e68a10d9",
+ "scores": {
+  "Bashi": {
+   "approved_wrongly": 0,
+   "other": 0,
+   "right": 20,
+   "wrong_approvals": 0,
+   "wrong_refusals": 0
+  },
+  "This account only": {
+   "approved_wrongly": 432000,
+   "other": 0,
+   "right": 14,
+   "wrong_approvals": 6,
+   "wrong_refusals": 0
+  }
+ }
+}

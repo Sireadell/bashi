@@ -19,6 +19,12 @@ Two parts, each record tagged with a source:
               one person at a time the shop looks like it owes and is overpaid; checked as one
               shop it owes nothing.
 
+  invented, family network: CUST-17 is a personal account that owes nothing. Its owner (Buyer 7)
+              collects goods for a family shop account (CUST-18) that Buyer 8 pays for. Buyer 8 owns
+              CUST-19 and is family of Buyer 9 (link FAM-1). Buyer 9 owns CUST-20 and collects for
+              CUST-21, where Buyer 10 also collects, and Buyer 10 owns CUST-22. CUST-22 is 7 links
+              from CUST-17. Alone CUST-17 owes N0; the whole family network owes N100,000.
+
 No names, phones, addresses, notes or item names exist in this file.
 """
 REAL = "real_audit"
@@ -98,6 +104,22 @@ _COLLECT_SALES = [(18000, "2026-07-08", "BUY-3", True), (22000, "2026-07-29", "B
 # personal accounts: (account, owner, sale amount, sale date)
 _PERSONAL = [("CUST-15", "BUY-3", 11000, "2026-09-01"), ("CUST-16", "BUY-4", 9000, "2026-09-10")]
 
+# The family network. Accounts: (account, owner or None, [(sale amount, sale date, who collected,
+# paid in full?, who paid)]). Buyers: (buyer, the shop account they buy for).
+_FAMILY_ACCOUNTS = [
+    ("CUST-17", "BUY-7", [(15000, "2026-08-03", None, True, None)]),
+    ("CUST-18", None, [(30000, "2026-08-11", "BUY-7", True, "BUY-8"),
+                       (20000, "2026-09-16", "BUY-7", False, None)]),
+    ("CUST-19", "BUY-8", [(10000, "2026-09-08", None, False, None)]),
+    ("CUST-20", "BUY-9", [(15000, "2026-09-12", None, False, None)]),
+    ("CUST-21", None, [(25000, "2026-09-19", "BUY-9", False, None),
+                       (12000, "2026-08-22", "BUY-10", True, None)]),
+    ("CUST-22", "BUY-10", [(30000, "2026-09-26", None, False, None)]),
+]
+_FAMILY_BUYERS = [("BUY-7", "CUST-18"), ("BUY-8", "CUST-18"), ("BUY-9", "CUST-21"), ("BUY-10", "CUST-21")]
+# (link, person, person): the two are family.
+_FAMILY_LINKS = [("FAM-1", "BUY-8", "BUY-9")]
+
 
 def build():
     customers = [{"id": c, "source": REAL} for c in ("CUST-A", "CUST-B", "CUST-C", "CUST-D")]
@@ -157,11 +179,32 @@ def build():
                       "date": day, "paid": amount, "source": INVENTED})
         payments.append({"id": "PY-%03d" % n_pay, "customer": acct, "amount": amount,
                          "date": day, "settles": sid, "applied": amount, "source": INVENTED})
+    owners = {o: a for a, o, _ in _FAMILY_ACCOUNTS if o}
+    buyers += [{"id": b, "label": "Buyer %s" % b.split("-")[1], "customer": shop,
+                "owns": [owners[b]] if b in owners else []} for b, shop in _FAMILY_BUYERS]
+    for acct, _, rows in _FAMILY_ACCOUNTS:
+        customers.append({"id": acct, "source": INVENTED})
+        for amount, day, taker, paid, payer in rows:
+            n_sale += 1
+            sid = "TI-%03d" % n_sale
+            sale = {"id": sid, "kind": "sale", "customer": acct, "amount": amount, "date": day,
+                    "paid": amount if paid else 0, "source": INVENTED}
+            if taker:
+                sale["buyer"] = taker
+            sales.append(sale)
+            if paid:
+                n_pay += 1
+                pay = {"id": "PY-%03d" % n_pay, "customer": acct, "amount": amount, "date": day,
+                       "settles": sid, "applied": amount, "source": INVENTED}
+                if payer:
+                    pay["buyer"] = payer
+                payments.append(pay)
+    family = [{"id": f, "a": a, "b": b, "source": INVENTED} for f, a, b in _FAMILY_LINKS]
     promises = [{"id": "PR%03d" % i, "customer": c, "amount": a, "date": made, "due": due,
                  "kept": kept, "source": INVENTED}
                 for i, (c, a, made, due, kept) in enumerate(_INVENTED_PROMISES, 1)]
     return {"customers": customers, "sales": sales, "payments": payments, "promises": promises,
-            "buyers": buyers}
+            "buyers": buyers, "family": family}
 
 
 SEED = build()

@@ -80,7 +80,7 @@ def test_receipt_json_matches_the_decision(client):
     assert {x["id"] for x in rec["promises"]} >= {"PR001"}
     assert sorted(rec["evidence_ids"]) == sorted(out["evidence_ids"])
     assert rec["check"]["ok"] is True
-    assert {r_["id"] for r_ in rec["rules"]} == {"R_LIMIT", "R_BROKEN_PROMISE"}
+    assert {r_["id"] for r_ in rec["rules"]} == {"R_LIMIT", "R_BROKEN_PROMISE", "R_FAMILY"}
     assert "synthetic" in rec["data_label"]
 
 
