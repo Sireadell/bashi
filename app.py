@@ -331,6 +331,30 @@ def receipt_data(decision_id):
     return build_receipt(shop, g, decision_id)
 
 
+def shallow_vs_deep(g, state, ev, dec, trace_ok):
+    """The same question answered by a balance check alone and by following the links.
+    The balance-only answer is the scorecard's baseline, not a new rule. Costs the
+    one extra look at unlinked payments that possible_phantoms already does."""
+    if not trace_ok:
+        return None
+    from rules import possible_phantoms
+    from scorecard import balance_only
+    orphan_paid = sum(ph["amount"] for ph in possible_phantoms(g, state))
+    debt = balance_only(state, orphan_paid)
+    shallow = "YES" if debt + dec["request"] <= state["customer"]["limit"] else "NO"
+    deep = ev["verdict"]
+    why = []
+    if shallow != deep:
+        if ev["broken_promises"] and deep == "NO" and shallow == "YES":
+            why.append("a broken promise (%s) that a balance never shows" % ", ".join(ev["broken_promises"]))
+        if orphan_paid:
+            why.append("a payment of %s that nobody linked to a sale, so a balance counts it and Bashi flags it" % naira(orphan_paid))
+        if not why:
+            why.append("the open debt differs once each payment is tied to its sale")
+    return {"shallow": shallow, "deep": deep, "debt": debt, "deep_debt": ev["open_debt"],
+            "differs": shallow != deep, "why": why, "inferred": len(state.get("inferred", {}))}
+
+
 def build_receipt(shop, g, decision_id):
     """The receipt for one decision, read from the graph `g` of shop `shop`.
     Shared by the receipt page, the JSON routes and the MCP tools."""
@@ -371,6 +395,10 @@ def build_receipt(shop, g, decision_id):
         g, (dec["id"], dec["customer_id"], dec["request"], dec["verdict"],
             dec["fingerprint"], dec["snapshot"]), state=state)
     out["verify"] = {"ok": ok, "problems": problems}
+    try:
+        out["shallow"] = shallow_vs_deep(g, state, ev, dec, out["trace_ok"])
+    except Exception:
+        out["shallow"] = None
     out["inferred_count"] = len(state.get("inferred", {}))
     out["deposits"] = sum(state["settles"][k] for k, m in state.get("inferred", {}).items() if m == "deposit")
     out["unapplied"] = None
