@@ -59,6 +59,14 @@
 </section>
 {% endif %}
 
+{% if linked_group %}
+<p class="small" id="linked-group">Linked group (found by FalkorDB's built-in connected-components algorithm): this account is joined to {{ linked_group.others }} other account{{ '' if linked_group.others == 1 else 's' }}{% if linked_group.others %}, {{ linked_group.owing }} of them owing money{% endif %}. For information only; it does not change the answer.</p>
+{% endif %}
+
+{% if linked_chain %}
+<p class="small" id="linked-chain">Shortest link chain (FalkorDB's built-in shortest path): from this account to the largest linked debt ({{ linked_chain.to }}, {{ linked_chain.owed|naira }}) is {{ linked_chain.links }} link{{ '' if linked_chain.links == 1 else 's' }}. For information only; it does not change the answer.</p>
+{% endif %}
+
 {% if orphans %}
 <section class="card" id="phantom-whatif">
   <h2>What if the unlinked payments had been linked?</h2>
