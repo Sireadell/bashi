@@ -47,6 +47,48 @@ def reset_limits():
         _hits.clear()
         _site_hits.clear()
         _read_hits.clear()
+    _case_cache.clear()
+
+
+# ---------------------------------------------------------------- demo case cache
+# Finding the demo case reads every customer one by one (about 8 seconds on the
+# free database). The answer only changes when the data is reloaded, so keep it
+# for ten minutes. The decision itself is always made fresh.
+CASE_TTL = 600
+_case_cache = {}
+
+
+def cached_case(graph_name, finder, *args, **kwargs):
+    key = (graph_name, finder, tuple(sorted(kwargs.items())))
+    hit = _case_cache.get(key)
+    if hit and time.time() - hit[0] < CASE_TTL:
+        return dict(hit[1])
+    case = finder(*args, **kwargs)
+    if case:
+        _case_cache[key] = (time.time(), dict(case))
+    return case
+
+
+def demo_case(g, name):
+    return cached_case(name, find_demo_case, g, only_source="invented")
+
+
+def real_case(g, name, real):
+    return cached_case(name, biggest_gap_case if real else find_real_case, g)
+
+
+def warm_cases():
+    """Fill the cache in the background so the first visitor's click is fast."""
+    def run():
+        for k in ("own", "real"):
+            try:
+                g = get_graph(GRAPH_OF[k])
+                if k == "own":
+                    demo_case(g, GRAPH_OF[k])
+                real_case(g, GRAPH_OF[k], k == "real")
+            except Exception:
+                pass
+    threading.Thread(target=run, daemon=True).start()
 
 
 def client_ip():
@@ -374,7 +416,7 @@ def demo():
         return redirect(url_for("home"))
     if shop_key() == "own":
         try:
-            case = find_demo_case(cur_graph(), only_source="invented")
+            case = demo_case(cur_graph(), GRAPH_OF["own"])
         except Exception:
             case = None
     if case:
@@ -403,7 +445,7 @@ def demo_real():
         return slow_down()
     g = cur_graph()
     try:
-        case = biggest_gap_case(g) if shop_key() == "real" else find_real_case(g)
+        case = real_case(g, GRAPH_OF[shop_key()], shop_key() == "real")
     except Exception:
         case = None
     if not case:
@@ -416,6 +458,10 @@ def demo_real():
     if not res.get("decision_id"):
         return render_template("gone.html", decision_id=None), 503
     return redirect(url_for("receipt", decision_id=res["decision_id"]))
+
+
+if os.environ.get("RENDER"):
+    warm_cases()
 
 
 @app.route("/receipt/<decision_id>")

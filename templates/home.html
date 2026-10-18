@@ -41,12 +41,13 @@
 {% endif %}
 
 {% if not result and not answer %}
+<script>function busy(f){var b=f.querySelector("button");b.disabled=true;b.textContent="Working, reading the shop records...";}</script>
 <section class="demo">
   <p class="kicker">Ninety second proof</p>
   <div class="actions">
-    {% if shop.own %}<form method="post" action="{{ url_for('demo_real') }}"><button class="btn" type="submit">See the real audit case</button></form>{% endif %}
-    {% if shop.real %}<form method="post" action="{{ url_for('demo_real') }}"><button class="btn" type="submit">See the account with the most money paid before the sale</button></form>{% else %}
-    <form method="post" action="{{ url_for('demo') }}"><button class="btn {{ 'alt' if shop.own else '' }}" type="submit">{{ 'Try the demo' if shop.own else 'Try the Tunde demo' }}</button></form>{% endif %}
+    {% if shop.own %}<form method="post" action="{{ url_for('demo_real') }}" onsubmit="busy(this)"><button class="btn" type="submit">See the real audit case</button></form>{% endif %}
+    {% if shop.real %}<form method="post" action="{{ url_for('demo_real') }}" onsubmit="busy(this)"><button class="btn" type="submit">See the account with the most money paid before the sale</button></form>{% else %}
+    <form method="post" action="{{ url_for('demo') }}" onsubmit="busy(this)"><button class="btn {{ 'alt' if shop.own else '' }}" type="submit">{{ 'Try the demo' if shop.own else 'Try the Tunde demo' }}</button></form>{% endif %}
   </div>
   <p class="hint">{% if shop.real %}This opens the receipt of the real account with the most money paid before the sales it was applied to. The receipt lists every matched payment and marks it inferred.{% elif shop.own %}The demo uses an invented customer: the answer is NO, and removing one record changes it. The real audit case opens the receipt of the real customer with the most money wrongly showing as owed.{% else %}Asks N45,000 for Tunde Adeyemi, then opens the receipt.{% endif %}</p>
 </section>
