@@ -7,7 +7,9 @@ PATH_QUERY = (
     "MATCH (a:Customer {id:$a}), (b:Customer {id:$b}) "
     "CALL algo.SPpaths({sourceNode:a, targetNode:b, "
     "relTypes:['OWNS','COLLECTED','BUYS_FOR','MADE','PAID','FAMILY'], relDirection:'both', pathCount:1}) "
-    "YIELD path RETURN length(path)")
+    # A family tie runs through the shared Family node (two edges); count it as
+    # one link, the same way the family network check does.
+    "YIELD path RETURN length(path) - size([n IN nodes(path) WHERE 'Family' IN labels(n)])")
 
 
 def linked_chain(graph, customer_id):
