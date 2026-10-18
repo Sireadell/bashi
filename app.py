@@ -637,5 +637,89 @@ def agents_md():
     return send_from_directory(ROOT, "AGENTS.md", mimetype="text/markdown")
 
 
+# ---------------------------------------------------------------- /proof
+# A visitor changes one character of one record on a throwaway copy of the
+# shop and watches the receipt check fail. The live graph is only read.
+
+PROOF_COLS = "d.id, d.customer_id, d.request, d.verdict, d.fingerprint, d.snapshot"
+
+
+def proof_edit_digit(n):
+    """Change only the last digit of a whole number."""
+    return n - n % 10 + (n % 10 + 1) % 10
+
+
+def proof_run(decision_id, graph_name, tamper):
+    """Copy the shop, optionally change one digit of one used record, check the
+    receipt on the copy, delete the copy. Returns what happened."""
+    import uuid
+    import whatif as _w
+    main = get_graph(graph_name)
+    db = _w.get_db()
+    _w.sweep_stale_copies(db)
+    copy_name = "shop_a_whatif_%s_%d_%s" % (decision_id, int(time.time()), uuid.uuid4().hex[:6])
+    out = {"decision_id": decision_id, "changed": None, "copy_deleted": False}
+    try:
+        main.copy(copy_name)
+        cg = db.select_graph(copy_name)
+        if tamper:
+            rows = cg.query("MATCH (:Decision {id:$i})-[:USED_EVIDENCE]->(e) "
+                            "WHERE e.amount IS NOT NULL AND (e:Trade OR e:Payment) "
+                            "RETURN labels(e)[0], e.id, e.amount ORDER BY e.id", {"i": decision_id}).result_set
+            rows = [r for r in rows if isinstance(r[2], int) and not isinstance(r[2], bool)]
+            if not rows:
+                raise ValueError("this receipt used no sale or payment amount to change")
+            lab, rid, old = rows[0]
+            new = proof_edit_digit(old)
+            cg.query("MATCH (n:%s {id:$x}) SET n.amount = $a" % lab, {"x": rid, "a": new})
+            out["changed"] = {"kind": LABELS[lab], "id": rid, "before": old, "after": new}
+        row = cg.query("MATCH (d:Decision {id:$i}) RETURN " + PROOF_COLS, {"i": decision_id}).result_set
+        if not row:
+            raise ValueError("unknown decision")
+        ok, problems = verify_decision(cg, row[0])
+        out["passed"] = ok
+        out["problems"] = problems
+    finally:
+        try:
+            db.select_graph(copy_name).delete()
+            out["copy_deleted"] = True
+        except Exception:
+            pass
+    out["real_graph_untouched"] = True
+    return out
+
+
+@app.route("/proof")
+def proof():
+    try:
+        rows = cur_graph().query(
+            "MATCH (d:Decision)-[:ABOUT]->(c:Customer) RETURN d.id, c.name, d.request, d.verdict "
+            "ORDER BY d.created DESC LIMIT 12").result_set
+    except Exception:
+        rows = []
+    picks = [{"id": r[0], "name": r[1], "request": r[2], "verdict": r[3]} for r in rows]
+    want = request.args.get("d")
+    return render_template("proof.html", picks=picks, want=want if want in {p["id"] for p in picks} else None)
+
+
+@app.route("/proof/run", methods=["POST"])
+def proof_route():
+    if too_many_writes():
+        return slow_down()
+    body = request.get_json(silent=True) or {}
+    did = body.get("decision")
+    if not isinstance(did, str) or not did:
+        return jsonify(error="pick a receipt first"), 400
+    key, g = graph_for_decision(did)
+    try:
+        if load_decision(did, g) is None:
+            return jsonify(error="unknown receipt"), 404
+        return jsonify(proof_run(did, GRAPH_OF[key], body.get("mode") == "tamper"))
+    except ValueError as e:
+        return jsonify(error=str(e)), 400
+    except Exception as e:
+        return jsonify(error="proof check failed: " + type(e).__name__), 500
+
+
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=int(os.environ.get("PORT", "5000")), debug=False)

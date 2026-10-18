@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Try to cheat a receipt | Bashi{% endblock %}
+{% block body %}
+<section class="card">
+  <h1>Try to cheat a receipt</h1>
+  <p>Every Bashi answer comes with a fingerprint, a long code worked out from the exact sales and payments it used. If anyone changes even one number later, the fingerprint no longer fits and the check fails.</p>
+  <p>Pick a receipt. We make a throwaway copy of the shop, so the real records are never touched. Then you can check the copy as it is, or change one digit of one record first and watch the check catch it. The copy is deleted straight after.</p>
+  {% if picks %}
+  <label>Receipt
+    <select id="pick">
+      {% for p in picks %}
+      <option value="{{ p.id }}" {% if want == p.id %}selected{% endif %}>{{ p.id }}: {{ p.name }}, {{ p.request | naira }}, {{ p.verdict }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <p>
+    <button class="btn alt" id="same" type="button">1. Check the untouched copy</button>
+  </p>
+  <p>
+    <button class="btn" id="bad" type="button">2. Change one digit, then check</button>
+  </p>
+  <p class="hint" id="busy" hidden>Working on a copy. This takes a few seconds.</p>
+  {% else %}
+  <p class="err">There are no saved receipts yet. <a href="{{ url_for('home') }}">Ask a question first</a>, then come back.</p>
+  {% endif %}
+</section>
+
+<section class="card" id="out" aria-live="polite" hidden>
+  <h2 id="headline"></h2>
+  <p id="detail"></p>
+  <ul id="problems"></ul>
+  <p class="hint" id="foot"></p>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+(function () {
+  var pick = document.getElementById('pick');
+  if (!pick) return;
+  var out = document.getElementById('out'), head = document.getElementById('headline'),
+      detail = document.getElementById('detail'), list = document.getElementById('problems'),
+      foot = document.getElementById('foot'), busy = document.getElementById('busy'),
+      same = document.getElementById('same'), bad = document.getElementById('bad');
+  function naira(n) { return 'N' + Number(n).toLocaleString('en-US'); }
+  function run(mode) {
+    same.disabled = bad.disabled = true; busy.hidden = false; out.hidden = true;
+    fetch('/proof/run', {method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({decision: pick.value, mode: mode})})
+      .then(function (r) { return r.json().then(function (j) { return {ok: r.ok, j: j}; }); })
+      .then(function (x) {
+        var j = x.j; list.innerHTML = ''; out.hidden = false;
+        if (!x.ok) {
+          head.textContent = 'Could not run the check';
+          detail.textContent = j.error || 'Try again in a few minutes.';
+          foot.textContent = ''; return;
+        }
+        if (j.passed) {
+          head.textContent = 'PASS. The copy matches the fingerprint.';
+          detail.textContent = 'Nothing was changed, so every record is exactly as it was when the answer was given.';
+        } else {
+          head.textContent = 'FAIL. The check caught the change.';
+          var c = j.changed;
+          detail.textContent = c ? ('We changed ' + c.kind + ' ' + c.id + ' from ' + naira(c.before) +
+            ' to ' + naira(c.after) + ' on the copy. One digit.') : 'The copy no longer matches.';
+        }
+        (j.problems || []).forEach(function (p) {
+          var li = document.createElement('li'); li.textContent = p; list.appendChild(li);
+        });
+        foot.textContent = 'The real shop was not changed. The copy was ' +
+          (j.copy_deleted ? 'deleted.' : 'queued for deletion.');
+      })
+      .catch(function () {
+        out.hidden = false; head.textContent = 'Could not run the check';
+        detail.textContent = 'Try again in a moment.'; foot.textContent = '';
+      })
+      .then(function () { same.disabled = bad.disabled = false; busy.hidden = true; });
+  }
+  same.addEventListener('click', function () { run('untouched'); });
+  bad.addEventListener('click', function () { run('tamper'); });
+})();
+</script>
+{% endblock %}
