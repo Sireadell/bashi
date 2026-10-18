@@ -416,6 +416,12 @@ def build_receipt(shop, g, decision_id):
         out["buyers"] = buyer_view(read_buyers(g, dec["customer_id"]), state, dec["request"], ev["verdict"])
     except Exception:
         out["buyers"] = None
+    out["go_between"] = None
+    try:
+        from go_between import go_between
+        out["go_between"] = go_between(g, dec["customer_id"])
+    except Exception:
+        out["go_between"] = None
     out["family"] = None
     try:
         from buyers import family_view
