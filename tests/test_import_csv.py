@@ -116,7 +116,7 @@ def test_good_load_counts_decision_verify_and_cleanup(tmp_path):
         g = get_db().select_graph(name)
         for q, n in [("MATCH (n:Customer) RETURN count(n)", 4), ("MATCH (n:Trade) RETURN count(n)", 8),
                      ("MATCH (n:Payment) RETURN count(n)", 6), ("MATCH (n:Promise) RETURN count(n)", 2),
-                     ("MATCH (n:Rule) RETURN count(n)", 2), ("MATCH (n:Counter) RETURN count(n)", 2),
+                     ("MATCH (n:Rule) RETURN count(n)", 3), ("MATCH (n:Counter) RETURN count(n)", 2),
                      ("MATCH ()-[r:MADE]->() RETURN count(r)", 8),
                      ("MATCH ()-[r:PROMISED]->() RETURN count(r)", 2),
                      ("MATCH ()-[r:SETTLES]->() RETURN count(r)", 5),

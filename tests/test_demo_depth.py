@@ -70,10 +70,10 @@ def test_saved_decision_has_every_link_and_still_verifies(seeded, monkeypatch):
     assert used == {e["id"] for e in res["evidence"]}
     rules = {r[0] for r in seeded.query(
         "MATCH (:Decision {id:$d})-[:APPLIED_RULE]->(r:Rule) RETURN r.id", {"d": did}).result_set}
-    assert rules == {"R_LIMIT", "R_BROKEN_PROMISE"}
+    assert rules == {"R_LIMIT", "R_BROKEN_PROMISE", "R_FAMILY"}
     about = seeded.query("MATCH (:Decision {id:$d})-[:ABOUT]->(c) RETURN c.id", {"d": did}).result_set
     assert about == [["CUST-01"]]
-    assert seeded.query("MATCH (r:Rule) RETURN count(r)").result_set[0][0] == 2
+    assert seeded.query("MATCH (r:Rule) RETURN count(r)").result_set[0][0] == 3
     snap = seeded.query("MATCH (d:Decision {id:$d}) RETURN d.snapshot", {"d": did}).result_set[0][0]
     assert json.loads(snap)["Customer:CUST-01"]
 
@@ -82,7 +82,7 @@ def test_saved_decision_has_every_link_and_still_verifies(seeded, monkeypatch):
 def test_a_second_decision_does_not_duplicate_the_rules(seeded):
     decide("CUST-01", 45000, graph=seeded)
     decide("CUST-02", 90000, graph=seeded)
-    assert seeded.query("MATCH (r:Rule) RETURN count(r)").result_set[0][0] == 2
+    assert seeded.query("MATCH (r:Rule) RETURN count(r)").result_set[0][0] == 3
 
 
 def test_demo_route_opens_on_the_deep_case(seeded, monkeypatch):

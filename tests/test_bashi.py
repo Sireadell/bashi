@@ -24,7 +24,7 @@ def test_tunde_is_no_because_of_pr001(graph):
     assert linked == len(r["evidence"]) == 5
     rules = graph.query("MATCH (:Decision {id:$d})-[:APPLIED_RULE]->(r) RETURN r.id",
                         {"d": r["decision_id"]}).result_set
-    assert {x[0] for x in rules} == {"R_LIMIT", "R_BROKEN_PROMISE"}
+    assert {x[0] for x in rules} == {"R_LIMIT", "R_BROKEN_PROMISE", "R_FAMILY"}
 
 
 def test_removing_pr001_flips_to_yes(graph):
