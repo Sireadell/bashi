@@ -1,7 +1,8 @@
 """Take sealed set F: run Bashi and a plain balance check on the 20 family-network cases and score them.
 
-Run: python sealed/run_family.py
-Writes sealed/RESULTS_FAMILY.md and sealed/results_family.json. It builds one private graph, runs every
+Run: python sealed/run_family.py      (set F, 20 cases)
+     python sealed/run_family.py g    (set G, 10 long cases, 10 to 22 links)
+Writes sealed/RESULTS_FAMILY.md and sealed/results_family.json (set G: ..._G.md, ..._g.json). It builds one private graph, runs every
 case, and deletes the graph afterwards. It never touches shop_a, shop_own or shop_real.
 It refuses to run if the answer key no longer matches the fingerprint in KEY_HASH_FAMILY.txt.
 
@@ -23,13 +24,16 @@ from db import get_db  # noqa: E402
 from rules import CANNOT_TRACE, decide, naira  # noqa: E402
 
 ARMS = ("Bashi", "This account only")
+SETS = {"f": ("cases_family.json", "KEY_HASH_FAMILY.txt", "RESULTS_FAMILY.md", "results_family.json", "F"),
+        "g": ("cases_family_g.json", "KEY_HASH_FAMILY_G.txt", "RESULTS_FAMILY_G.md", "results_family_g.json", "G")}
+WHICH = SETS["g" if "g" in [a.lower() for a in sys.argv[1:]] else "f"]
 
 
 def load_key():
-    with open(os.path.join(HERE, "cases_family.json"), encoding="utf-8") as fh:
+    with open(os.path.join(HERE, WHICH[0]), encoding="utf-8") as fh:
         cases = json.load(fh)
     digest = hashlib.sha256(json.dumps(cases, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
-    with open(os.path.join(HERE, "KEY_HASH_FAMILY.txt"), encoding="utf-8") as fh:
+    with open(os.path.join(HERE, WHICH[1]), encoding="utf-8") as fh:
         if fh.read().split()[-1] != digest:
             raise SystemExit("The answer key does not match its fingerprint. Not running.")
     return cases, digest
@@ -112,9 +116,9 @@ def main():
     cases, digest = load_key()
     answers = run(cases)
     scores = score(cases, answers)
-    lines = ["# Sealed set F: family network, results", "",
-             "20 invented cases, answer key locked first (sha256 `%s`). Correct answers come from plain "
-             "arithmetic in make_key_family.py, not from Bashi." % digest, "",
+    lines = ["# Sealed set %s: family network, results" % WHICH[4], "",
+             "%d invented cases, answer key locked first (sha256 `%s`). Correct answers come from plain "
+             "arithmetic in the generator, not from Bashi." % (len(cases), digest), "",
              "| Arm | Right | Wrong approvals | Wrong refusals | Other |", "|---|---|---|---|---|"]
     for arm in ARMS:
         s = scores[arm]
@@ -126,9 +130,9 @@ def main():
         lines.append("| %s | %d | %d | %s | %s | %s | %s | %s | %s |" % (
             c["id"], c["depth"], len(c["reached"]), naira(c["network_owed"]), naira(c["limit"]),
             naira(c["request"]), c["correct"], answers[ARMS[0]][c["id"]], answers[ARMS[1]][c["id"]]))
-    with open(os.path.join(HERE, "RESULTS_FAMILY.md"), "w", encoding="utf-8") as fh:
+    with open(os.path.join(HERE, WHICH[2]), "w", encoding="utf-8") as fh:
         fh.write("\n".join(lines) + "\n")
-    with open(os.path.join(HERE, "results_family.json"), "w", encoding="utf-8") as fh:
+    with open(os.path.join(HERE, WHICH[3]), "w", encoding="utf-8") as fh:
         json.dump({"hash": digest, "scores": scores, "answers": answers}, fh, indent=1, sort_keys=True)
     for arm in ARMS:
         s = scores[arm]

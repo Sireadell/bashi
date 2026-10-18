@@ -1,0 +1,45 @@
+{
+ "answers": {
+  "Bashi": {
+   "G01": "NO",
+   "G02": "YES",
+   "G03": "NO",
+   "G04": "YES",
+   "G05": "NO",
+   "G06": "NO",
+   "G07": "YES",
+   "G08": "NO",
+   "G09": "YES",
+   "G10": "YES"
+  },
+  "This account only": {
+   "G01": "YES",
+   "G02": "YES",
+   "G03": "YES",
+   "G04": "YES",
+   "G05": "YES",
+   "G06": "YES",
+   "G07": "YES",
+   "G08": "YES",
+   "G09": "YES",
+   "G10": "YES"
+  }
+ },
+ "hash": "015685dc1b0cdffd954e7fadfd3730719dc93df41deec71e543f54348fd4a330",
+ "scores": {
+  "Bashi": {
+   "approved_wrongly": 0,
+   "other": 0,
+   "right": 10,
+   "wrong_approvals": 0,
+   "wrong_refusals": 0
+  },
+  "This account only": {
+   "approved_wrongly": 128000,
+   "other": 0,
+   "right": 5,
+   "wrong_approvals": 5,
+   "wrong_refusals": 0
+  }
+ }
+}
