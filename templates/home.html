@@ -8,6 +8,11 @@
   <p class="sub">In my audit of 17 July 2026, 8 credit sales were marked paid while the customer's ledger still showed the debt. Each screen looked right on its own, so nobody saw it. Bashi follows each sale to its payments in a graph, flags the gap, answers yes or no on credit, and gives a receipt anyone can check.</p>
   {% else %}<h1 class="lead">Should the shop sell on credit? Bashi answers yes or no, and shows the records behind it.</h1>
   <p class="sub">Every answer can be checked. Take away one record and see if the answer changes.</p>{% endif %}
+  {% if shop.real_available or shop.own %}<ol class="beforeafter">
+    <li><b>Before:</b> a real customer asks for N10,000. The ledger says they owe N343,210. Answer: NO.</li>
+    <li><b>Bashi finds</b> 3 payments that were recorded but never linked to their sales.</li>
+    <li><b>After linking them:</b> owed N0. Answer: YES. Press "See the real audit case" and try it.</li>
+  </ol>{% endif %}
   <p class="bignum"><b>0</b> wrong approvals in 255 locked test cases. A plain balance check made <b>53</b>.</p>
 </section>
 <section class="start" id="start">

@@ -148,3 +148,5 @@ h2{font-size:21px;letter-spacing:-.01em}
 .bignum{margin:14px 0 0;font-size:18px;color:var(--mute)}
 .bignum b{font-size:40px;color:var(--ink);line-height:1;vertical-align:-4px;margin-right:2px}
 @media (max-width:420px){.bignum b{font-size:32px}}
+.beforeafter{margin:14px 0 0;padding-left:20px;font-size:17px;line-height:1.5;max-width:40em}
+.beforeafter li{margin:0 0 4px}
