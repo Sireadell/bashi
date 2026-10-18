@@ -95,7 +95,7 @@ For Claude Desktop, install [extension/Bashi.mcpb](extension/Bashi.mcpb) (steps 
 
 **Runs on a real shop's books.** My whole shop is loaded on the live site, names removed: 45 customers, 544 credit sales, 543 payments. Press "Open my real shop's books" on the home page.
 
-I built Bashi for small shops that sell on credit. When a customer asks to buy on credit, Bashi answers yes or no, and it hands back a receipt that links the exact records it used: which sales, which payments, which broken promise. The answer comes from a fixed rule check over a FalkorDB graph, not from a guess, so anyone can look at the receipt and see why.
+Bashi is for any business that sells on credit, from a corner shop to a wholesaler with hundreds of accounts. I built it from my own shop. When a customer asks to buy on credit, Bashi answers yes or no, and it hands back a receipt that links the exact records it used: which sales, which payments, which broken promise. The answer comes from a fixed rule check over a FalkorDB graph, not from a guess, so anyone can look at the receipt and see why.
 
 **Part of the demo data is real and part is invented.** The real part is my own shop: the 8 sales from my audit, and a separate view of my whole shop's records (45 customers, 544 sales, 543 payments), all with names removed. Everything else is invented. See "Real vs invented" below.
 
@@ -365,7 +365,7 @@ If removing the evidence changes nothing, the page says so instead of pretending
 
 ## Against the plain alternatives
 
-Most small shops use one of two things: a notebook or spreadsheet ledger, or a balance check (add up the sales, subtract the payments, compare with the limit). Both give one number. Neither shows which sale a payment settled, and neither knows about a broken promise.
+Most businesses that sell on credit use one of two things: a notebook or spreadsheet ledger, or a balance check (add up the sales, subtract the payments, compare with the limit). Both give one number. Neither shows which sale a payment settled, and neither knows about a broken promise.
 
 On the 8 real audit sales (names removed), the shop's own ledger showed N388,340 owed. A balance check reads that number and stops there. Bashi walks from each sale to the payments linked to it, and for all 8 it finds a payment of the same amount that was recorded but never linked. It flags each one as a possible phantom debt and does not change the debt. You can see this on the live site with "See the real audit case".
 
