@@ -9,8 +9,8 @@ Two parts, each record tagged with a source:
               linked to the sale, so the debt shows and the phantom-debt flag fires.
               Payment dates (set equal to the sale dates) and credit limits are assumed.
 
-  invented    Filler so there is more to ask about: 12 made-up customers (CUST-01 to
-              CUST-12) with normal sales, payments and promises. CUST-01 has one broken
+  invented    Filler so there is more to ask about: 16 made-up customers (CUST-01 to
+              CUST-16) with normal sales, payments and promises. CUST-01 has one broken
               promise (the demo: NO turns to YES when it is removed). CUST-02 has one
               phantom debt. Every invented promise is kept, except CUST-01's.
 

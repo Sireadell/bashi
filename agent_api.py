@@ -37,7 +37,7 @@ def _app():
 
 def check_customer(value):
     if not isinstance(value, str) or not _ID.match(value.strip()):
-        raise ApiError(400, "customer must be a customer id such as C001 "
+        raise ApiError(400, "customer must be a customer id from the customer list "
                             "(letters, numbers, dash or underscore). Use list_customers to see them.")
     return value.strip()
 
