@@ -422,6 +422,12 @@ def build_receipt(shop, g, decision_id):
         out["linked_group"] = linked_group(g, dec["customer_id"])
     except Exception:
         out["linked_group"] = None
+    out["linked_chain"] = None
+    try:
+        from linked_chain import linked_chain
+        out["linked_chain"] = linked_chain(g, dec["customer_id"])
+    except Exception:
+        out["linked_chain"] = None
     out["inferred_count"] = len(state.get("inferred", {}))
     out["deposits"] = sum(state["settles"][k] for k, m in state.get("inferred", {}).items() if m == "deposit")
     out["unapplied"] = None
