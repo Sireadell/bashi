@@ -6,8 +6,8 @@ walks the graph itself instead of a hand-written path query. Information only:
 it never feeds the YES/NO decision. Read-only."""
 
 GROUP_QUERY = (
-    "CALL algo.WCC({nodeLabels:['Customer','Buyer','Trade','Payment'], "
-    "relationshipTypes:['OWNS','COLLECTED','MADE','PAID','FAMILY']}) "
+    "CALL algo.WCC({nodeLabels:['Customer','Buyer','Trade','Payment','Family'], "
+    "relationshipTypes:['OWNS','COLLECTED','BUYS_FOR','MADE','PAID','FAMILY']}) "
     "YIELD node, componentId "
     "WITH componentId AS comp, [x IN collect(node) WHERE 'Customer' IN labels(x) | x.id] AS ids "
     "RETURN comp, ids")

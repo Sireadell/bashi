@@ -6,7 +6,7 @@ from linked_group import GROUP_QUERY, DEBT_QUERY
 PATH_QUERY = (
     "MATCH (a:Customer {id:$a}), (b:Customer {id:$b}) "
     "CALL algo.SPpaths({sourceNode:a, targetNode:b, "
-    "relTypes:['OWNS','COLLECTED','MADE','PAID','FAMILY'], relDirection:'both', pathCount:1}) "
+    "relTypes:['OWNS','COLLECTED','BUYS_FOR','MADE','PAID','FAMILY'], relDirection:'both', pathCount:1}) "
     "YIELD path RETURN length(path)")
 
 
