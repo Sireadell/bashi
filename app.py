@@ -416,6 +416,12 @@ def build_receipt(shop, g, decision_id):
             t["buyer"] = out["buyers"]["names"].get(out["buyers"]["collected_by"].get(t["id"]))
         for p in out["payments"]:
             p["buyer"] = out["buyers"]["names"].get(out["buyers"]["paid_by"].get(p["id"]))
+    out["linked_group"] = None
+    try:
+        from linked_group import linked_group
+        out["linked_group"] = linked_group(g, dec["customer_id"])
+    except Exception:
+        out["linked_group"] = None
     out["inferred_count"] = len(state.get("inferred", {}))
     out["deposits"] = sum(state["settles"][k] for k, m in state.get("inferred", {}).items() if m == "deposit")
     out["unapplied"] = None
