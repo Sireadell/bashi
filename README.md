@@ -10,15 +10,13 @@ More for judges: [JUDGES.md](JUDGES.md)
 
 ![Drawn example with invented data: CUST-17 owes N0, but 7 links away 5 linked accounts owe N100,000, so the answer is NO](static/family-network.png)
 
-*Invented example, drawn for this README (not a screenshot of the site): alone this customer owes N0, but 7 links away 5 linked accounts owe N100,000, so Bashi says NO.*
-
-Checking CUST-17 alone, 1 link: YES, owes N0. Walking 7 links: NO, 5 linked accounts owe N100,000.
+*Invented example, drawn for this README. Check CUST-17 alone and it owes N0, so the answer is YES. Walk 7 links through the people behind it and 5 linked accounts owe N100,000, so Bashi says NO. Press "See the family network (7 links)" on the live site to run it.*
 
 **My shop's ledger said customers owed N388,340 they had already paid.** In my audit of 17 July 2026, 8 credit sales were marked paid while the customer's ledger still showed the debt. Each screen looked right on its own, so nobody saw it. Bashi follows each sale to its payments in a graph, flags the gap, answers yes or no on credit, and gives a receipt anyone can check. Press "See the real audit case" on the live site to see those 8 sales.
 
 **Entered in Track 01, Agents That Act on Connected Data. This is the one track I want judged.**
 
-**What the graph does here that a balance check cannot.** A balance check adds up what a customer owes and stops. It cannot see that a payment cleared a particular sale, or that the same customer broke a promise to pay. Bashi walks those links in FalkorDB: customer, to sales, to payments, to promises. On 255 test cases whose answers I locked before running anything (55, then 200 new), Bashi wrongly approved 0 and a balance check wrongly approved 53 (14 of the first 55, 39 of the next 200). The files are `sealed/RESULTS.md` and `sealed/RESULTS_B.md`. Plus 30 locked family-network cases with chains up to 22 links: Bashi 30 of 30; checking the asking account alone wrongly approves 11, and an AI given the same records without the graph gets 19 of 30, mostly by refusing customers who should get credit (`sealed/RESULTS_LLM_FAMILY.md`) (`sealed/RESULTS_FAMILY.md` for set F, 20 cases, and `sealed/RESULTS_FAMILY_G.md` for set G, 10 cases). I wrote those cases myself, so it shows the situations Bashi was built for, not accuracy on every shop. Take FalkorDB away and Bashi answers nothing.
+**What the graph does here that a balance check cannot.** A balance check adds up what a customer owes and stops. It cannot see that a payment cleared a particular sale, or that the same customer broke a promise to pay. Bashi walks those links in FalkorDB: customer, to sales, to payments, to promises. On 255 test cases whose answers I locked before running anything (55, then 200 new), Bashi wrongly approved 0 and a balance check wrongly approved 53 (14 of the first 55, 39 of the next 200). The files are `sealed/RESULTS.md` and `sealed/RESULTS_B.md`. I then locked 30 family-network cases, with chains up to 22 links (`sealed/RESULTS_FAMILY.md`, 20 cases, and `sealed/RESULTS_FAMILY_G.md`, 10 cases). Bashi got 30 of 30. Checking only the asking account wrongly approved 11. An AI given the same records without the graph got 19 of 30, mostly by refusing customers who should have had credit (`sealed/RESULTS_LLM_FAMILY.md`). I wrote those cases myself, so it shows the situations Bashi was built for, not accuracy on every shop. Take FalkorDB away and Bashi answers nothing.
 
 **Against an AI with no graph.** I gave an AI model (Gemini Flash Lite, temperature 0) the same 200 locked cases as a flat list of sales, payments and promises with the same rules, just no links. It got 152 right and wrongly approved 23, worth N3,685,003 of credit. Bashi got 200 right with 0 wrong approvals. The AI did spot every broken promise; its misses were reading and arithmetic slips, which is the point: the same records, read without the links, give answers you can't rely on. Every answer is saved in `sealed/RESULTS_LLM.md` and the JSON files beside it.
 
@@ -48,7 +46,7 @@ Press the what-if on family link FAM-1: on a throwaway copy of the graph it is r
 | 1 | Open https://bashi-vrfv.onrender.com (a sleeping host can take about 25 seconds the first time). | The home page of my own shop view. |
 | 2 | Press "Try the demo". | A receipt for an invented customer (CUST-02, N90,000): NO, because sale TI-005 looks unpaid. Payment PY-005 for the same amount was never linked to it, and the receipt names both. |
 | 3 | On the receipt, press "What if this evidence did not exist" next to TI-005. | The answer flips to YES (owed N0), run on a copy of the graph. |
-| 4 | Ask CUST-17 for N40,000 (invented), open the receipt, and press the what-if on family link FAM-1. | A plain balance says YES. Bashi says NO (N140,000 across 6 linked accounts, limit N100,000), then YES once FAM-1 is removed on a copy. |
+| 4 | Back on the home page, press "See the family network (7 links)" (invented customer CUST-17, N40,000), then press the what-if on family link FAM-1. | A plain balance check says YES. Bashi says NO (this account and 5 linked accounts owe N100,000, plus N40,000 is over the N100,000 limit), then YES once FAM-1 is removed on a copy. |
 | 5 | Check the receipt from a terminal (this saves one decision on the live site, then re-checks it): | The last line says `"verified":true`. |
 
 ```bash
