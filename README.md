@@ -10,6 +10,8 @@ More for judges: [JUDGES.md](JUDGES.md)
 
 **What the graph does here that a balance check cannot.** A balance check adds up what a customer owes and stops. It cannot see that a payment cleared a particular sale, or that the same customer broke a promise to pay. Bashi walks those links in FalkorDB: customer, to sales, to payments, to promises. On 255 test cases whose answers I locked before running anything (55, then 200 new), Bashi wrongly approved 0 and a balance check wrongly approved 53 (14 of the first 55, 39 of the next 200). The files are `sealed/RESULTS.md` and `sealed/RESULTS_B.md`. I wrote those cases myself, so it shows the situations Bashi was built for, not accuracy on every shop. Take FalkorDB away and Bashi answers nothing.
 
+**Against an AI with no graph.** I gave an AI model (Gemini Flash Lite, temperature 0) the same 200 locked cases as a flat list of sales, payments and promises with the same rules, just no links. It got 152 right and wrongly approved 23, worth N3,685,003 of credit. Bashi got 200 right with 0 wrong approvals. The AI did spot every broken promise; its misses were reading and arithmetic slips, which is the point: the same records, read without the links, give answers you can't rely on. Every answer is saved in `sealed/RESULTS_LLM.md` and the JSON files beside it.
+
 ## Judge in 60 seconds
 
 | Step | Do this | You should see |
