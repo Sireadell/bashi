@@ -3,8 +3,12 @@
 {% if not result and not answer %}
 <script>function busy(f){var b=f.querySelector("button");b.disabled=true;b.textContent="Working, reading the shop records...";}</script>
 <section class="hero">
-  <h1 class="lead">Should the shop sell on credit? Bashi answers yes or no, and shows the records behind it.</h1>
-  <p class="sub">Every answer can be checked. Take away one record and see if the answer changes.</p>
+  {% if shop.real_available or shop.own %}<p class="kicker">Built from my own shop's books</p>
+  <h1 class="lead">My shop's ledger said customers owed N388,340 they had already paid. Bashi catches that before I refuse them credit.</h1>
+  <p class="sub">In my audit of 17 July 2026, 8 credit sales were marked paid while the customer's ledger still showed the debt. Each screen looked right on its own, so nobody saw it. Bashi follows each sale to its payments in a graph, flags the gap, answers yes or no on credit, and gives a receipt anyone can check.</p>
+  {% else %}<h1 class="lead">Should the shop sell on credit? Bashi answers yes or no, and shows the records behind it.</h1>
+  <p class="sub">Every answer can be checked. Take away one record and see if the answer changes.</p>{% endif %}
+  <p class="bignum"><b>0</b> wrong approvals in 255 locked test cases. A plain balance check made <b>53</b>.</p>
 </section>
 <section class="start" id="start">
   <p class="kicker">Start here</p>
@@ -24,7 +28,7 @@
   <div class="realline"><p><b>Runs on a real shop's books.</b> My whole shop, names removed: 45 customers, 544 credit sales, 543 payments. Not a mock-up. {% if shop.real %}You are looking at it now.{% endif %}</p>
   {% if not shop.real %}<form method="post" action="{{ url_for('choose_shop') }}"><input type="hidden" name="shop" value="real"><button class="btn alt" type="submit">Open my real shop's books</button></form>{% endif %}</div>
   {% endif %}
-  <p class="realline"><b>Tested before it was built for show:</b> on 255 cases whose answers were locked first, Bashi wrongly approved 0 and a balance check wrongly approved 53. <a href="{{ url_for('proof') }}">Try to tamper with a receipt yourself</a> and watch the check fail.</p>
+  <p class="realline"><b>Check it yourself:</b> the 255 test cases had their answers locked before Bashi ran (files in the repo). <a href="{{ url_for('proof') }}">Try to tamper with a receipt</a> and watch the check fail.</p>
   <p class="gloss"><b>Phantom debt:</b> the books still say a customer owes for a sale, but a payment of the same amount came in and was never linked to it. <b>Inferred:</b> a payment-to-sale link that a rule proposed, not one a person recorded. Every inferred link says so on the receipt.</p>
 </section>
 {% endif %}

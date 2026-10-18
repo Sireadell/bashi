@@ -144,3 +144,7 @@ h2{font-size:21px;letter-spacing:-.01em}
 .gloss{border-top:1px solid var(--line);padding-top:12px;margin:14px 0 0;font-size:15px;color:var(--mute)}
 .gloss b{color:var(--ink)}
 @media (max-width:700px){.startlist{grid-template-columns:1fr}.start{padding:16px}.realline .btn{width:100%}}
+
+.bignum{margin:14px 0 0;font-size:18px;color:var(--mute)}
+.bignum b{font-size:40px;color:var(--ink);line-height:1;vertical-align:-4px;margin-right:2px}
+@media (max-width:420px){.bignum b{font-size:32px}}
