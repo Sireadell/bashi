@@ -26,6 +26,7 @@
     <div class="sd-box"><p class="sd-h">Following the links says</p><p class="sd-v {{ shallow.deep|lower }}">{{ shallow.deep }}</p><p class="small">Debt {{ shallow.deep_debt|naira }}. Each payment tied to its sale, promises checked.</p></div>
   </div>
   {% if shallow.differs %}<p><b>The two answers differ.</b> What made the difference: {{ shallow.why|join('; ') }}.</p>
+  {% if orphans and shallow.shallow == 'YES' and shallow.deep == 'NO' %}<p class="small"><b>Why Bashi holds at NO here.</b> The ledger balance is low only because it subtracts payments that nobody tied to a sale, so it cannot say which sale each payment paid. Bashi will not approve credit on payments that nobody linked, so it answers NO and flags possible phantom debt. Press the what-if below to link them on a throwaway copy: if the answer then becomes YES, the NO came from missing links, not from a bad customer. Someone should confirm those links in the real books.</p>{% endif %}
   {% else %}<p>Both give the same answer here.</p>{% endif %}
   {% if shallow.inferred %}<p class="small">{{ shallow.inferred }} payment link{{ '' if shallow.inferred == 1 else 's' }} here {{ 'was' if shallow.inferred == 1 else 'were' }} matched by rule (inferred), not confirmed by a person.</p>{% endif %}
 </section>
@@ -147,6 +148,7 @@
     </tr>
     {% endfor %}
   </table></div>
+  {% elif orphans %}<p>No payment is linked to these sales yet. The {{ orphans|length }} unlinked payment{{ '' if orphans|length == 1 else 's' }} for this customer {{ 'is' if orphans|length == 1 else 'are' }} listed under "Possible phantom debt" below.</p>
   {% else %}<p>No payments were read for this customer.</p>{% endif %}
 </section>
 {% if inferred_count %}
