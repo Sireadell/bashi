@@ -14,6 +14,11 @@ Two parts, each record tagged with a source:
               promise (the demo: NO turns to YES when it is removed). CUST-02 has one
               phantom debt. Every invented promise is kept, except CUST-01's.
 
+  invented, two buyers: CUST-13 is one shop where two people act for it. BUY-1 collects the
+              goods and BUY-2 pays for them ("Buyer 1" and "Buyer 2", invented labels). Checked
+              one person at a time the shop looks like it owes and is overpaid; checked as one
+              shop it owes nothing.
+
 No names, phones, addresses, notes or item names exist in this file.
 """
 REAL = "real_audit"
@@ -72,6 +77,14 @@ _INVENTED_PROMISES = [
 ]
 
 
+# The two-buyer shop: (sale amount, sale date, who collected, payment date, who paid).
+# A payment is linked to its own sale, as the shop's records say.
+_BUYER_SHOP = "CUST-13"
+_BUYER_SALES = [(20000, "2026-08-04", "BUY-1", "2026-08-06", "BUY-1"),
+                (40000, "2026-09-02", "BUY-1", "2026-09-05", "BUY-2"),
+                (30000, "2026-09-20", "BUY-1", "2026-09-24", "BUY-2")]
+
+
 def build():
     customers = [{"id": c, "source": REAL} for c in ("CUST-A", "CUST-B", "CUST-C", "CUST-D")]
     customers += [{"id": c, "source": INVENTED} for c in sorted(_INVENTED)]
@@ -94,10 +107,23 @@ def build():
                 payments.append({"id": "PY-%03d" % n_pay, "customer": cust, "amount": pamt,
                                  "date": pday, "settles": None if phantom else sid,
                                  "applied": 0 if phantom else pamt, "source": INVENTED})
+    customers.append({"id": _BUYER_SHOP, "source": INVENTED})
+    buyers = [{"id": "BUY-1", "label": "Buyer 1", "customer": _BUYER_SHOP},
+              {"id": "BUY-2", "label": "Buyer 2", "customer": _BUYER_SHOP}]
+    for amount, day, taker, pday, payer in _BUYER_SALES:
+        n_sale += 1
+        n_pay += 1
+        sid = "TI-%03d" % n_sale
+        sales.append({"id": sid, "kind": "sale", "customer": _BUYER_SHOP, "amount": amount,
+                      "date": day, "paid": amount, "source": INVENTED, "buyer": taker})
+        payments.append({"id": "PY-%03d" % n_pay, "customer": _BUYER_SHOP, "amount": amount,
+                         "date": pday, "settles": sid, "applied": amount, "source": INVENTED,
+                         "buyer": payer})
     promises = [{"id": "PR%03d" % i, "customer": c, "amount": a, "date": made, "due": due,
                  "kept": kept, "source": INVENTED}
                 for i, (c, a, made, due, kept) in enumerate(_INVENTED_PROMISES, 1)]
-    return {"customers": customers, "sales": sales, "payments": payments, "promises": promises}
+    return {"customers": customers, "sales": sales, "payments": payments, "promises": promises,
+            "buyers": buyers}
 
 
 SEED = build()

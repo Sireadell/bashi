@@ -78,6 +78,13 @@ def prepare(data):
             raise ValueError("record %s has no valid source" % row["id"])
     customers = [{"id": c["id"], "name": c["id"], "source": c["source"],
                   "credit_limit": credit_limit(biggest[c["id"]])} for c in data["customers"]]
+    buyers = [{"id": b["id"], "name": b["label"], "cid": b["customer"]} for b in data.get("buyers", [])]
+    bids = {b["id"]: b["cid"] for b in buyers}
+    for row in sales + pays:
+        if row.get("buyer") and bids.get(row["buyer"]) != row["customer"]:
+            raise ValueError("record %s names a buyer who does not act for that shop" % row["id"])
+    collected = [{"bid": s["buyer"], "id": s["id"]} for s in sales if s.get("buyer")]
+    paid_by = [{"bid": p["buyer"], "id": p["id"]} for p in pays if p.get("buyer")]
     trades = [{"id": s["id"], "amount": s["amount"], "date": s["date"], "cid": s["customer"],
                "kind": s.get("kind", "sale"), "marked_paid": s.get("paid", 0),
                "source": s["source"]} for s in sales]
@@ -94,7 +101,8 @@ def prepare(data):
                  "kept": bool(r["kept"]), "source": r["source"]} for r in proms]
     promised = [{"cid": r["customer"], "prid": r["id"]} for r in proms]
     return dict(customers=customers, trades=trades, payments=payments, settles=settles,
-                promises=promises, promised=promised)
+                promises=promises, promised=promised,
+                buyers=buyers, collected=collected, paid_by=paid_by)
 
 
 def load(g, rows):
@@ -115,6 +123,14 @@ def load(g, rows):
             "amount:r.amount, kept:r.kept, source:r.source})", {"rows": rows["promises"]})
     g.query("UNWIND $rows AS r MATCH (c:Customer {id:r.cid}), (p:Promise {id:r.prid}) "
             "CREATE (c)-[:PROMISED]->(p)", {"rows": rows["promised"]})
+    if rows.get("buyers"):
+        g.query("CREATE INDEX FOR (n:Buyer) ON (n.id)")
+        g.query("UNWIND $rows AS r MATCH (c:Customer {id:r.cid}) "
+                "CREATE (:Buyer {id:r.id, name:r.name})-[:BUYS_FOR]->(c)", {"rows": rows["buyers"]})
+        g.query("UNWIND $rows AS r MATCH (b:Buyer {id:r.bid}), (t:Trade {id:r.id}) "
+                "CREATE (b)-[:COLLECTED]->(t)", {"rows": rows["collected"]})
+        g.query("UNWIND $rows AS r MATCH (b:Buyer {id:r.bid}), (p:Payment {id:r.id}) "
+                "CREATE (b)-[:PAID]->(p)", {"rows": rows["paid_by"]})
     g.query("CREATE (:Counter {id:'decision', n:$d}), (:Counter {id:'promise', n:$p})",
             {"d": DECISION_START, "p": len(rows["promises"])})
 

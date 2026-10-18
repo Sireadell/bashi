@@ -10,6 +10,8 @@
 .eg-node.decision.yes rect{stroke:var(--yes)}
 .eg-node.decision.yes text{fill:var(--yes)}
 .eg-node.customer rect{stroke-dasharray:none;fill:var(--paper)}
+.eg-node.buyer rect{fill:var(--paper);stroke-dasharray:2 2}
+.eg-edge.buyer{stroke-dasharray:2 3}
 .eg-node.promise.broken rect{stroke:var(--no);stroke-width:3}
 .eg-node.promise.broken .eg-sub{fill:var(--no);font-weight:700;letter-spacing:.05em}
 .eg-node.orphan rect{stroke:var(--warn);stroke-width:2;stroke-dasharray:5 3}

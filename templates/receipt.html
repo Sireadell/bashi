@@ -31,6 +31,25 @@
 </section>
 {% endif %}
 
+{% if buyers %}
+<section class="card sd" id="shop-buyers">
+  <h2>One shop, {{ buyers.people|length }} buyers</h2>
+  <p>The credit is for the shop, not for one person. Different people collect goods and pay for the same shop, and the graph links each of them to it.{% if tag == 'invented' %} This shop and its buyers are invented, made up to show the idea.{% elif tag == 'real' %} These are real records with names removed.{% endif %}</p>
+  <div class="scroll"><table>
+    <tr><th>Buyer</th><th class="n">Collected</th><th class="n">Paid</th><th class="n">One person's balance</th></tr>
+    {% for b in buyers.people %}<tr><td>{{ b.name }}</td><td class="n">{{ b.collected|naira }}</td><td class="n">{{ b.paid|naira }}</td><td class="n">{{ b.balance|naira if b.balance >= 0 else 'overpaid ' ~ (-b.balance)|naira }}</td></tr>{% endfor %}
+  </table></div>
+  {% if buyers.different %}<p>{{ buyers.different }} payment{{ '' if buyers.different == 1 else 's' }} {{ 'was' if buyers.different == 1 else 'were' }} made by a different person from the one who collected the goods; all {{ 'is' if buyers.different == 1 else 'are' }} linked to the same shop.</p>{% endif %}
+  {% if buyers.person_answer %}
+  <div class="sd-grid">
+    <div class="sd-box"><p class="sd-h">Checking {{ buyers.person_name }} alone says</p><p class="sd-v {{ buyers.person_answer|lower }}">{{ buyers.person_answer }}</p><p class="small">Debt {{ buyers.person_debt|naira }} for that one person.</p></div>
+    <div class="sd-box"><p class="sd-h">Checking the shop says</p><p class="sd-v {{ dec.verdict|lower }}">{{ dec.verdict }}</p><p class="small">Debt {{ open_debt|naira if trace_ok else 'unknown' }}. Every payment from every buyer counted.</p></div>
+  </div>
+  {% if buyers.wrong %}<p><b>A per-person check gives the wrong answer here.</b> It sees {{ buyers.person_name }} owing and the other buyer overpaid, and never puts the two together.</p>{% endif %}
+  {% endif %}
+</section>
+{% endif %}
+
 {% if orphans %}
 <section class="card" id="phantom-whatif">
   <h2>What if the unlinked payments had been linked?</h2>
@@ -91,10 +110,11 @@
 <section class="card">
   <h2>Credit sales and what is still owed</h2>
   <div class="scroll"><table>
-    <tr><th>Sale</th><th>Date</th><th class="n">Amount</th><th class="n">Paid</th><th class="n">Still owed</th><th></th></tr>
+    <tr><th>Sale</th>{% if buyers %}<th>Collected by</th>{% endif %}<th>Date</th><th class="n">Amount</th><th class="n">Paid</th><th class="n">Still owed</th><th></th></tr>
     {% for t in trades %}
     <tr>
       <td><a class="mono" href="{{ url_for('record', label='Trade', rid=t.id, d=dec.id) }}">{{ t.id }}</a></td>
+      {% if buyers %}<td>{{ t.buyer or 'not recorded' }}</td>{% endif %}
       <td>{{ t.date }}</td><td class="n">{{ t.amount|naira }}</td><td class="n">{{ t.settled|naira }}</td>
       <td class="n"><b>{{ t.open|naira }}</b></td>
       <td><button class="mini" data-remove="{{ t.id }}">What if this evidence did not exist</button></td>
@@ -109,10 +129,11 @@
   <h2>Payments used</h2>
   {% if payments %}
   <div class="scroll"><table>
-    <tr><th>Payment</th><th>Date</th><th class="n">Amount</th><th>Settles</th><th></th></tr>
+    <tr><th>Payment</th>{% if buyers %}<th>Paid by</th>{% endif %}<th>Date</th><th class="n">Amount</th><th>Settles</th><th></th></tr>
     {% for p in payments %}
     <tr>
       <td><a class="mono" href="{{ url_for('record', label='Payment', rid=p.id, d=dec.id) }}">{{ p.id }}</a></td>
+      {% if buyers %}<td>{{ p.buyer or 'not recorded' }}</td>{% endif %}
       <td>{{ p.date }}</td><td class="n">{{ p.amount|naira }}</td>
       <td>{% for t in trades %}{% for q in t.pays if q.id == p.id %}<a class="mono" href="{{ url_for('record', label='Trade', rid=t.id, d=dec.id) }}">{{ t.id }}</a> {{ q.amount|naira }}{% if q.method %} <span class="tagi" title="Matched by rule, not confirmed by a person">inferred, {{ 'exact amount' if q.method == 'exact' else 'paid before the sale' if q.method == 'deposit' else 'oldest sale first' }}</span>{% endif %} {% endfor %}{% endfor %}</td>
       <td><button class="mini" data-remove="{{ p.id }}">What if this evidence did not exist</button></td>

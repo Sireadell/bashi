@@ -247,7 +247,7 @@ PURPOSES = {
     'own_shop.py|find_real_case|c7ee4a': 'Find the customers from the real audit data.',
     'real_shop.py|load_real|fb170a': 'Link each real-audit payment to the customer who paid.',
     'rules.py|read_state|b1acd8': 'Read everything the rules need for one customer in one go: limit, sales, payments, settlements, promises and broken promises, as of a date.',
-    'rules.py|possible_phantoms|078564': 'Check if any payments are tied to customers in this graph.',
+    'rules.py|possible_phantoms|3ecc27': 'Check if any payments are tied to customers in this graph.',
     'rules.py|possible_phantoms|324847': "Find a customer's payments that settle nothing and have no guessed match, as possible phantom debts.",
     'rules.py|possible_phantoms|23e623': 'Find unmatched payments anywhere in the shop when payments are not tied to customers.',
     'rules.py|_existing_max|6dd0f5': 'List existing ids of one kind so a new counter starts after the highest.',

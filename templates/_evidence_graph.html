@@ -22,7 +22,8 @@
 {% for p in shown_pay %}{% set _ = pix.update({p.id: loop.index0}) %}{% endfor %}
 
 {% set rows = [shown_trades|length, shown_pay|length, shown_promises|length, 1]|max %}
-{% set Y0 = 160 %}
+{% set shown_buyers = (buyers.people[:2] if buyers else []) %}
+{% set Y0 = 160 + (56 if shown_buyers else 0) %}
 {% set STEP = 54 %}
 {% set H = Y0 + rows * STEP + 2 %}
 {% set hidden = (trades|length - shown_trades|length) + (promises|length - shown_promises|length) + (prow|length - shown_pay|length) %}
@@ -64,9 +65,18 @@
       <text class="eg-lbl orphan" x="{{ 90 + (138 - 90) * 0.45 }}" y="{{ py + (ty - py) * 0.45 - 4 }}">{{ '{:,}'.format(p.amount) }}</text>
     {% endfor %}
 
+    {% for b in shown_buyers %}
+      {% set bx = 62 if loop.index0 == 0 else 298 %}
+      <line class="eg-edge buyer" x1="{{ 140 if loop.index0 == 0 else 220 }}" y1="118" x2="{{ bx }}" y2="136"/>
+    {% endfor %}
+
     {# decision and customer #}
     {{ node(180, 10, 170, 'Decision ' ~ dec.id, dec.verdict ~ ', asked ' ~ '{:,}'.format(dec.request), 'decision ' ~ ('no' if dec.verdict == 'NO' else 'yes'), 'Decision ' ~ dec.id ~ ': ' ~ dec.verdict, '', 22) }}
     {{ node(180, 78, 150, dec.customer_name or dec.customer_id, 'customer ' ~ dec.customer_id, 'customer', 'Customer ' ~ dec.customer_id, '', 18) }}
+
+    {% for b in shown_buyers %}
+      {{ node(62 if loop.index0 == 0 else 298, 136, 110, b.name, 'collected ' ~ b.trades ~ ', paid ' ~ b.payments, 'buyer', 'Buyer ' ~ b.name ~ ' buys for this shop. Collected ' ~ b.collected|naira ~ ' of goods, paid ' ~ b.paid|naira, '', 16) }}
+    {% endfor %}
 
     <text class="eg-head" x="49" y="{{ Y0 - 12 }}">PAYMENTS</text>
     <text class="eg-head" x="180" y="{{ Y0 - 12 }}">CREDIT SALES</text>
@@ -89,6 +99,7 @@
   <ul class="eg-key small">
     <li>Numbers on the lines are the amount of that payment applied to that sale.</li>
     {% if has_rule %}<li>* matched by rule, not confirmed by a person.</li>{% endif %}
+    {% if shown_buyers %}<li>The two boxes under the customer are buyers who act for this shop. {% if buyers.people|length > 2 %}{{ buyers.people|length - 2 }} more not drawn. {% endif %}Who collected or paid each record is in the tables below.</li>{% endif %}
     {% if has_broken %}<li>A promise marked BROKEN has a red border.</li>{% endif %}
     {% if orphans %}<li>A dashed box and dashed line mean a payment of the same amount as an unpaid sale was never linked to it: a possible phantom debt. Flagged, not changed.</li>{% endif %}
     {% if hidden > 0 %}<li>{{ hidden }} more record{{ '' if hidden == 1 else 's' }} not drawn here. They are all in the tables below.</li>{% endif %}

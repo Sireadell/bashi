@@ -70,7 +70,7 @@ def test_seed_has_no_personal_information():
 
 
 def test_seed_keys_are_only_codes_amounts_dates_and_flags():
-    allowed = {"id", "source", "kind", "customer", "amount", "date", "paid", "settles", "applied", "due", "kept"}
+    allowed = {"id", "source", "kind", "customer", "amount", "date", "paid", "settles", "applied", "due", "kept", "buyer", "label"}
     for rows in SEED.values():
         for row in rows:
             assert set(row) <= allowed, set(row) - allowed
@@ -87,7 +87,7 @@ def test_seed_real_part_is_the_eight_audited_trades():
 
 def test_seed_invented_part_has_one_broken_promise_and_one_phantom():
     inv_c = [c for c in SEED["customers"] if c["source"] == I]
-    assert len(inv_c) == 12
+    assert len(inv_c) == 13   # 12 filler + the two-buyer shop
     broken = [p for p in SEED["promises"] if not p["kept"]]
     assert [p["customer"] for p in broken] == ["CUST-01"]
     phantoms = [p for p in SEED["payments"] if p["source"] == I and p["settles"] is None]
@@ -98,7 +98,7 @@ def test_seed_invented_part_has_one_broken_promise_and_one_phantom():
 def test_seed_loads_and_every_real_trade_raises_the_phantom_flag():
     g = load_temp(SEED)
     q = lambda c: g.query(c).result_set[0][0]
-    assert q("MATCH (n:Customer) RETURN count(n)") == 16
+    assert q("MATCH (n:Customer) RETURN count(n)") == 17
     assert q("MATCH (n:Trade {source:'real_audit'}) RETURN count(n)") == 8
     assert q("MATCH (n:Payment) WHERE NOT (n)-[:SETTLES]->(:Trade) RETURN count(n)") == 9   # 8 real + 1 invented
     assert q("MATCH (c:Customer) WHERE c.source IS NULL RETURN count(c)") == 0
