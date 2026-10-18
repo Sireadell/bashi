@@ -419,7 +419,7 @@ The scorecard runs on the invented practice shop, and only 3 of 40 differ, so th
 python -m pytest
 ```
 
-There are 187 tests. The full run takes about 20 minutes because it talks to a hosted database. The tests run against a copy of the graph and delete it afterwards.
+There are 193 tests. The latest full run passed 187 of 187 on 18 October, and the 6 added since pass too (dates and counts in [TESTS.md](TESTS.md)). The full run takes about 25 minutes because it talks to a hosted database. The tests run against a copy of the graph and delete it afterwards.
 
 ## AI tools used
 

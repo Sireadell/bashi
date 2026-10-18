@@ -5,7 +5,16 @@ from types import SimpleNamespace as NS
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+import pytest  # noqa: E402
+
 import agent  # noqa: E402
+
+
+@pytest.fixture(autouse=True)
+def no_model_keys(monkeypatch):
+    """These tests use a fake model or the built-in parser, so a key in .env must not leak in."""
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    monkeypatch.delenv("GEMINI_API_KEY", raising=False)
 
 
 def tool(_n, **args):
