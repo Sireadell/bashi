@@ -439,6 +439,11 @@ def build_receipt(shop, g, decision_id):
         out["linked_chain"] = linked_chain(g, dec["customer_id"])
     except Exception:
         out["linked_chain"] = None
+    try:
+        from lookalike import lookalike
+        out["lookalike"] = lookalike(g, dec["customer_id"])
+    except Exception:
+        out["lookalike"] = None
     out["inferred_count"] = len(state.get("inferred", {}))
     out["deposits"] = sum(state["settles"][k] for k, m in state.get("inferred", {}).items() if m == "deposit")
     out["unapplied"] = None
