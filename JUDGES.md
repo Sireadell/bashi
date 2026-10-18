@@ -27,4 +27,4 @@ The sealed tests: 55 cases, then 200 new ones whose answers were locked before r
 - The what-if button copies the graph (`GRAPH.COPY`), removes one record on the copy, and re-asks.
 - Every decision is saved back into the graph with a fingerprint, and replay shows if anything changed later.
 
-The README lists each claim with the click or command that checks it.
+The README lists each claim with the click or command that checks it. Its "Tracks entered" section quotes each track's focus areas from the [track page](https://wemakedevs.org/hackathons/falkordb) and says where Bashi does each one.

@@ -1,5 +1,6 @@
 Live demo: https://bashi-vrfv.onrender.com (no sign-up)
 Demo video: https://youtu.be/Xpq_LN4h9XA
+Judging? Start here: [JUDGES.md](JUDGES.md)
 
 # Bashi
 
@@ -31,6 +32,8 @@ You get back `NO`, the reason (a broken promise, PR001), the ids of the records 
 ## Why this exists
 
 On 17 July 2026 I ran an audit (read-only) on a real shop's records. It found 8 sales marked fully paid while the customer's account ledger still showed debt, N388,340 in total. The cause: one payment updates two separate records, the sale and the ledger, and one of them can lag or fail. Each screen looks right on its own, so nobody sees the gap. I fixed the cause afterwards.
+
+It is not just my shop. In the World Bank's 2014 Nigeria business survey, 1,299 of the 2,652 firms that answered said part of their sales were paid for after delivery ([survey question k2c](https://microdata.worldbank.org/catalog/2361/variable/F4/V1038?name=k2c); a count of firms in the survey, not a national rate). A study of Nigerian food traders found these markets run on trust "in the context of inadequate formal institutions such as banks and legal contracts" ([Lyon and Porter, Cambridge Journal of Economics, 2009](https://www.gov.uk/research-for-development-outputs/market-institutions-trust-and-norms-exploring-moral-economies-in-nigerian-food-systems)). Selling now and collecting later is normal, and the record is often the only proof either side has.
 
 I ran the same kind of check on the same shop on 15 October 2026 (494 sales, 46 credit accounts). 3 of the 46 accounts still had two records that differ, a total gap of N15,510.
 
@@ -89,8 +92,22 @@ python verify.py --graph shop_own     # PASS
 
 ## Tracks entered
 
-- **Track 01, Agents That Act on Connected Data (lead).** The agent answers a credit question from linked records in the graph, saves the decision back into the graph, and the receipt shows the exact records it used.
-- **Track 02, Agent Memory and Coordination.** Decisions and promises to pay are stored in the graph and survive restarts. A promise written in plain words ("Tunde promises N10,000 by Friday") becomes a node that the next decision for that customer reads. Stored decisions can be replayed later with `python verify.py`. The only hand-off is between the language step (picks lookups, words one sentence) and the fixed rule check, which makes the decision. It is not several agents talking to each other.
+Track descriptions and focus areas are quoted from the [hackathon track page](https://wemakedevs.org/hackathons/falkordb). Each line below says where Bashi does it and how to check it.
+
+**Track 01, Agents That Act on Connected Data (lead).** "Build an agent that uses the graph to decide and act."
+
+- "Multi-hop reasoning": the answer walks customer, to sales, to payments, to promises in one query (`rules.py`, `read_state`). Check: open the live site, press "See the real audit case", and read the receipt.
+- "Graph queries and algorithms as agent tools": the agent calls the graph through named tools that run Cypher, and the what-if tool copies the graph with `GRAPH.COPY`. Check: `whatif.py`, or the five tools listed at `/mcp`.
+- "Tool selection through MCP": five tools (`decide_credit`, `get_receipt`, `verify_decision`, `what_if_remove_evidence`, `list_customers`) at `/mcp`, and a one-click Claude Desktop extension. Check: the 30-second `curl` near the top, or [extension/INSTALL.md](extension/INSTALL.md).
+- "Actions based on what the graph shows": the yes or no comes from what the graph holds, and the decision is saved back as a Decision node linked to every record it read. Check: live site, "Try the demo" asks N45,000 for CUST-01 and gets NO because of a broken promise.
+- "Explainable results": every answer has a receipt that names the exact sales, payments and promises behind it. Check: open any receipt, then `/api/verify/<id>` or `python verify.py`.
+
+**Track 02, Agent Memory and Coordination.** "Build agents that remember across sessions and share state with each other."
+
+- "Persistent conversation history": every decision is saved in the graph with a fingerprint and links to its evidence, so it can be re-checked later. A promise to pay written in plain words becomes a node the next decision reads. Check: `python verify.py`, or the four tamper commands in "The 90-second path".
+- "Shared state and handoffs between agents": another agent can take a decision id over MCP and re-check it (`verify_decision`) or run a what-if on it (`what_if_remove_evidence`). Check: `POST /mcp` with `tools/call`, steps in [AGENTS.md](AGENTS.md).
+
+Bashi is one agent with fixed rules, not several agents talking to each other.
 
 ## How it works
 
