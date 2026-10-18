@@ -1,0 +1,2 @@
+sha256 of the 10 set-G long family-network cases and their correct answers, canonical JSON (sorted keys, no spaces), seed 20261019:
+015685dc1b0cdffd954e7fadfd3730719dc93df41deec71e543f54348fd4a330
