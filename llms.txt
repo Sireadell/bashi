@@ -1,6 +1,6 @@
 # Bashi
 
-> Bashi answers one question for a shop: can this customer take this amount on credit? It says YES, NO or CANNOT TRACE with a receipt that links the exact records used. The answer comes from two fixed rules, not an AI guess, and anyone can re-check a receipt.
+> Bashi answers one question for a shop: can this customer take this amount on credit? It says YES, NO or CANNOT TRACE with a receipt that links the exact records used. The answer comes from three fixed rules, not an AI guess (credit limit, broken promises, and the debt across linked accounts), and anyone can re-check a receipt.
 
 Full guide with examples: /AGENTS.md
 
