@@ -1,0 +1,401 @@
+{
+ "answers": {
+  "Q01": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\"answer\": \"YES\", \"reason\": \"The customer owes nothing, has no broken promises, and the total of what is owed plus the new request is within the credit limit.\"}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q02": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"YES\",\n  \"reason\": \"The customer owes N50000 from past sales, and adding the new request of N30000 totals N80000, which is within the N100000 credit limit with no broken promises.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q03": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"YES\",\n  \"reason\": \"There are no broken promises, and the current balance of N25000 plus the new request of N40000 equals N65000, which is within the N100000 credit limit.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q04": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"YES\",\n  \"reason\": \"The customer owes N100000, which plus the new request of N100000 equals N200000, remaining under the N300000 credit limit with no broken promises.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q05": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"YES\",\n  \"reason\": \"The customer owes nothing, has no broken promises, and the new request of N90000 is within the credit limit of N100000.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q06": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"YES\",\n  \"reason\": \"The customer owes N10000 from past sales, and adding the new request of N60000 results in N70000, which is within the N100000 credit limit with no broken promises.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q07": {
+   "answer": "NO",
+   "finish": "STOP",
+   "raw": "{\"answer\": \"NO\", \"reason\": \"The customer owes N70000 and the new request of N40000 would bring the total to N110000, which exceeds the credit limit of N100000.\"}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q08": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"YES\",\n  \"reason\": \"The customer owes N50000 from past sales, and adding the new request of N60000 exceeds the credit limit of N100000? Wait, N50000 + N60000 = N110000, which is more than N100000, so the answer is NO.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q09": {
+   "answer": "NO",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"NO\",\n  \"reason\": \"The customer owes N80000 from past sales, and adding the new request of N30000 exceeds the credit limit of N100000.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q10": {
+   "answer": "NO",
+   "finish": "STOP",
+   "raw": "{\"answer\": \"NO\", \"reason\": \"The customer owes N350000 and adding the new request of N200000 exceeds the credit limit of N500000.\"}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q11": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"YES\",\n  \"reason\": \"The customer owes nothing, has no broken promises, and the new request of N130000 is within the N100000 credit limit.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q12": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"YES\",\n  \"reason\": \"The customer owes N60000 from past sales, and adding the new request of N40000 reaches exactly the credit limit of N100000 with no broken promises.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q13": {
+   "answer": "NO",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"NO\",\n  \"reason\": \"The customer owes N60000 from past sales, and adding the new request of N40001 exceeds the credit limit of N100000.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q14": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\"answer\": \"YES\", \"reason\": \"The customer owes N50000 from the previous sale, which combined with the new request of N50000 reaches the N100000 credit limit with no broken promises.\"}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q15": {
+   "answer": "NO",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"NO\",\n  \"reason\": \"The customer owes N50000 from the previous sale, which makes the total debt plus the new request exceed the N100000 credit limit.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q16": {
+   "answer": "NO",
+   "finish": "STOP",
+   "raw": "{\"answer\": \"NO\", \"reason\": \"The customer has a broken promise to pay with a due date prior to the check date.\"}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q17": {
+   "answer": "NO",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"NO\",\n  \"reason\": \"There is a broken promise to pay with a due date before the check date.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q18": {
+   "answer": "NO",
+   "finish": "STOP",
+   "raw": "{\"answer\": \"NO\", \"reason\": \"The customer has a broken promise with a due date before the check date.\"}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q19": {
+   "answer": "NO",
+   "finish": "STOP",
+   "raw": "{\"answer\": \"NO\", \"reason\": \"The customer has a broken promise to pay with a due date prior to the check date.\"}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q20": {
+   "answer": "NO",
+   "finish": "STOP",
+   "raw": "{\"answer\": \"NO\", \"reason\": \"The customer has a broken promise to pay with a due date before the check date.\"}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q21": {
+   "answer": "NO",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"NO\",\n  \"reason\": \"The customer has a broken promise with a due date prior to the check date.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q22": {
+   "answer": "NO",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"NO\",\n  \"reason\": \"There is a broken promise to pay with a due date before the check date.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q23": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"YES\",\n  \"reason\": \"There are no sales, no broken promises, and the new request of N20000 does not exceed the credit limit of N100000.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q24": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"YES\",\n  \"reason\": \"There are no broken promises, all sales have recorded amounts, and the current balance of zero plus the new request of N30000 does not exceed the credit limit of N100000.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q25": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"YES\",\n  \"reason\": \"The customer owes N30000, which plus the new request of N30000 equals N60000 (below the N100000 credit limit), and there are no broken promises.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q26": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"YES\",\n  \"reason\": \"There are no broken promises and the total owed plus the new request does not exceed the credit limit.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q27": {
+   "answer": "NO",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"NO\",\n  \"reason\": \"There is a broken promise to pay with a due date before the check date.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q28": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\"answer\": \"YES\", \"reason\": \"There are no broken promises because the due date of the promise is after the check date, and the total owed plus the new request does not exceed the credit limit.\"}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q29": {
+   "answer": "NO",
+   "finish": "STOP",
+   "raw": "{\"answer\": \"NO\", \"reason\": \"The customer has a broken promise with a due date before the check date.\"}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q30": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"YES\",\n  \"reason\": \"The customer owes nothing on past sales, has no broken promises, and the new request of N50000 plus what is owed does not exceed the credit limit of N100000.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q31": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"YES\",\n  \"reason\": \"The customer owes nothing on past sales, has no broken promises, and the total owed plus the new request of N90000 is within the N100000 credit limit.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q32": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\"answer\": \"YES\", \"reason\": \"The customer owes N30000, which plus the new request of N50000 is N80000, staying within the N100000 limit with no broken promises.\"}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q33": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"YES\",\n  \"reason\": \"The customer owes nothing on past sales and has no broken promises, so the new request of N250000 is well within the N300000 credit limit.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q34": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\"answer\": \"YES\", \"reason\": \"The customer owes nothing, has no broken promises, and the total owed plus the new request is within the credit limit.\"}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q35": {
+   "answer": "NO",
+   "finish": "STOP",
+   "raw": "{\"answer\": \"NO\", \"reason\": \"The customer owes N70000 on S2, and adding the new request of N40000 exceeds the credit limit of N100000.\"}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q36": {
+   "answer": "NO",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"NO\",\n  \"reason\": \"The customer has a broken promise with a due date prior to the check date.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q37": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\"answer\": \"YES\", \"reason\": \"The customer owes nothing on past sales, has no broken promises, and the current request of N120000 plus current debt of N0 is above the N100000 credit limit? Wait, N120000 is greater than N100000 credit limit.\"}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q38": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"YES\",\n  \"reason\": \"The customer owes nothing on past sales, has no broken promises, and the total owed plus the new request does not exceed the credit limit.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q39": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"YES\",\n  \"reason\": \"The customer owes nothing, has no broken promises, and the total owed plus the new request of N80000 is within the N100000 credit limit.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q40": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"YES\",\n  \"reason\": \"The customer owes N40000 for sale S1, and adding the new request of N50000 results in N90000, which is within the N100000 credit limit with no broken promises.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q41": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"YES\",\n  \"reason\": \"The customer owes N0, so the new request of N90000 plus what is owed is within the N100000 credit limit and there are no broken promises.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q42": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"YES\",\n  \"reason\": \"The customer owes N20000 from past sales, and adding the new request of N70000 results in N90000, which is within the N100000 credit limit with no broken promises.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q43": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\"answer\": \"YES\", \"reason\": \"The customer owes N20000 from past sales, which plus the new request of N85000 exceeds the credit limit, but wait: S1 was N60000 and payments totaled N40000, leaving N20000 owed. N20000 + N85000 = N105000, which is over the N100000 limit, so the answer should be NO.\"}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q44": {
+   "answer": "NO",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"NO\",\n  \"reason\": \"The customer owes N0 on past sales, but the new request of N100000 plus what is owed exceeds the credit limit of N100000.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q45": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"YES\",\n  \"reason\": \"The customer owes N30000 from past sales, and adding the new request of N50000 totals N80000, which is within the N100000 credit limit with no broken promises.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q46": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"YES\",\n  \"reason\": \"The customer owes N0, so the new request of N90000 is within the credit limit and there are no broken promises.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q47": {
+   "answer": "NO",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"NO\",\n  \"reason\": \"What the customer owes (N0) plus the new request (N100001) is more than the credit limit of N100000.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q48": {
+   "answer": "NO",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"NO\",\n  \"reason\": \"The customer owes N30000 and the new request of N70000 brings the total to N100000, which exceeds the credit limit when added to the existing balance.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q49": {
+   "answer": "REFUSE",
+   "finish": "STOP",
+   "raw": "{\"answer\": \"CANNOT TRACE\", \"reason\": \"Sale S1 has no amount recorded.\"}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q50": {
+   "answer": "REFUSE",
+   "finish": "STOP",
+   "raw": "{\"answer\": \"CANNOT TRACE\", \"reason\": \"Sale S2 has no amount recorded.\"}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q51": {
+   "answer": "REFUSE",
+   "finish": "STOP",
+   "raw": "{\"answer\": \"CANNOT TRACE\", \"reason\": \"Sale S1 has no amount recorded, which violates the rule for traceability.\"}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q52": {
+   "answer": "REFUSE",
+   "finish": "STOP",
+   "raw": "{\"answer\": \"CANNOT TRACE\", \"reason\": \"Sale S2 has no amount recorded.\"}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q53": {
+   "answer": "NO",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"NO\",\n  \"reason\": \"What the customer owes (N40000) plus the new request (N70000) equals N110000, which exceeds the credit limit of N100000.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q54": {
+   "answer": "YES",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"YES\",\n  \"reason\": \"The customer owes N30000 and the new request of N50000 keeps the total at N80000, which is within the N100000 credit limit with no broken promises.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  },
+  "Q55": {
+   "answer": "NO",
+   "finish": "STOP",
+   "raw": "{\n  \"answer\": \"NO\",\n  \"reason\": \"What the customer owes (N60000) plus the new request (N45000) equals N105000, which exceeds the credit limit of N100000.\"\n}",
+   "served_model": "gemini-3.5-flash-lite"
+  }
+ },
+ "by_class": {
+  "boundary": {
+   "n": 4,
+   "right": 4
+  },
+  "broken_promise": {
+   "n": 7,
+   "right": 7
+  },
+  "clean_over": {
+   "n": 5,
+   "right": 3
+  },
+  "clean_within": {
+   "n": 6,
+   "right": 6
+  },
+  "deposit_first": {
+   "n": 4,
+   "right": 4
+  },
+  "kept_promise": {
+   "n": 4,
+   "right": 4
+  },
+  "missing_data": {
+   "n": 4,
+   "right": 4
+  },
+  "others_payment": {
+   "n": 3,
+   "right": 3
+  },
+  "overpayment": {
+   "n": 3,
+   "right": 3
+  },
+  "promise_not_due": {
+   "n": 3,
+   "right": 1
+  },
+  "split_payment": {
+   "n": 4,
+   "right": 2
+  },
+  "unlinked_payment": {
+   "n": 8,
+   "right": 7
+  }
+ },
+ "fingerprint": "d1eefd0fdebf5bf97957be205d72adb0077444c43d3a9af99526808cb218bfcc",
+ "finished_utc": "2026-10-18T06:30:51+00:00",
+ "model_asked": "gemini-flash-lite-latest",
+ "models_served": [
+  "gemini-3.5-flash-lite"
+ ],
+ "prompt_template": "You help a small shop decide whether to sell to a customer on credit.\n\nThe shop's rule:\n1. If any sale has no amount recorded, answer CANNOT TRACE.\n2. What the customer owes is, for each sale, its amount minus the payments that paid for that sale, never below zero. Extra money paid on one sale does not clear another sale.\n3. A promise to pay is broken if it was not kept and its due date is before the check date.\n4. Answer NO if there is a broken promise, or if what the customer owes plus the new request is more than the credit limit. Otherwise answer YES.\n\nBelow are this customer's records, exported from the shop's book as plain tables.\n\nCheck date: {as_of}\nCredit limit: N{limit}\nNew request: N{request} on credit\n\nSales (number, date, amount):\n{sales}\n\nPayments received from this customer (number, date, amount):\n{payments}\n\nPromises to pay (amount, date made, due date, kept):\n{promises}\n\nReply with JSON only, in this shape: {{\"answer\": \"YES\" or \"NO\" or \"CANNOT TRACE\", \"reason\": \"one sentence\"}}",
+ "scores": {
+  "naira_wrongly_approved": 395000,
+  "other_wrong": 0,
+  "right": 48,
+  "wrong_approvals": 4,
+  "wrong_refusals": 3
+ },
+ "set": "a",
+ "started_utc": "2026-10-18T06:27:50+00:00",
+ "temperature": 0
+}
