@@ -36,6 +36,17 @@
   <p class="realline"><b>Check it yourself:</b> the 255 test cases had their answers locked before Bashi ran (files in the repo). <a href="{{ url_for('proof') }}">Try to tamper with a receipt</a> and watch the check fail.</p>
   <p class="gloss"><b>Phantom debt:</b> the books still say a customer owes for a sale, but a payment of the same amount came in and was never linked to it. <b>Inferred:</b> a payment-to-sale link that a rule proposed, not one a person recorded. Every inferred link says so on the receipt.</p>
 </section>
+<section class="card" id="ways">
+  <h2>Ways to use Bashi</h2>
+  <ul>
+    <li><b>This website.</b> No sign-up. Use the buttons above.</li>
+    <li><b>MCP</b> (a standard way for AI tools to call other tools): <span class="mono">https://bashi-vrfv.onrender.com/mcp</span>. Works in Cursor and other AI tools that take an MCP address.</li>
+    <li><b>Claude Desktop:</b> a one-click extension, <a href="https://github.com/Sireadell/bashi/blob/master/extension/Bashi.mcpb">Bashi.mcpb</a>.</li>
+    <li><b>Web API:</b> <span class="mono">/api/decide</span>, <span class="mono">/api/receipt</span>, <span class="mono">/api/verify</span>, <span class="mono">/api/whatif</span>, <span class="mono">/api/customers</span>.</li>
+    <li><b>Guides an AI can read:</b> <a href="/llms.txt">/llms.txt</a> and <a href="/AGENTS.md">/AGENTS.md</a>.</li>
+    <li><b>Your own shop:</b> put your sales and payments in three CSV files and load them into your own FalkorDB from the command line. It never touches this demo. Steps are in the <a href="https://github.com/Sireadell/bashi#use-it-on-your-own-shop">README</a>.</li>
+  </ul>
+</section>
 {% endif %}
 {% if result %}
 <section class="verdict {{ 'no' if result.verdict == 'NO' else 'yes' }}" aria-live="polite">

@@ -54,3 +54,16 @@ def test_unlinked_payment_counts_in_balance_but_is_named(graph, client):
     p = panel(client, res["decision_id"])
     assert "unlinked" in p or "nobody linked" in p
     assert "Debt N0" in p            # the balance check saw the payment
+
+
+def test_unlinked_case_explains_why_it_holds_at_no(graph, client):
+    graph.query("CREATE (:Customer {id:'CY', name:'Yusuf', credit_limit:100000, source:'invented'})")
+    graph.query("MATCH (c:Customer {id:'CY'}) CREATE (c)-[:MADE]->(:Trade {id:'TY1', amount:90000, date:'2026-01-01'})")
+    graph.query("MATCH (c:Customer {id:'CY'}) CREATE (c)-[:PAID]->(:Payment {id:'PY1', amount:90000, date:'2026-02-01'})")
+    res = decide("CY", 20000, graph=graph)
+    r = client.get("/receipt/" + res["decision_id"], headers=COOKIE)
+    html = r.get_data(as_text=True)
+    if "Why Bashi holds at NO here" in html:
+        assert "not from a bad customer" in html
+        assert "No payments were read" not in html
+        assert "No payment is linked to these sales yet" in html

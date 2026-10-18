@@ -19,7 +19,7 @@ from seed import LABELS
 LABEL_TEXT = "Real audit of 17 July 2026, names removed"
 EXPLAINER = ("Real part: 8 credit sales from the founder's own shop audit of 17 July 2026. Each sale was "
              "recorded as paid, but the customer's ledger still showed the money as owed (N388,340 in "
-             "total). Names, phones and notes are removed. Invented part: 12 made-up customers added so "
+             "total). Names, phones and notes are removed. Invented part: 16 made-up customers added so "
              "there is more to ask about. Each customer is tagged real or invented. Credit limits and "
              "payment dates are assumed.")
 SOURCES = ("real_audit", "invented")

@@ -330,7 +330,7 @@ def build_reply(run, middle=None):
         return "Which customer? I found: " + ", ".join(
             "%s (%s)" % (c["name"], c["id"]) for c in p["candidates"]) + "."
     if not p["candidates"]:
-        return "I could not find that customer. Use a name or an id like C001."
+        return "I could not find that customer. Use a name or an id from the customer list."
     if p["kind"] == "promise":
         return "I need an amount and a date, for example: Tunde promised to pay N10,000 on Friday."
     return "How much credit is %s asking for? For example: Can %s take N45,000 on credit?" % (
