@@ -150,3 +150,85 @@ h2{font-size:21px;letter-spacing:-.01em}
 @media (max-width:420px){.bignum b{font-size:32px}}
 .beforeafter{margin:14px 0 0;padding-left:20px;font-size:17px;line-height:1.5;max-width:40em}
 .beforeafter li{margin:0 0 4px}
+
+/* product look: calm palette, sans type, soft cards */
+:root{--paper:#f6f7f9;--card:#ffffff;--ink:#14181f;--mute:#5b6472;--line:#e3e6eb;--zebra:#f8f9fb;
+--no:#c0392b;--yes:#1a7f4b;--warn:#a15c00;--accent:#3b5bdb;--accentfg:#fff;--bannerbg:#14181f;--bannerfg:#f6f7f9;
+--nobg:#fdecea;--yesbg:#e7f5ee;--cantbg:#eef0f3;--radius:14px;--shadow:0 1px 2px rgba(20,24,31,.05),0 6px 20px rgba(20,24,31,.06)}
+@media (prefers-color-scheme:dark){:root{--paper:#0f1217;--card:#171b22;--ink:#e8ebf0;--mute:#9aa3b2;--line:#2a303a;--zebra:#1b2028;
+--no:#ff7b6e;--yes:#4cc38a;--warn:#e6a23c;--accent:#8ea6ff;--accentfg:#0f1217;--bannerbg:#e8ebf0;--bannerfg:#0f1217;
+--nobg:#2a1715;--yesbg:#12261c;--cantbg:#1d222a;--shadow:none}}
+body{font:16px/1.65 Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--paper);-webkit-font-smoothing:antialiased}
+.top,main,footer{max-width:960px}
+.top{align-items:center;padding-top:20px;padding-bottom:10px}
+.brand{font-size:24px;font-weight:800;letter-spacing:-.03em}
+.brand::before{content:"";display:inline-block;width:12px;height:12px;border-radius:4px;background:var(--accent);margin-right:8px;vertical-align:1px}
+.tag{font-style:normal;font-size:14px}
+a{color:var(--accent)}
+footer{font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+.demo-banner{font-size:12px;padding:8px 16px;letter-spacing:.06em}
+h1,h2,.lead,.realbooks-head{font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
+h2{font-size:18px;font-weight:700;letter-spacing:-.01em}
+.card h2{font-size:17px}
+.lead{font-weight:800;letter-spacing:-.03em;line-height:1.15}
+.sub{font-size:17px;line-height:1.6}
+.kicker{color:var(--accent);letter-spacing:.1em}
+.ask,.card,.demo,.start,.realbooks,.whatif{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.ask,.card{padding:22px 24px;margin:18px 0}
+.start{padding:26px 28px}
+.startlist dd{font-size:15px}
+.startlist>div{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.startlist dt{color:var(--accent)}
+.bignum{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 20px;font-size:16px;line-height:1.55;box-shadow:var(--shadow)}
+.bignum b{color:var(--accent)}
+.beforeafter{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 20px 14px 38px;font-size:16px}
+.btn{background:var(--accent);color:var(--accentfg);border:2px solid var(--accent);border-radius:10px;font:600 16px Inter,system-ui,sans-serif;padding:13px 22px;transition:background .15s,box-shadow .15s}
+.btn:hover{opacity:1;box-shadow:0 4px 14px rgba(59,91,219,.28)}
+.demo .btn:not(.alt){font-size:17px}
+.btn.alt{background:var(--card);color:var(--accent);border-color:var(--accent)}
+.btn.alt:hover{background:var(--accent);color:var(--accentfg)}
+.realline .btn{font-size:15px}
+label{font:600 13px Inter,system-ui,sans-serif}
+select,input{font:16px Inter,system-ui,sans-serif;border:1px solid var(--line);border-radius:10px;background:var(--paper);padding:12px 14px}
+select:focus,input:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px rgba(59,91,219,.18)}
+.mini{border-radius:8px;border-color:var(--line);font-family:Inter,system-ui,sans-serif}
+.mini:hover,.mini.on{background:var(--accent);border-color:var(--accent);color:var(--accentfg)}
+.mono{font-family:ui-monospace,'Cascadia Code',Consolas,monospace}
+.tagi{border-radius:6px;font-style:normal;border-color:var(--line)}
+/* verdict: a big coloured badge */
+.verdict{border:1px solid var(--line);border-radius:18px;background:var(--card);box-shadow:var(--shadow);padding:26px 28px;position:relative;overflow:hidden}
+.verdict::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--mute)}
+.verdict.no{border-color:var(--line);background:linear-gradient(180deg,var(--nobg),var(--card) 55%)}
+.verdict.yes{border-color:var(--line);background:linear-gradient(180deg,var(--yesbg),var(--card) 55%)}
+.verdict.no::before{background:var(--no)}.verdict.yes::before{background:var(--yes)}
+.verdict:not(.no):not(.yes){background:linear-gradient(180deg,var(--cantbg),var(--card) 55%)}
+.verdict .who{font-size:16px;font-weight:500}
+.big{display:inline-block;font-family:Inter,system-ui,sans-serif;font-size:clamp(56px,14vw,104px);font-weight:900;letter-spacing:-.04em;line-height:1;padding:10px 28px 14px;margin:12px 0 10px;border-radius:16px;background:var(--mute);color:#fff}
+.no .big{background:var(--no);color:#fff}.yes .big{background:var(--yes);color:#fff}
+@media (prefers-color-scheme:dark){.no .big,.yes .big,.big{color:#0f1217}}
+.why{font-size:18px;font-weight:500}
+.nums{border-top:1px solid var(--line);gap:12px}
+.nums>*{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+.nums b{font-size:22px;font-weight:800}
+/* tables */
+.scroll{border:1px solid var(--line);border-radius:10px}
+table{font-size:14.5px}
+th{font:600 11.5px Inter,system-ui,sans-serif;background:var(--paper);border-bottom:1px solid var(--line);padding:10px 12px}
+td{padding:10px 12px}
+tbody tr:nth-child(even) td{background:var(--zebra)}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+tr.total td{border-top:2px solid var(--ink);font-weight:700;background:var(--card)}
+/* receipt cards and FalkorDB info boxes */
+.card.sd,.card.warn{border-left:4px solid var(--accent)}
+.card.warn{border-left-color:var(--warn)}
+.sd-box{border-radius:10px;background:var(--paper)}
+.sd-v.yes{color:var(--yes)}.sd-v.no{color:var(--no)}
+.check.ok,.check.bad{border-left-width:4px}
+.check.ok{border-left-color:var(--yes)}
+.whatif{border:2px dashed var(--line);padding:22px 26px}
+.whatif.flipped{border:1px solid var(--yes);box-shadow:inset 6px 0 0 var(--yes),var(--shadow)}
+.side{border-radius:12px}
+.v.yes{color:var(--yes)}.v.no{color:var(--no)}
+.eg-node rect{rx:8px}
+.props dt{font-family:Inter,system-ui,sans-serif}
+@media (max-width:560px){.start{padding:18px 16px}.startlist>div{padding:12px}.verdict{padding:20px 16px}.big{padding:8px 20px 10px}.nums>*{flex:1 1 40%}}
