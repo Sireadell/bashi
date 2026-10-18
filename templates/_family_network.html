@@ -1,0 +1,33 @@
+{# Family network: every account reached by following people links, how, and what it owes. #}
+{% if family %}
+{% set CW = 112 %}{% set RH = 52 %}
+{% set W = [family.cols * CW, 336]|max %}{% set H = (family.depth + 1) * RH %}
+{% set pos = {} %}
+{% for n in family.nodes %}{% set _ = pos.update({n.id: (n.col * CW + CW // 2 + (W - family.cols * CW) // 2, n.depth * RH + 4)}) %}{% endfor %}
+<section class="card {{ 'warn' if family.over else 'sd' }}" id="family-network">
+  <h2>Family network: {{ family.accounts }} linked account{{ '' if family.accounts == 1 else 's' }}, {{ family.hops }} link{{ '' if family.hops == 1 else 's' }} deep</h2>
+  <p>This account owes {{ family.own|naira }} on its own. Bashi followed the people linked to it (who owns it, who collects goods or pays for it, and their family), step by step, and added up what every account it reached still owes.{% if tag == 'invented' %} These accounts and people are invented, made up to show the idea.{% endif %}</p>
+  <div class="scroll"><table>
+    <tr><th>Account</th><th>How it is linked</th><th class="n">Links</th><th class="n">Still owed</th></tr>
+    <tr><td class="mono">{{ dec.customer_id }}</td><td>The account asking</td><td class="n">0</td><td class="n">{{ family.own|naira }}</td></tr>
+    {% for r in family.rows %}<tr><td class="mono">{{ r.account }}</td><td>{{ r.steps|map(attribute='text')|join(', then ') }}</td><td class="n">{{ r.hops }}</td><td class="n">{{ r.debt|naira }}</td></tr>{% endfor %}
+    <tr class="total"><td colspan="3">Owed across the whole family network</td><td class="n"><b>{{ family.total|naira }}</b></td></tr>
+  </table></div>
+  <p>{{ family.total|naira }} plus the {{ dec.request|naira }} asked is {{ (family.total + dec.request)|naira }}, {{ 'above' if family.over else 'within' }} the limit {{ dec.limit|naira }}.{% if family.over %} <b>The family network rule says NO.</b>{% endif %}</p>
+  <svg class="eg-svg" viewBox="0 0 {{ W }} {{ H }}" role="img" aria-label="The family network as a graph, {{ family.hops }} links deep" preserveAspectRatio="xMidYMin meet">
+    {% for n in family.nodes if n.parent %}{% set a = pos[n.parent] %}{% set b = pos[n.id] %}
+      <line class="eg-edge{{ ' settles' if n.family else '' }}" x1="{{ a[0] }}" y1="{{ a[1] + 36 }}" x2="{{ b[0] }}" y2="{{ b[1] }}"/>
+      {% if n.family %}<text class="eg-lbl" x="{{ (a[0] + b[0]) // 2 + 4 }}" y="{{ (a[1] + 36 + b[1]) // 2 + 3 }}">family</text>{% endif %}
+    {% endfor %}
+    {% for n in family.nodes %}{% set p = pos[n.id] %}
+      <g class="eg-node {{ 'customer' if n.account else 'buyer' }}"><title>{{ n.name }}{% if n.debt is not none %}, owes {{ n.debt|naira }}{% endif %}</title>
+        <rect x="{{ p[0] - CW // 2 + 6 }}" y="{{ p[1] }}" width="{{ CW - 12 }}" height="36" rx="3"/>
+        <text class="eg-id" x="{{ p[0] }}" y="{{ p[1] + 15 }}">{{ n.name }}</text>
+        <text class="eg-sub" x="{{ p[0] }}" y="{{ p[1] + 29 }}">{% if n.id == dec.customer_id %}asking, owes {{ family.own|naira }}{% elif n.account %}owes {{ n.debt|naira }}{% else %}person{% endif %}</text>
+      </g>
+    {% endfor %}
+  </svg>
+  {% for l in family.links %}<p>Family link <span class="mono">{{ l }}</span> joins two people in this network. <button class="mini" data-remove="{{ l }}">What if this evidence did not exist</button></p>{% endfor %}
+  <p class="small">The walk follows up to 20 links; this network ends {{ family.hops }} link{{ '' if family.hops == 1 else 's' }} away. Every account reached, what it owed and the path to it are part of the fingerprint, so a change anywhere along the way makes the check below fail.</p>
+</section>
+{% endif %}

@@ -168,6 +168,8 @@ def decide_credit(customer, amount, shop=None, base_url=""):
                "reason": res["reason"], "reasons": _reasons(res["reason"]),
                "open_debt": res["open_debt"], "limit": res["limit"],
                "broken_promises": res["broken_promises"],
+               "family_network_debt": res.get("network_debt"),
+               "family_network": res.get("network") or {},
                "decision_id": res["decision_id"], "fingerprint": res["fingerprint"],
                "evidence_ids": [e["id"] for e in res["evidence"]],
                "warnings": ["%s counts as owed, but unlinked payment %s has the same amount (%s). "
@@ -199,7 +201,12 @@ def get_receipt(decision_id, base_url=""):
                "rules": [{"id": r, "text": a.RULES.get(r, "")} for r in json.loads(dec["rule_ids"] or "[]")],
                "sales": data["trades"], "payments": data["payments"], "promises": data["promises"],
                "unlinked_payments_that_may_match_a_sale": data["orphans"],
-               "evidence_ids": [x["id"] for k in ("trades", "payments", "promises") for x in data[k]],
+               "evidence_ids": ([x["id"] for k in ("trades", "payments", "promises") for x in data[k]]
+                                + ((data.get("family") or {}).get("links") or [])),
+               "family_network": data.get("family") and {
+                   "debt": data["family"]["total"], "accounts": data["family"]["accounts"],
+                   "links_deep": data["family"]["hops"],
+                   "path": {r["account"]: [x["text"] for x in r["steps"]] for r in data["family"]["rows"]}},
                "check": data["verify"], "data_label": data["banner"]}
         out.update(_links(decision_id, base_url))
         return out

@@ -347,6 +347,11 @@ def shallow_vs_deep(g, state, ev, dec, trace_ok):
     if shallow != deep:
         if ev["broken_promises"] and deep == "NO" and shallow == "YES":
             why.append("a broken promise (%s) that a balance never shows" % ", ".join(ev["broken_promises"]))
+        if "R_FAMILY" in ev.get("rules_failed", []) and deep == "NO" and shallow == "YES":
+            net = state.get("network", {})
+            why.append("%s owed across %d linked family account%s, up to %d links away, that a balance "
+                       "never sees" % (naira(ev["network_debt"]), len(net), "" if len(net) == 1 else "s",
+                                       max(v["hops"] for v in net.values())))
         if orphan_paid:
             why.append("a payment of %s that nobody linked to a sale, so a balance counts it and Bashi flags it" % naira(orphan_paid))
         if not why:
@@ -411,6 +416,12 @@ def build_receipt(shop, g, decision_id):
         out["buyers"] = buyer_view(read_buyers(g, dec["customer_id"]), state, dec["request"], ev["verdict"])
     except Exception:
         out["buyers"] = None
+    out["family"] = None
+    try:
+        from buyers import family_view
+        out["family"] = family_view(state, ev, dec["request"])
+    except Exception:
+        out["family"] = None
     if out["buyers"]:
         for t in out["trades"]:
             t["buyer"] = out["buyers"]["names"].get(out["buyers"]["collected_by"].get(t["id"]))

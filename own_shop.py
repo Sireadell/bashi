@@ -89,6 +89,18 @@ def prepare(data):
             raise ValueError("buyer %s owns unknown account %s" % (o["bid"], o["cid"]))
     collected = [{"bid": s["buyer"], "id": s["id"]} for s in sales if s.get("buyer")]
     paid_by = [{"bid": p["buyer"], "id": p["id"]} for p in pays if p.get("buyer")]
+    # What each buyer does for their shop, in plain words, for the family network on the receipt.
+    takes, gives = {c["bid"] for c in collected}, {p["bid"] for p in paid_by}
+    for b in buyers:
+        b["role"] = ("collects and pays for" if b["id"] in takes and b["id"] in gives else
+                     "pays for" if b["id"] in gives else "collects goods for")
+    family = []
+    for f in data.get("family", []):
+        if f.get("source") not in SOURCES:
+            raise ValueError("record %s has no valid source" % f["id"])
+        if f["a"] not in bids or f["b"] not in bids or f["a"] == f["b"]:
+            raise ValueError("family link %s must join two different known buyers" % f["id"])
+        family.append({"id": f["id"], "a": f["a"], "b": f["b"], "source": f["source"]})
     trades = [{"id": s["id"], "amount": s["amount"], "date": s["date"], "cid": s["customer"],
                "kind": s.get("kind", "sale"), "marked_paid": s.get("paid", 0),
                "source": s["source"]} for s in sales]
@@ -106,7 +118,7 @@ def prepare(data):
     promised = [{"cid": r["customer"], "prid": r["id"]} for r in proms]
     return dict(customers=customers, trades=trades, payments=payments, settles=settles,
                 promises=promises, promised=promised,
-                buyers=buyers, owns=owns, collected=collected, paid_by=paid_by)
+                buyers=buyers, owns=owns, collected=collected, paid_by=paid_by, family=family)
 
 
 def load(g, rows):
@@ -130,13 +142,20 @@ def load(g, rows):
     if rows.get("buyers"):
         g.query("CREATE INDEX FOR (n:Buyer) ON (n.id)")
         g.query("UNWIND $rows AS r MATCH (c:Customer {id:r.cid}) "
-                "CREATE (:Buyer {id:r.id, name:r.name})-[:BUYS_FOR]->(c)", {"rows": rows["buyers"]})
+                "CREATE (:Buyer {id:r.id, name:r.name})-[:BUYS_FOR {role:r.role}]->(c)", {"rows": rows["buyers"]})
         g.query("UNWIND $rows AS r MATCH (b:Buyer {id:r.bid}), (c:Customer {id:r.cid}) "
                 "CREATE (b)-[:OWNS]->(c)", {"rows": rows["owns"]})
         g.query("UNWIND $rows AS r MATCH (b:Buyer {id:r.bid}), (t:Trade {id:r.id}) "
                 "CREATE (b)-[:COLLECTED]->(t)", {"rows": rows["collected"]})
         g.query("UNWIND $rows AS r MATCH (b:Buyer {id:r.bid}), (p:Payment {id:r.id}) "
                 "CREATE (b)-[:PAID]->(p)", {"rows": rows["paid_by"]})
+    if rows.get("family"):
+        # Two people who are family: (:Buyer)-[:FAMILY]->(:Family)<-[:FAMILY]-(:Buyer). The link is a
+        # node with an id so a receipt can use it as evidence and the what-if can remove it.
+        g.query("CREATE INDEX FOR (n:Family) ON (n.id)")
+        g.query("UNWIND $rows AS r MATCH (a:Buyer {id:r.a}), (b:Buyer {id:r.b}) "
+                "CREATE (a)-[:FAMILY]->(:Family {id:r.id, source:r.source})<-[:FAMILY]-(b)",
+                {"rows": rows["family"]})
     g.query("CREATE (:Counter {id:'decision', n:$d}), (:Counter {id:'promise', n:$p})",
             {"d": DECISION_START, "p": len(rows["promises"])})
 

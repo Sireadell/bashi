@@ -33,7 +33,7 @@ def diff_snapshots(old, new):
         for f in sorted(old[key]):
             a, b = old[key][f], new[key].get(f)
             if a != b:
-                if f in ("amount", "limit"):
+                if f in ("amount", "limit", "debt"):
                     a, b = _describe(a), _describe(b)
                 msgs.append("%s %s changed %s -> %s" % (name, f, a, b))
     return msgs
@@ -71,10 +71,10 @@ def verify_decision(graph, d, state=None):
     for lab, eid in linked:
         used.add("%s:%s" % (lab, eid))
     for key in old:
-        if key.startswith("Settles:"):
+        if key.startswith(("Settles:", "Network:")):
             used.add(key)
     now = {k: v for k, v in now_all.items() if k in used}
-    for lab, eid in [_label(k) for k in old if not k.startswith(("Customer", "Settles"))]:
+    for lab, eid in [_label(k) for k in old if not k.startswith(("Customer", "Settles", "Network"))]:
         if "%s:%s" % (lab, eid) not in {"%s:%s" % (a, b) for a, b in linked}:
             problems.append("%s %s is no longer linked to this decision" % (lab, eid))
     problems += diff_snapshots(old, now)

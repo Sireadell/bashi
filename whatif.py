@@ -92,7 +92,7 @@ def whatif(decision_id, remove, graph_name=MAIN):
         main.copy(copy_name)
         cg = db.select_graph(copy_name)
         for rid in remove:
-            cg.query("MATCH (n) WHERE n.id = $i AND (n:Trade OR n:Payment OR n:Promise) "
+            cg.query("MATCH (n) WHERE n.id = $i AND (n:Trade OR n:Payment OR n:Promise OR n:Family) "
                      "DETACH DELETE n", {"i": rid})
         # Read the copy as it stood on the decision's day, so the baseline is the
         # same data the original decision used and only the removal changes it.
