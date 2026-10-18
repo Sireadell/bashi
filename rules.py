@@ -36,8 +36,10 @@ def _is_money(v):
 # ---------------------------------------------------------------- reading
 
 # The family network walk: from the account, follow owner, buyer and family links, up to
-# MAX_HOPS steps, to every other account reached. Each account is kept once, with its shortest
-# path, its sales total and what was paid on them.
+# MAX_HOPS links, to every other account reached. Each account is kept once, with its shortest
+# path, its sales total and what was paid on them. A family link is two steps in the graph (person,
+# family link, person) but one link in words, so the graph walk may go twice as far and any account
+# more than MAX_HOPS links away is dropped afterwards.
 NETWORK_QUERY = (
     "MATCH p=(c:Customer {id:$cid})-[:OWNS|BUYS_FOR|FAMILY*1..%d]-(o:Customer) WHERE o.id <> $cid "
     "WITH o, p ORDER BY length(p) WITH o, collect(p)[0] AS p "
@@ -47,7 +49,7 @@ NETWORK_QUERY = (
     "OPTIONAL MATCH (o)-[:MADE]->(t:Trade) "
     "WITH o, ids, labs, names, rels, sum(t.amount) AS made, count(t) - count(t.amount) AS bad "
     "OPTIONAL MATCH (o)-[:MADE]->(:Trade)<-[s:SETTLES|INFERRED_SETTLES]-(:Payment) "
-    "RETURN o.id, made, sum(s.amount), bad, ids, labs, names, rels" % MAX_HOPS)
+    "RETURN o.id, made, sum(s.amount), bad, ids, labs, names, rels" % (2 * MAX_HOPS))
 
 
 def _steps(ids, labs, names, rels):
@@ -86,6 +88,8 @@ def read_network(graph, customer_id):
     network, family = {}, {}
     for acct, made, paid, bad, ids, labs, names, rels in rows:
         steps = _steps(ids, labs, names, rels)
+        if len(steps) > MAX_HOPS:
+            continue
         made, paid = _whole(made or 0), _whole(paid or 0)    # sum() comes back as a decimal
         debt = None if bad or not _is_money(made) or not _is_money(paid) else made - paid
         network[acct] = {"debt": debt, "hops": len(steps), "via": ">".join(ids), "steps": steps}
