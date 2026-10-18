@@ -399,6 +399,12 @@ def build_receipt(shop, g, decision_id):
         out["shallow"] = shallow_vs_deep(g, state, ev, dec, out["trace_ok"])
     except Exception:
         out["shallow"] = None
+    out["exposure"] = []
+    try:
+        from buyers import read_exposure
+        out["exposure"] = read_exposure(g, dec["customer_id"])
+    except Exception:
+        out["exposure"] = []
     out["buyers"] = None
     try:
         from buyers import buyer_view, read_buyers

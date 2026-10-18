@@ -56,7 +56,7 @@ def client(own, monkeypatch):
 
 
 def test_seed_has_two_invented_buyers_with_generic_labels():
-    assert [b["label"] for b in SEED["buyers"]] == ["Buyer 1", "Buyer 2"]
+    assert [b["label"] for b in SEED["buyers"]] == ["Buyer %d" % i for i in range(1, 7)]
     assert {c["source"] for c in SEED["customers"] if c["id"] == SHOP} == {"invented"}
     assert own_shop.find_leaks(SEED) == []
 
@@ -64,7 +64,7 @@ def test_seed_has_two_invented_buyers_with_generic_labels():
 def test_graph_links_buyers_to_the_shop_sales_and_payments(own):
     q = lambda c: own.query(c).result_set[0][0]
     assert q("MATCH (:Buyer)-[:BUYS_FOR]->(:Customer {id:'CUST-13'}) RETURN count(*)") == 2
-    assert q("MATCH (:Buyer)-[:COLLECTED]->(:Trade) RETURN count(*)") == 3
+    assert q("MATCH (:Buyer {id:'BUY-1'})-[:COLLECTED]->(:Trade) RETURN count(*)") == 3
     assert q("MATCH (:Buyer)-[:PAID]->(:Payment) RETURN count(*)") == 3
 
 
@@ -134,3 +134,37 @@ def test_buyer_must_act_for_the_shop_that_owns_the_record():
 def test_buyer_paid_links_do_not_hide_another_shops_phantom_debt(own):
     """Buyer-[:PAID]->Payment must not look like a payment tied to a customer."""
     assert len(decide("CUST-02", 1000, graph=own, save=False)["possible_phantoms"]) == 1
+
+
+# ---------------------------------------------------------------- collectors only, personal accounts
+
+def test_collector_shop_has_no_payer_claims(own, client):
+    res = decide("CUST-14", 10000, graph=own)
+    html = client.get("/receipt/" + res["decision_id"], headers=COOKIE).get_data(as_text=True)
+    box = html.split('id="shop-buyers"')[1].split("</section>")[0]
+    assert "Sales collected" in box and "Buyer 3" in box
+    assert "different person" not in box and "alone says" not in box and '<th class="n">Paid' not in box
+
+
+def test_personal_account_shows_the_other_account_and_its_debt(own, client):
+    from buyers import read_exposure
+    assert read_exposure(own, "CUST-15") == [{"who": "Buyer 3", "account": "CUST-14", "sales": 5, "debt": 43360}]
+    res = decide("CUST-15", 10000, graph=own)
+    html = client.get("/receipt/" + res["decision_id"], headers=COOKIE).get_data(as_text=True)
+    assert "Also collects goods for another account that owes N43,360." in html
+    assert "invented" in html.split('id="other-accounts"')[1].split("</section>")[0]
+
+
+def test_exposure_never_changes_the_answer(own):
+    plain = copy.deepcopy(SEED)
+    for b in plain["buyers"]:
+        b.pop("owns", None)
+    g2 = load(plain)
+    for amount in (10000, 90000):
+        a, b = decide("CUST-15", amount, graph=own, save=False), decide("CUST-15", amount, graph=g2, save=False)
+        assert (a["verdict"], a["fingerprint"]) == (b["verdict"], b["fingerprint"])
+
+
+def test_account_without_owner_has_no_exposure(own):
+    from buyers import read_exposure
+    assert read_exposure(own, "CUST-03") == [] and read_exposure(own, "CUST-14") == []

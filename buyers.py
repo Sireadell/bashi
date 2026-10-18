@@ -64,14 +64,34 @@ def buyer_view(info, state, request, verdict):
         payer, taker = info["paid"].get(pid), info["collected"].get(tid)
         if payer and taker and payer != taker:
             different.add(pid)
+    has_payers = bool(info["paid"])
     limit = state["customer"]["limit"]
     worst = max(rows, key=lambda r: r["balance"]) if rows else None
     person = None
-    if worst and isinstance(limit, int):
+    if has_payers and worst and isinstance(limit, int):
         person = "YES" if max(worst["balance"], 0) + request <= limit else "NO"
-    return {"people": rows, "different": len(different),
+    return {"has_payers": has_payers, "people": rows, "different": len(different),
             "collected_by": dict(info["collected"]), "paid_by": dict(info["paid"]),
             "names": names, "person_answer": person,
             "person_name": worst["name"] if worst else None,
             "person_debt": worst["balance"] if worst else None,
             "wrong": bool(person and verdict in ("YES", "NO") and person != verdict)}
+
+
+def read_exposure(graph, customer_id):
+    """For a personal account: the other accounts its owner also collects goods for.
+
+    (:Buyer)-[:OWNS]->(:Customer) says whose account this is. Any other account where
+    that person collected sales is listed with what it owes. Shown on the receipt only;
+    the yes or no rule never reads it. Returns [] when there is none."""
+    from rules import evaluate, read_state
+    rows = graph.query(
+        "MATCH (b:Buyer)-[:OWNS]->(:Customer {id:$cid}) "
+        "MATCH (b)-[:COLLECTED]->(t:Trade)<-[:MADE]-(o:Customer) WHERE o.id <> $cid "
+        "RETURN b.name AS who, o.id AS acct, count(t) AS n", {"cid": customer_id}).result_set
+    out = []
+    for who, acct, n in sorted(rows, key=lambda r: (r[1], r[0])):
+        st = read_state(graph, acct)
+        debt = evaluate(st, 1)["open_debt"] if st else None
+        out.append({"who": who, "account": acct, "sales": n, "debt": debt})
+    return out

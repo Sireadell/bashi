@@ -31,13 +31,20 @@
 </section>
 {% endif %}
 
+{% if exposure %}
+<section class="card warn" id="other-accounts">
+  <h2>Same person, another account</h2>
+  {% for x in exposure %}<p>Also collects goods for another account that owes {{ x.debt|naira if x.debt is not none else 'an amount that cannot be traced' }}. {{ x.who }} collected {{ x.sales }} sale{{ '' if x.sales == 1 else 's' }} on account <span class="mono">{{ x.account }}</span>.</p>{% endfor %}
+  <p class="small">Shown so you can see the link. It does not change the answer above, which still follows the two fixed rules for this account only.{% if tag == 'invented' %} These accounts and people are invented.{% endif %}</p>
+</section>
+{% endif %}
 {% if buyers %}
 <section class="card sd" id="shop-buyers">
   <h2>One shop, {{ buyers.people|length }} buyers</h2>
   <p>The credit is for the shop, not for one person. Different people collect goods and pay for the same shop, and the graph links each of them to it.{% if tag == 'invented' %} This shop and its buyers are invented, made up to show the idea.{% elif tag == 'real' %} These are real records with names removed.{% endif %}</p>
   <div class="scroll"><table>
-    <tr><th>Buyer</th><th class="n">Collected</th><th class="n">Paid</th><th class="n">One person's balance</th></tr>
-    {% for b in buyers.people %}<tr><td>{{ b.name }}</td><td class="n">{{ b.collected|naira }}</td><td class="n">{{ b.paid|naira }}</td><td class="n">{{ b.balance|naira if b.balance >= 0 else 'overpaid ' ~ (-b.balance)|naira }}</td></tr>{% endfor %}
+    <tr><th>Buyer</th><th class="n">Sales collected</th><th class="n">Worth</th>{% if buyers.has_payers %}<th class="n">Paid</th><th class="n">One person's balance</th>{% endif %}</tr>
+    {% for b in buyers.people %}<tr><td>{{ b.name }}</td><td class="n">{{ b.trades }}</td><td class="n">{{ b.collected|naira }}</td>{% if buyers.has_payers %}<td class="n">{{ b.paid|naira }}</td><td class="n">{{ b.balance|naira if b.balance >= 0 else 'overpaid ' ~ (-b.balance)|naira }}</td>{% endif %}</tr>{% endfor %}
   </table></div>
   {% if buyers.different %}<p>{{ buyers.different }} payment{{ '' if buyers.different == 1 else 's' }} {{ 'was' if buyers.different == 1 else 'were' }} made by a different person from the one who collected the goods; all {{ 'is' if buyers.different == 1 else 'are' }} linked to the same shop.</p>{% endif %}
   {% if buyers.person_answer %}

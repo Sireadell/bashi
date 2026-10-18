@@ -83,6 +83,10 @@ def prepare(data):
     for row in sales + pays:
         if row.get("buyer") and bids.get(row["buyer"]) != row["customer"]:
             raise ValueError("record %s names a buyer who does not act for that shop" % row["id"])
+    owns = [{"bid": b["id"], "cid": c} for b in data.get("buyers", []) for c in b.get("owns", [])]
+    for o in owns:
+        if o["cid"] not in known:
+            raise ValueError("buyer %s owns unknown account %s" % (o["bid"], o["cid"]))
     collected = [{"bid": s["buyer"], "id": s["id"]} for s in sales if s.get("buyer")]
     paid_by = [{"bid": p["buyer"], "id": p["id"]} for p in pays if p.get("buyer")]
     trades = [{"id": s["id"], "amount": s["amount"], "date": s["date"], "cid": s["customer"],
@@ -102,7 +106,7 @@ def prepare(data):
     promised = [{"cid": r["customer"], "prid": r["id"]} for r in proms]
     return dict(customers=customers, trades=trades, payments=payments, settles=settles,
                 promises=promises, promised=promised,
-                buyers=buyers, collected=collected, paid_by=paid_by)
+                buyers=buyers, owns=owns, collected=collected, paid_by=paid_by)
 
 
 def load(g, rows):
@@ -127,6 +131,8 @@ def load(g, rows):
         g.query("CREATE INDEX FOR (n:Buyer) ON (n.id)")
         g.query("UNWIND $rows AS r MATCH (c:Customer {id:r.cid}) "
                 "CREATE (:Buyer {id:r.id, name:r.name})-[:BUYS_FOR]->(c)", {"rows": rows["buyers"]})
+        g.query("UNWIND $rows AS r MATCH (b:Buyer {id:r.bid}), (c:Customer {id:r.cid}) "
+                "CREATE (b)-[:OWNS]->(c)", {"rows": rows["owns"]})
         g.query("UNWIND $rows AS r MATCH (b:Buyer {id:r.bid}), (t:Trade {id:r.id}) "
                 "CREATE (b)-[:COLLECTED]->(t)", {"rows": rows["collected"]})
         g.query("UNWIND $rows AS r MATCH (b:Buyer {id:r.bid}), (p:Payment {id:r.id}) "
