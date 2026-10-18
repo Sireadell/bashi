@@ -1,6 +1,6 @@
 # Five-minute path for judges
 
-**Judged track: Track 01, Agents That Act on Connected Data.** The graph work a balance check cannot do: it follows customer, sales, payments and promises. Wrongly approved on the 255 sealed cases: Bashi 0, balance check 53. Plus 30 locked family-network cases with chains up to 22 links: Bashi 30 of 30; checking the asking account alone wrongly approves 11 (`sealed/RESULTS_FAMILY.md`, `sealed/RESULTS_FAMILY_G.md`).
+**Judged track: Track 01, Agents That Act on Connected Data.** The graph work a balance check cannot do: it follows customer, sales, payments and promises. Wrongly approved on the 255 sealed cases: Bashi 0, balance check 53. Plus 30 locked family-network cases with chains up to 22 links: Bashi 30 of 30; checking the asking account alone wrongly approves 11, and an AI given the same records without the graph gets 19 of 30, mostly by refusing customers who should get credit (`sealed/RESULTS_LLM_FAMILY.md`) (`sealed/RESULTS_FAMILY.md`, `sealed/RESULTS_FAMILY_G.md`).
 
 The practice shop (invented) also has an older broken-promise case, Tunde (customer C001): pick it in the shop list and the button reads "Try the Tunde demo". It is optional.
 
