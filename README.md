@@ -68,7 +68,7 @@ Track descriptions and focus areas are quoted from the [hackathon track page](ht
 | "Multi-hop reasoning" | The answer walks customer, to sales, to payments, to promises in one query (`rules.py`, `read_state`). | Live site, "See the real audit case", read the receipt |
 | Multi-hop reasoning (family walk) | The family network rule walks up to 20 links from the asking account in one Cypher variable-length query. | Ask CUST-17 for N40,000 in the own shop view: NO, 7 links deep |
 | "Graph queries and algorithms as agent tools" | The agent calls the graph through named tools that run Cypher, and the what-if tool copies the graph with `GRAPH.COPY`. | `whatif.py`, or the five tools listed at `/mcp` |
-| "Graph queries and algorithms as agent tools" (algorithms) | FalkorDB's own algorithms run on the receipt: `algo.WCC` finds the linked group and `algo.SPpaths` finds the shortest link chain to the largest linked debt. | `linked_group.py`, `linked_chain.py` |
+| "Graph queries and algorithms as agent tools" (algorithms) | FalkorDB's own algorithms run on the receipt: `algo.WCC` finds the linked group and `algo.SPpaths` finds the shortest link chain to the largest linked debt, and `algo.betweenness` names the key go-between. | `linked_group.py`, `linked_chain.py`, `go_between.py` |
 | "Tool selection through MCP" | Five tools (`decide_credit`, `get_receipt`, `verify_decision`, `what_if_remove_evidence`, `list_customers`) at `/mcp`, and a one-click Claude Desktop extension. | The 30-second `curl` near the top, or [extension/INSTALL.md](extension/INSTALL.md) |
 | "Actions based on what the graph shows" | The yes or no comes from what the graph holds, and the decision is saved back as a Decision node linked to every record it read. | Live site, "Try the demo" asks N90,000 for CUST-02 and gets NO because of an unlinked payment |
 | "Vector search" (extra) | Each customer has a 5-number credit profile stored as a FalkorDB vector, and the receipt's "Customers most like this one" block finds the three nearest with FalkorDB's vector index. | `lookalike.py` |
@@ -205,7 +205,7 @@ The answer is a walk over links, so the graph is the product:
 - The what-if button uses FalkorDB's `GRAPH.COPY` to copy the whole graph, delete one record on the copy, ask again, and delete the copy.
 - The receipt reads one customer's records in a single combined query (it used to be four).
 - The family network rule walks up to 20 links from the asking account in one Cypher variable-length query, so debt hidden several links away is found.
-- Every receipt can also show two lines from FalkorDB built-in algorithms: the linked group (`algo.WCC`, `linked_group.py`) and the shortest link chain to the largest linked debt (`algo.SPpaths`, `linked_chain.py`). Shown only when the account has linked accounts. Information only.
+- Every receipt can also show three lines from FalkorDB built-in algorithms: the linked group (`algo.WCC`, `linked_group.py`), the shortest link chain to the largest linked debt (`algo.SPpaths`, `linked_chain.py`) and the key go-between, the person who sits between the most linked accounts (`algo.betweenness`, `go_between.py`). Shown only when the account has linked accounts. Information only.
 - Each customer carries a 5-number credit profile (debt against limit, broken promises, unlinked payments, linked accounts, share of sales fully paid) stored as a FalkorDB vector; the receipt's "Customers most like this one" block uses FalkorDB's vector index to find the three nearest. No AI model, no outside service, information only.
 
 Stop FalkorDB and Bashi answers nothing. There is no local copy of the data to fall back on.
@@ -391,7 +391,7 @@ Honest limit: the amounts and sale dates come from my audit, but the payment rec
 | A tampered record is caught on replay | Run the four tamper commands in "The 90-second path" |
 | Bashi gives the same answer as a balance check on 37 of 40 questions | `python scorecard.py`, then read `scorecard_results.json` |
 | The family rule works: CUST-17 asking N40,000 (invented, own shop view) is NO, and the what-if that removes FAM-1 flips it to YES | Live site, own shop view, open the receipt, press the what-if on FAM-1 |
-| The linked-group and shortest-chain lines come from FalkorDB's own algorithms | Read `linked_group.py` (`algo.WCC`) and `linked_chain.py` (`algo.SPpaths`) |
+| The linked-group, shortest-chain and go-between lines come from FalkorDB's own algorithms | Read `linked_group.py` (`algo.WCC`), `linked_chain.py` (`algo.SPpaths`) and `go_between.py` (`algo.betweenness`) |
 | "Customers most like this one" uses FalkorDB's vector index, not an AI model | Read `lookalike.py` (`db.idx.vector.queryNodes`) |
 | The yes or no contains no AI | Read `rules.py`; no model is called inside `decide` |
 | A model sentence that fails the check is replaced | Read `agent.py`; the reply says which mode answered |

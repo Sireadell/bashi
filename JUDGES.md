@@ -37,7 +37,7 @@ The sealed tests: 55 cases, then 200 new ones whose answers were locked before r
 - Inferred links are saved as their own link type, so a link a person confirmed is never mixed with one a rule proposed.
 - The what-if button copies the graph (`GRAPH.COPY`), removes one record on the copy, and re-asks.
 - The family network rule walks up to 20 links in one Cypher variable-length query.
-- Receipt lines from FalkorDB's own algorithms: the linked group (`algo.WCC`, `linked_group.py`) and the shortest link chain to the largest linked debt (`algo.SPpaths`, `linked_chain.py`). Information only.
+- Receipt lines from FalkorDB's own algorithms: the linked group (`algo.WCC`, `linked_group.py`) and the shortest link chain to the largest linked debt (`algo.SPpaths`, `linked_chain.py`) and the key go-between (`algo.betweenness`, `go_between.py`). Information only.
 - "Customers most like this one" uses FalkorDB's vector index on a 5-number credit profile (`lookalike.py`). No AI model. Information only.
 - Every decision is saved back into the graph with a fingerprint, and replay shows if anything changed later.
 
