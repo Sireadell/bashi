@@ -1,5 +1,5 @@
 Live demo: https://bashi-vrfv.onrender.com (no sign-up)
-Demo video: https://youtu.be/Xpq_LN4h9XA
+Demo video: https://youtu.be/m4gcgUnqMD0
 More for judges: [JUDGES.md](JUDGES.md)
 
 # Bashi
@@ -53,7 +53,7 @@ Press the what-if on family link FAM-1: on a throwaway copy of the graph it is r
 ID=$(curl -s -X POST https://bashi-vrfv.onrender.com/api/decide -H "Content-Type: application/json" -d '{"customer":"CUST-01","amount":45000}' | python -c "import sys,json;print(json.load(sys.stdin)['decision_id'])"); curl -s https://bashi-vrfv.onrender.com/api/verify/$ID
 ```
 
-Expected: `{"detail":"Every record matches what was saved, and running the rule again gives the same answer.","id":"D...","verified":true}`. Demo video: https://youtu.be/Xpq_LN4h9XA.
+Expected: `{"detail":"Every record matches what was saved, and running the rule again gives the same answer.","id":"D...","verified":true}`. Demo video: https://youtu.be/m4gcgUnqMD0.
 
 ## Track entered
 
