@@ -4,6 +4,10 @@ More for judges: [JUDGES.md](JUDGES.md)
 
 # Bashi
 
+![The real audit case: as the records stand NO, owed N343,210; with the 3 unlinked payments linked on a throwaway copy YES, owed N0](static/real-audit-whatif.png)
+
+*The real audit case on the live site: the same customer, NO with the 3 payments unlinked and YES once they are linked on a copy. The real data is never changed.* On the 70 sealed cases that depend on those links (unlinked payment, money paid before the sale, split payments, someone else paying), an AI with the same records but no graph got 46 right and Bashi got 70 (`sealed/RESULTS_LLM.md`).
+
 **My shop's ledger said customers owed N388,340 they had already paid.** In my audit of 17 July 2026, 8 credit sales were marked paid while the customer's ledger still showed the debt. Each screen looked right on its own, so nobody saw it. Bashi follows each sale to its payments in a graph, flags the gap, answers yes or no on credit, and gives a receipt anyone can check. Press "See the real audit case" on the live site to see those 8 sales.
 
 **Entered in Track 01, Agents That Act on Connected Data. This is the one track I want judged.**
@@ -12,13 +16,24 @@ More for judges: [JUDGES.md](JUDGES.md)
 
 **Against an AI with no graph.** I gave an AI model (Gemini Flash Lite, temperature 0) the same 200 locked cases as a flat list of sales, payments and promises with the same rules, just no links. It got 152 right and wrongly approved 23, worth N3,685,003 of credit. Bashi got 200 right with 0 wrong approvals. The AI did spot every broken promise; its misses were reading and arithmetic slips, which is the point: the same records, read without the links, give answers you can't rely on. Every answer is saved in `sealed/RESULTS_LLM.md` and the JSON files beside it.
 
+## Ways to use Bashi
+
+| Way | How |
+|---|---|
+| Website | https://bashi-vrfv.onrender.com, no sign-up. |
+| MCP (a standard way for AI tools to call other tools) | `https://bashi-vrfv.onrender.com/mcp`. Works in Cursor and other AI tools that take an MCP address. Five tools: `decide_credit`, `get_receipt`, `verify_decision`, `what_if_remove_evidence`, `list_customers`. |
+| Claude Desktop | One-click extension: [extension/Bashi.mcpb](extension/Bashi.mcpb), steps in [extension/INSTALL.md](extension/INSTALL.md). |
+| Web API | `/api/decide`, `/api/receipt`, `/api/verify`, `/api/whatif`, `/api/customers`. See [AGENTS.md](AGENTS.md). |
+| Guides an AI can read | `/llms.txt` and `/AGENTS.md` on the live site. |
+| Your own shop | Three CSV files (customers, sales, payments), loaded into your own FalkorDB from the command line. It never writes to the public demo. See "Use it on your own shop" below. |
+
 ## Judge in 60 seconds
 
 | Step | Do this | You should see |
 |---|---|---|
 | 1 | Open https://bashi-vrfv.onrender.com (a sleeping host can take about 25 seconds the first time). | The home page of my own shop view. |
-| 2 | Press "Try the demo". | A receipt: N45,000 for CUST-01 is NO because of broken promise PR001, and it lists the sales and payments used. |
-| 3 | On the receipt, press "What if this evidence did not exist" next to the broken promise. | The answer flips to YES, run on a copy of the graph. |
+| 2 | Press "Try the demo". | A receipt for an invented customer (CUST-02, N90,000): NO, because sale TI-005 looks unpaid. Payment PY-005 for the same amount was never linked to it, and the receipt names both. |
+| 3 | On the receipt, press "What if this evidence did not exist" next to TI-005. | The answer flips to YES (owed N0), run on a copy of the graph. |
 | 4 | Check the receipt from a terminal (this saves one decision on the live site, then re-checks it): | The last line says `"verified":true`. |
 
 ```bash
@@ -111,7 +126,7 @@ The live site opens on my own shop view (graph `shop_own`). Every record is tagg
 |---|---|
 | Real | The 8 credit sales from my own audit of 17 July 2026 (N388,340 in total). Each sale was recorded as paid, but the customer's ledger still showed the money as owed. The amounts still shown as owed and the sale dates come from the audit. Customers are coded CUST-A to CUST-D. |
 | Real (whole shop) | The "My whole shop" view: 45 customers, 544 credit sales and 543 payments from my shop's own records, names removed. Customers are coded CUST-001 to CUST-045. Credit limits are assumed. Payment-to-sale links are inferred by rule and marked inferred. |
-| Invented | 12 made-up customers (CUST-01 to CUST-12) with their sales, payments and promises, added so there is more to ask about. |
+| Invented | 16 made-up customers (CUST-01 to CUST-16, the last four are buyer examples) with their sales, payments and promises, added so there is more to ask about. |
 | Assumed | Credit limits for all customers, and the payment dates of the 8 real sales (set equal to the sale dates). The audit log does not hold them. The page says so. |
 | Removed | Names, phone numbers, addresses, notes and item names. The data files hold only codes, amounts and dates, and the loader refuses anything else. |
 
@@ -121,7 +136,7 @@ This is my own shop's data, used under the hackathon rule that data may be publi
 
 1. **Open the live link (about 5 seconds).** It opens on my own shop view.
 2. **Press "See the real audit case" (about 20 seconds).** The receipt of the real customer with the most money wrongly showing as owed opens. It lists the exact sales and payments, and flags the payment that is not linked to a sale as a possible phantom debt.
-3. **Go back and press "Try the demo", then what-if (about 25 seconds).** This asks N45,000 for an invented customer (CUST-01). The answer is NO. Open the receipt, press "What if this evidence did not exist" next to the broken promise, and the answer flips to YES on a copy of the graph. The real data is never touched.
+3. **Go back and press "Try the demo", then what-if (about 25 seconds).** This asks N90,000 for an invented customer (CUST-02). The answer is NO because sale TI-005 looks unpaid while payment PY-005 of the same amount was never linked to it. Open the receipt, press "What if this evidence did not exist" next to TI-005, and the answer flips to YES on a copy of the graph. The real data is never touched.
 4. **Run the tamper test (about 40 seconds).** On the site, press "See the real audit case" once so a decision is saved. Then, in a terminal with the repo set up as in "Run it" below:
 
 ```powershell
@@ -140,7 +155,7 @@ Track descriptions and focus areas are quoted from the [hackathon track page](ht
 - "Multi-hop reasoning": the answer walks customer, to sales, to payments, to promises in one query (`rules.py`, `read_state`). Check: open the live site, press "See the real audit case", and read the receipt.
 - "Graph queries and algorithms as agent tools": the agent calls the graph through named tools that run Cypher, and the what-if tool copies the graph with `GRAPH.COPY`. Check: `whatif.py`, or the five tools listed at `/mcp`.
 - "Tool selection through MCP": five tools (`decide_credit`, `get_receipt`, `verify_decision`, `what_if_remove_evidence`, `list_customers`) at `/mcp`, and a one-click Claude Desktop extension. Check: the 30-second `curl` near the top, or [extension/INSTALL.md](extension/INSTALL.md).
-- "Actions based on what the graph shows": the yes or no comes from what the graph holds, and the decision is saved back as a Decision node linked to every record it read. Check: live site, "Try the demo" asks N45,000 for CUST-01 and gets NO because of a broken promise.
+- "Actions based on what the graph shows": the yes or no comes from what the graph holds, and the decision is saved back as a Decision node linked to every record it read. Check: live site, "Try the demo" asks N90,000 for CUST-02 and gets NO because of an unlinked payment.
 - "Explainable results": every answer has a receipt that names the exact sales, payments and promises behind it. Check: open any receipt, then `/api/verify/<id>` or `python verify.py`.
 
 **Track 02, Agent Memory and Coordination (extra, not the judged track).** "Build agents that remember across sessions and share state with each other."
@@ -458,7 +473,7 @@ The scorecard runs on the invented practice shop, and only 3 of 40 differ, so th
 python -m pytest
 ```
 
-There are 193 tests. The latest full run passed 187 of 187 on 18 October, and the 6 added since pass too (dates and counts in [TESTS.md](TESTS.md)). The full run takes about 25 minutes because it talks to a hosted database. The tests run against a copy of the graph and delete it afterwards.
+There are 270 tests (dates and counts of full runs in [TESTS.md](TESTS.md)). The full run takes about 25 minutes because it talks to a hosted database. The tests run against a copy of the graph and delete it afterwards.
 
 ## AI tools used
 

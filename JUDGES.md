@@ -2,9 +2,11 @@
 
 **Judged track: Track 01, Agents That Act on Connected Data.** The graph work a balance check cannot do: it follows customer, sales, payments and promises. Wrongly approved on the 255 sealed cases: Bashi 0, balance check 53.
 
-The practice shop (invented) has the Tunde case: pick it in the shop list and the button reads "Try the Tunde demo" (customer C001).
+The practice shop (invented) also has an older broken-promise case, Tunde (customer C001): pick it in the shop list and the button reads "Try the Tunde demo". It is optional.
 
 **Bashi runs on a real shop's books:** my whole shop, names removed, 45 customers, 544 credit sales, 543 payments. Press "Open my real shop's books" on the home page.
+
+Ways to use Bashi (website, MCP, Claude Desktop, web API, your own shop): see the "Ways to use Bashi" box in [README.md](README.md).
 
 Live site: https://bashi-vrfv.onrender.com (no sign-up). The free host sleeps when idle, so the first visit can show a "waking up" screen for about 25 seconds.
 
@@ -13,7 +15,7 @@ Live site: https://bashi-vrfv.onrender.com (no sign-up). The free host sleeps wh
 | 0:00 | Open the live site. | It opens on my own shop view. The page says Bashi answers yes or no for credit and shows the records behind it. FalkorDB is named in the footer. |
 | 0:30 | Press "See the real audit case". | A receipt for a real customer. The 8 real audit sales are flagged as possible phantom debts (N388,340 in total). The fingerprint shows "Verified". |
 | 1:30 | In the shop list at the bottom, pick "My whole shop (real records, names removed)". Press "See the account with the most money paid before the sale". | The receipt of one real account. Every payment matched to a sale is marked "inferred" with the rule that made it. A note shows N111,500 that was paid before the sales it was applied to, treated as deposits. |
-| 2:30 | Go back and press "Try the demo" (N45,000 for invented customer CUST-01), open the receipt, then press "What if this evidence did not exist" next to the broken promise. | The answer is NO because of broken promise PR001, then flips to YES on a copy of the graph. The real data is never touched. |
+| 2:30 | Go back and press "Try the demo" (N90,000 for invented customer CUST-02), open the receipt, then press "What if this evidence did not exist" next to sale TI-005. | The answer is NO because TI-005 looks unpaid while payment PY-005 of the same amount was never linked to it. It flips to YES (owed N0) on a copy of the graph. The real data is never touched. |
 | 3:30 | Open `/mcp` or read AGENTS.md. | The agent routes and the MCP tools another AI tool can call. |
 | 4:00 | In a terminal, run the four tamper commands in "The 90-second path" in the README. | `verify.py` fails and names the changed record, then passes after the restore. |
 
@@ -22,7 +24,7 @@ The sealed tests: 55 cases, then 200 new ones whose answers were locked before r
 ## What is real and what is not
 
 - Real: my own shop's records, with names removed. Two views: the 8 audit sales, and the whole shop (45 customers, 544 credit sales, 543 payments).
-- Invented: the practice shop and the 12 filler customers in the audit view.
+- Invented: the practice shop and the 16 invented customers (CUST-01 to CUST-16) in the audit view.
 - Assumed: credit limits, and the dates of the 8 audit payments.
 - Inferred: in the whole-shop view, which payment cleared which sale. It is a rule, not a fact, and every such link says so on the receipt.
 
