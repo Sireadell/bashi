@@ -18,6 +18,20 @@
 <section id="whatif-panel" class="whatif" hidden aria-live="polite"></section>
 {% include "_evidence_graph.html" %}
 
+{% if shallow %}
+<section class="card sd" id="shallow-deep">
+  <h2>Shallow check vs following the links</h2>
+  <div class="sd-grid">
+    <div class="sd-box"><p class="sd-h">A balance check alone says</p><p class="sd-v {{ shallow.shallow|lower }}">{{ shallow.shallow }}</p><p class="small">Debt {{ shallow.debt|naira }}. Sales minus every payment, nothing else.</p></div>
+    <div class="sd-box"><p class="sd-h">Following the links says</p><p class="sd-v {{ shallow.deep|lower }}">{{ shallow.deep }}</p><p class="small">Debt {{ shallow.deep_debt|naira }}. Each payment tied to its sale, promises checked.</p></div>
+  </div>
+  {% if shallow.differs %}<p><b>The two answers differ.</b> What made the difference: {{ shallow.why|join('; ') }}.</p>
+  {% else %}<p>Both give the same answer here.</p>{% endif %}
+  {% if shallow.inferred %}<p class="small">{{ shallow.inferred }} payment link{{ '' if shallow.inferred == 1 else 's' }} here {{ 'was' if shallow.inferred == 1 else 'were' }} matched by rule (inferred), not confirmed by a person.</p>{% endif %}
+</section>
+{% endif %}
+
+
 <section class="card">
   <h2>Does this receipt still check out?</h2>
   {% if verify and verify.ok %}
